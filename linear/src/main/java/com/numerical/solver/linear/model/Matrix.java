@@ -158,6 +158,22 @@ public class Matrix {
         return ret;
     }
 
+    public Matrix transpose() {
+        Dimension dim = this.getDimension();
+
+        int rows = dim.getRow();
+        int cols = this.getDimension().getCol();
+        Matrix ret = new Matrix(new Dimension(rows, cols));
+
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j <= cols; j++) {
+                ret.setCell(new Dimension(i,j),this.getCell(new Dimension(j,i)));
+            }
+        }
+        return ret;
+    }
+
+
     public Dimension getDimension(){
         Dimension dim = new Dimension();
         dim.setRow(data.size());
