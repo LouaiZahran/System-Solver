@@ -42,7 +42,7 @@
           <option value="20" >20</option>
         </select>
 
-        <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)="solutionTypeList()">
+        <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)="solutionTypeList(currentSolType)">
           <optgroup label="Direct Methods">
             <option *ngFor = "let sol of DirectSolTypes">
               {{sol.type}}
@@ -75,27 +75,26 @@
   <div id="0">
       <div id="0.5">
           <div  style="display: flex;">
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input00">
               <p>X1</p>
               <p>+</p>
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input01">
               <p>X2</p>
               <p>=</p>
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input02">
 
           </div>
           <div  style="display: flex;">
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input10">
               <p>X1</p>
               <p>+</p>
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input11">
               <p>X2</p>
               <p>=</p>
-              <input placeholder="0" type="number" class="matrixIn">
+              <input placeholder="0" type="number" class="matrixIn" id = "input12">
 
           </div>
       </div>
   </div>
 </div>
-
 

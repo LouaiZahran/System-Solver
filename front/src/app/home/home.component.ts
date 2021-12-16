@@ -33,7 +33,6 @@ class problem implements properties{
     this.method = method
   }
 }
-
 @Component({
     selector: 'solve',
     templateUrl: './home.component.html',
@@ -41,6 +40,8 @@ class problem implements properties{
   })
 export class homecomponent {
   constructor(private server : HomeService){}
+
+
 
   DirectSolTypes : solverType[] = [
     {type : "Gauss Elmination", value : 1},
@@ -59,75 +60,34 @@ export class homecomponent {
     {type : "Cholesky Decompostion", value : 3}
   ]
 
-
   createdIter : boolean = false;
   validFlagInput : boolean = false;
   symmFalg : boolean = false;
   currentSolType : string = this.DirectSolTypes[0].type;
-  matrixInput : HTMLInputElement[][]= [];
+  matrixInput : HTMLInputElement[][]= [
+    [<HTMLInputElement>document.getElementById("input00"), <HTMLInputElement>document.getElementById("input01"), <HTMLInputElement>document.getElementById("input02")],
+    [<HTMLInputElement>document.getElementById("input10"), <HTMLInputElement>document.getElementById("input11"), <HTMLInputElement>document.getElementById("input12")]
+  ];
   variableNames : string[] = [];
   externalnum:number=2
-  coff:any=[]
+  coff:any=[
+    "X1", "X2"
+  ]
   flag:number=0
   $event:any
   significant_figure:number = 1
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
 
-  solutionTypeList()
+
+  solutionTypeList(solType : string)
   {
-    var divOptn = document.createElement("div");
-    var input = document.createElement("input");
-    var input2 = document.createElement("input");
-    input.value = "3";
-    input.style.width="60px"
-    input.style.height="40px"
-    input.style.marginTop="4px"
-    input.style.marginLeft="5px"
-    input.style.border="1px solid black"
-    input.style.borderRadius = "10px"
-    input.type = "number";
-    input.min = "1";
-    input.step = "1";
-    input.className = "matrixIn";
-    input.placeholder="3";
-    input.id = "iter"
-    input2.style.width="60px"
-    input2.style.height="40px"
-    input2.style.marginTop="4px"
-    input2.style.marginLeft="5px"
-    input2.style.border="1px solid black"
-    input2.style.borderRadius = "10px"
-    input2.type = "number";
-    input2.min = "1";
-    input2.step = "1";
-    input2.className = "matrixIn";
-    input2.placeholder="3";
-    input2.id = "iter2"
-    var list = document.createElement("ul");
-    list.id = "iterList";
+
+    this.currentSolType = solType;
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
-        document.getElementById("main")?.appendChild(input);
-        document.getElementById("main")?.appendChild(input2);
-        var li = document.createElement("li");
-
-
-        for(let i = 0; i < this.externalnum; i++){
-          var input3 = document.createElement("input");
-          input3.style.width="60px"
-          input3.style.height="40px"
-          input3.style.marginTop="4px"
-          input3.style.marginLeft="5px"
-          input3.style.border="1px solid black"
-          input3.style.borderRadius = "10px"
-          input3.type = "number";
-          input3.className = "matrixIn";
-          input3.placeholder = this.coff[i];
-          li.appendChild(input3);
-        }
-        list.appendChild(li);
-        document.getElementById("main")?.appendChild(list);
+        this.createErrorIters();
+        this.createInitList(this.externalnum);
         this.createdIter = true;
       }
     }
@@ -141,8 +101,70 @@ export class homecomponent {
 
   }
 
+  createErrorIters(){
+    var input = document.createElement("input");
+    var input2 = document.createElement("input");
+    input.value = "3";
+    input.style.width="60px"
+    input.style.height="40px"
+    input.style.marginTop="4px"
+    input.style.marginLeft="5px"
+    input.style.border="3px solid black"
+    input.style.borderRadius = "10px"
+    input.type = "number";
+    input.min = "1";
+    input.step = "1";
+    input.className = "matrixIn";
+    input.placeholder="3";
+    input.id = "iter"
+    input2.style.width="60px"
+    input2.style.height="40px"
+    input2.style.marginTop="4px"
+    input2.style.marginLeft="5px"
+    input2.style.border="3px solid black"
+    input2.style.borderRadius = "10px"
+    input2.type = "number";
+    input2.min = "1";
+    input2.step = "1";
+    input2.className = "matrixIn";
+    input2.placeholder="3";
+    input2.id = "iter2";
+    document.getElementById("main")?.appendChild(input);
+    document.getElementById("main")?.appendChild(input2);
+  }
+
+  createInitList(num : number){
+
+    var list = document.createElement("ul");
+    list.id = "iterList";
+
+    var li = document.createElement("li");
+
+    for(let i = 0; i < num; i++){
+      var input3 = document.createElement("input");
+      input3.style.width="60px"
+      input3.style.height="40px"
+      input3.style.marginTop="4px"
+      input3.style.marginLeft="5px"
+      input3.style.border="3px solid black"
+      input3.style.borderRadius = "10px"
+      input3.type = "number";
+      input3.className = "matrixIn";
+      input3.placeholder = this.coff[i];
+      li.appendChild(input3);
+    }
+    list.appendChild(li);
+    document.getElementById("main")?.appendChild(list);
+
+
+
+  }
+
+
   validateInput()
   {
+    console.log(this.significant_figure);
+    console.log(this.currentSolType);
     for(let i = 0; i < this.matrixInput.length; i++){
       for(let j = 0; j < this.matrixInput[i].length; j++){
         var input = <HTMLInputElement>this.matrixInput[i][j];
@@ -183,6 +205,7 @@ export class homecomponent {
     }
   }
 
+
   validateSymmetric()
   {
     var symm : boolean = true;
@@ -206,6 +229,7 @@ export class homecomponent {
     }
   }
 
+
   delete(num:number)
   {
 
@@ -218,7 +242,7 @@ export class homecomponent {
       this.delete2();
     }
 
-    // this.create();
+    //this.create();
   }
 
   generate(y:number)
@@ -248,8 +272,12 @@ export class homecomponent {
     document.getElementById("iter")?.remove();
     document.getElementById("iter2")?.remove();
     document.getElementById("iterList")?.remove();
-    this.currentSolType = this.DirectSolTypes[0].type;
-    this.createdIter = false;
+    if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+      this.createInitList(num);
+      this.createErrorIters();
+
+    }
+
 
     this.matrixInput = [];
     var set2 = document.createElement("div")
@@ -269,6 +297,7 @@ export class homecomponent {
         input.style.marginLeft="5px"
         input.style.border="1px solid black"
         input.style.borderRadius = "10px"
+        input.style.border = "3px solid rgb(141, 180, 43)"
         input.type = "number";
         input.className = "matrixIn";
         input.placeholder="0"
@@ -293,80 +322,62 @@ export class homecomponent {
         }
 
       }
-        var p3=document.createElement("p")
-        var text3=document.createTextNode("=")
-        p3.style.marginLeft="8px"
-        p3.appendChild(text3)
-        set.appendChild(p3)
-        var input2 =document.createElement("input")
-        input2.style.width="60px"
-        input2.style.height="40px"
-        input2.style.marginTop="4px"
-        input2.style.marginLeft="5px"
-        input2.style.border="1px solid black"
-        input2.style.borderRadius = "10px"
-        input2.type = "number";
-        input2.className = "matrixIn";
-        input2.placeholder="0"
-        this.matrixInput[i].push(input2);
-        set.appendChild(input2)
-        set2.appendChild(set)
-        document.getElementById("0")?.appendChild(set2)
+
+
+
+      var p3=document.createElement("p")
+      var text3=document.createTextNode("=")
+      p3.style.marginLeft="8px"
+      p3.appendChild(text3)
+      set.appendChild(p3)
+      var input2 =document.createElement("input")
+      input2.style.width="60px"
+      input2.style.height="40px"
+      input2.style.marginTop="4px"
+      input2.style.marginLeft="5px"
+      input2.style.border="1px solid black"
+      input2.style.borderRadius = "10px"
+      input2.style.border = "3px solid rgb(206, 56, 76)"
+
+      input2.type = "number";
+      input2.className = "matrixIn";
+      input2.placeholder="0"
+      this.matrixInput[i].push(input2);
+      set.appendChild(input2)
+
+
+      set2.appendChild(set)
+      document.getElementById("0")?.appendChild(set2)
     }
     console.log(this.matrixInput)
   }
 
-  // create()
-  // {
-  //   if(this.flag==1)
-  //   {
-  //     this.delete2()
-  //     return
-  //   }
-  //   var set= document.createElement("div")
-  //   set.id="2"
-  //   set.style.display="flex"
-  //   var x=1
-  //   var p4=document.createElement("p")
-  //   var text4=document.createTextNode("{")
-  //   p4.appendChild(text4)
-  //   set.appendChild(p4)
-  //   for(let i=0 ;i<this.externalnum;i++)
-  //   {
-  //     var p=document.createElement("p")
-  //     var text=document.createTextNode(  x +" :")
-  //     p.style.marginLeft="5px"
-  //     p.style.marginTop="2px"
-  //     p.appendChild(text)
-  //     set.appendChild(p)
-  //     document.getElementById("1000")?.appendChild(set)
-  //     var input =document.createElement("input")
-  //       input.style.width="30px"
-  //       input.style.height="20px"
-  //       input.style.marginLeft="5px"
-  //       input.style.marginTop="5px"
-  //       input.style.border="1px solid black"
-  //       input.placeholder="x"+x
-  //       input.id=x.toString()
-  //       input.id=x.toString()
-  //       set.appendChild(input)
-  //       if(i!=this.externalnum-1)
-  //       {
-  //         var p2=document.createElement("p")
-  //         var text2=document.createTextNode(";")
-  //         p2.style.marginLeft="5px"
-  //         p2.appendChild(text2)
-  //         set.appendChild(p2)
-  //       }
-  //       x=x+1
-  //   }
-  //   var p3=document.createElement("p")
-  //   var text3=document.createTextNode("}")
-  //   p3.style.marginLeft="5px"
-  //   p3.appendChild(text3)
-  //   set.appendChild(p3)
-  //   this.flag=1
-  // }
+  /*create()
+  {
+    this.validateInput();
+    this.validateSymmetric();
+    if(this.validFlagInput == true && ((this.symmFalg == true && this.currentSolType == "Cholesky") || (this.symmFalg == false && this.currentSolType !== "Cholesky"))){
+      for(let i = 0; i < this.matrixInput.length; i++){
+        for(let j = 0; j < this.matrixInput[i].length; j++){
+          if(j !== (this.matrixInput[i].length - 1)){
+            this.coeff_matrix[i][j] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
+          }else{
+            this.constants_matrix[i] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
+          }
+
+        }
+      }
+
+      this.server.postProblem(new problem(this.externalnum, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
+    }
+    var p3=document.createElement("p")
+    var text3=document.createTextNode("}")
+    p3.style.marginLeft="5px"
+    p3.appendChild(text3)
+    set.appendChild(p3)
+    this.flag=1
+  }*/
+
   solve()
   {
 
@@ -389,3 +400,5 @@ export class homecomponent {
   }
 
 }
+
+
