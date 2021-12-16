@@ -47,8 +47,8 @@ input
     left: 40px;
 }
 
-#validate {
-    background-color: rgb(16, 34, 63);
+button {
+    background-color: darkslategrey;
     color: rgb(255, 255, 255);
     font-family: Fira code;
     font-size: 20px;
@@ -57,6 +57,10 @@ input
     left: 5px;
     border-radius: 7px;
     position: relative;
+
+}
+button:hover{
+  background-color: rgb(34, 56, 56);
 
 }
 

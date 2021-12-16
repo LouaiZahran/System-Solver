@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
+import { HomeService } from './home.service';
 
 export interface solverType {
   type : string;
@@ -10,12 +11,36 @@ export interface decompostion {
   type : string;
   value : number;
 }
+export interface properties {
+  num_of_unknowns : number;
+  coeff_matrix :number[][];
+  constants_matrix :number[];
+  precision :number;
+  method :string;
+
+}
+class problem implements properties{
+  num_of_unknowns : number = 0;
+  coeff_matrix :number[][] = [];
+  constants_matrix :number[] = [];
+  precision :number = 0;
+  method :string = "";
+  constructor(number_of_unknowns:number,coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+    this.num_of_unknowns = number_of_unknowns;
+    this.coeff_matrix = coeff_matrix;
+    this.constants_matrix = constants_matrix;
+    this.precision = precision;
+    this.method = method
+  }
+}
+
 @Component({
     selector: 'solve',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
   })
 export class homecomponent {
+  constructor(private server : HomeService){}
 
   DirectSolTypes : solverType[] = [
     {type : "Gauss Elmination", value : 1},
@@ -29,7 +54,7 @@ export class homecomponent {
 
 
   decompostions : decompostion[] = [
-    {type : "Do Little Decompostion", value : 1},
+    {type : "Doo Little Decompostion", value : 1},
     {type : "Crout Decompostion", value : 2},
     {type : "Cholesky Decompostion", value : 3}
   ]
@@ -46,6 +71,8 @@ export class homecomponent {
   flag:number=0
   $event:any
   significant_figure:number = 1
+  coeff_matrix :number[][] = [];
+  constants_matrix :number[] = [];
 
   solutionTypeList()
   {
@@ -191,7 +218,7 @@ export class homecomponent {
       this.delete2();
     }
 
-    this.create();
+    // this.create();
   }
 
   generate(y:number)
@@ -289,57 +316,76 @@ export class homecomponent {
     console.log(this.matrixInput)
   }
 
-  create()
+  // create()
+  // {
+  //   if(this.flag==1)
+  //   {
+  //     this.delete2()
+  //     return
+  //   }
+  //   var set= document.createElement("div")
+  //   set.id="2"
+  //   set.style.display="flex"
+  //   var x=1
+  //   var p4=document.createElement("p")
+  //   var text4=document.createTextNode("{")
+  //   p4.appendChild(text4)
+  //   set.appendChild(p4)
+  //   for(let i=0 ;i<this.externalnum;i++)
+  //   {
+  //     var p=document.createElement("p")
+  //     var text=document.createTextNode(  x +" :")
+  //     p.style.marginLeft="5px"
+  //     p.style.marginTop="2px"
+  //     p.appendChild(text)
+  //     set.appendChild(p)
+  //     document.getElementById("1000")?.appendChild(set)
+  //     var input =document.createElement("input")
+  //       input.style.width="30px"
+  //       input.style.height="20px"
+  //       input.style.marginLeft="5px"
+  //       input.style.marginTop="5px"
+  //       input.style.border="1px solid black"
+  //       input.placeholder="x"+x
+  //       input.id=x.toString()
+  //       input.id=x.toString()
+  //       set.appendChild(input)
+  //       if(i!=this.externalnum-1)
+  //       {
+  //         var p2=document.createElement("p")
+  //         var text2=document.createTextNode(";")
+  //         p2.style.marginLeft="5px"
+  //         p2.appendChild(text2)
+  //         set.appendChild(p2)
+  //       }
+  //       x=x+1
+  //   }
+  //   var p3=document.createElement("p")
+  //   var text3=document.createTextNode("}")
+  //   p3.style.marginLeft="5px"
+  //   p3.appendChild(text3)
+  //   set.appendChild(p3)
+  //   this.flag=1
+  // }
+  solve()
   {
-    if(this.flag==1)
-    {
-      this.delete2()
-      return
-    }
-    var set= document.createElement("div")
-    set.id="2"
-    set.style.display="flex"
-    var x=1
-    var p4=document.createElement("p")
-    var text4=document.createTextNode("{")
-    p4.appendChild(text4)
-    set.appendChild(p4)
-    for(let i=0 ;i<this.externalnum;i++)
-    {
-      var p=document.createElement("p")
-      var text=document.createTextNode(  x +" :")
-      p.style.marginLeft="5px"
-      p.style.marginTop="2px"
-      p.appendChild(text)
-      set.appendChild(p)
-      document.getElementById("1000")?.appendChild(set)
-      var input =document.createElement("input")
-        input.style.width="30px"
-        input.style.height="20px"
-        input.style.marginLeft="5px"
-        input.style.marginTop="5px"
-        input.style.border="1px solid black"
-        input.placeholder="x"+x
-        input.id=x.toString()
-        input.id=x.toString()
-        set.appendChild(input)
-        if(i!=this.externalnum-1)
-        {
-          var p2=document.createElement("p")
-          var text2=document.createTextNode(";")
-          p2.style.marginLeft="5px"
-          p2.appendChild(text2)
-          set.appendChild(p2)
-        }
-        x=x+1
-    }
-    var p3=document.createElement("p")
-    var text3=document.createTextNode("}")
-    p3.style.marginLeft="5px"
-    p3.appendChild(text3)
-    set.appendChild(p3)
-    this.flag=1
-  }
 
+    this.validateInput();
+    this.validateSymmetric();
+    if(this.validFlagInput == true && ((this.symmFalg == true && this.currentSolType == "Cholesky") || (this.symmFalg == false && this.currentSolType !== "Cholesky"))){
+      for(let i = 0; i < this.matrixInput.length; i++){
+        for(let j = 0; j < this.matrixInput[i].length; j++){
+          if(j !== (this.matrixInput[i].length - 1)){
+            this.coeff_matrix[i][j] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
+          }else{
+            this.constants_matrix[i] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
+          }
+
+        }
+      }
+
+      this.server.postProblem(new problem(this.externalnum, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
+    }
+  }
 
 }
