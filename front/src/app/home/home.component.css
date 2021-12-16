@@ -1,11 +1,20 @@
 
-input
+#input00, #input01,
+#input10, #input11
 {
     width: 50px;
     height: 30px;
-    border: 1px solid black;
+    border: 3px solid rgb(141, 180, 43);
     margin-top: 4px;
     margin-left: 5px;
+}
+#input02, #input12 {
+     width: 50px;
+    height: 30px;
+    border: 3px solid rgb(206, 56, 76);
+    margin-top: 4px;
+    margin-left: 5px;
+
 }
 
 .container{
@@ -19,6 +28,7 @@ input
 
 .matrixIn {
     border-radius: 10px;
+
 }
 
 #selectSolver {
@@ -51,12 +61,28 @@ input
     background-color: rgb(16, 34, 63);
     color: rgb(255, 255, 255);
     font-family: Fira code;
-    font-size: 20px;
+    font-size: 18px;
     width: 100px;
     height: 30px;
     left: 5px;
     border-radius: 7px;
     position: relative;
+
+}
+button {
+    background-color: darkslategrey;
+    color: rgb(255, 255, 255);
+    font-family: Fira code;
+    font-size: 18px;
+    width: 100px;
+    height: 30px;
+    left: 5px;
+    border-radius: 7px;
+    position: relative;
+
+}
+button:hover{
+  background-color: rgb(34, 56, 56);
 
 }
 
