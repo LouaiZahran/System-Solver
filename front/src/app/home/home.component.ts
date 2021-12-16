@@ -17,6 +17,7 @@ export interface decompostion {
   export class homecomponent {
     createdIter : boolean = false;
     validFlagInput : boolean = false;
+    symmFalg : boolean = false;
 
     DirectSolTypes : solverType[] = [
       {type : "Gauss Elmination", value : 1},
@@ -74,17 +75,40 @@ export interface decompostion {
       input2.className = "matrixIn";
       input2.placeholder="3";
       input2.id = "iter2"
+      var list = document.createElement("ul");
+      list.id = "iterList";
       if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
         if(!this.createdIter){
           document.getElementById("main")?.appendChild(input);
           document.getElementById("main")?.appendChild(input2);
+          var li = document.createElement("li");
+
+
+          for(let i = 0; i < this.externalnum; i++){
+            var input3 = document.createElement("input");
+            input3.style.width="60px"
+            input3.style.height="40px"
+            input3.style.marginTop="4px"
+            input3.style.marginLeft="5px"
+            input3.style.border="1px solid black"
+            input3.style.borderRadius = "10px"
+            input3.type = "number";
+            input3.className = "matrixIn";
+            input3.placeholder = this.coff[i];
+            li.appendChild(input3);
+          }
+          list.appendChild(li);
+          document.getElementById("main")?.appendChild(list);
           this.createdIter = true;
+          
         }
       }
       else{
+      
         this.createdIter = false;
         document.getElementById("iter")?.remove();
         document.getElementById("iter2")?.remove();
+        document.getElementById("iterList")?.remove();
       }
       
     }
@@ -129,8 +153,31 @@ export interface decompostion {
       }
      
     }
+
+    validateSymmetric(){
+      var symm : boolean = true;
+      for(let i = 0; i < this.externalnum; i++){
+        for(let j = 0; j < this.externalnum; j++){
+          var input = <HTMLInputElement>this.matrixInput[i][j];
+          var input2 = <HTMLInputElement>this.matrixInput[j][i];
+          var value = input.value;
+          var value2 = input2.value;
+          if(value != value2){
+            symm = false;
+            break;
+          }
+        }
+      }
+      
+      this.symmFalg = symm;
+      if(this.currentSolType == this.decompostions[2].type && !this.symmFalg){
+        alert("Matrix Must be Symmetirc");
+
+      }
+    }
     delete(num:number)
     {
+
       var del =document.getElementById("0.5")
       del?.parentNode?.removeChild(del)
       this.externalnum=num
@@ -144,6 +191,7 @@ export interface decompostion {
     }
     generate(y:number)
     {
+
       var x = 1;
       for(let i = 0; i < y; i++)
       {
@@ -164,6 +212,12 @@ export interface decompostion {
         
     set(num:number)
     {
+      document.getElementById("iter")?.remove();
+      document.getElementById("iter2")?.remove();
+      document.getElementById("iterList")?.remove();
+      this.currentSolType = this.DirectSolTypes[0].type;
+      this.createdIter = false;
+      
       this.matrixInput = [];
       var set2 = document.createElement("div")
       set2.id = "0.5"

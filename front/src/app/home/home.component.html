@@ -1,7 +1,7 @@
 <h1>solve linear equations</h1>
 
 
-<div class = "main" style="display: flex;"> 
+<div style="display: flex;"> 
     <h3>enter number of equations</h3>
     <div class="dropdown" id = "main">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +39,7 @@
           <li><a (click)="generate(9)" (click)="delete(9)" class="dropdown-item" href="#">9</a></li>
           <li><a (click)="generate(10)" (click)="delete(10)" class="dropdown-item" href="#">10</a></li>
         </ul>
-        <button id = "validate" (click) = "validateInput()">Validate</button>
+        <button id = "validate" (click) = "validateInput();validateSymmetric()">Validate</button>
       </div>
 </div>
 
