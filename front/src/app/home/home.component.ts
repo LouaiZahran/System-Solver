@@ -16,6 +16,7 @@ export interface decompostion {
   })
   export class homecomponent {
     createdIter : boolean = false;
+    validFlagInput : boolean = false;
 
     DirectSolTypes : solverType[] = [
       {type : "Gauss Elmination", value : 1},
@@ -37,7 +38,8 @@ export interface decompostion {
    currentSolType : string = this.DirectSolTypes[0].type;
   
 
-    matrix : number[][]= [];
+    matrixInput : HTMLInputElement[][]= [];
+    
     variableNames : string[] = [];
 
     externalnum:number=2
@@ -46,6 +48,8 @@ export interface decompostion {
     solutionTypeList(){
       var divOptn = document.createElement("div");
       var input = document.createElement("input");
+      var input2 = document.createElement("input");
+      input.value = "3";
       input.style.width="60px"
       input.style.height="40px"
       input.style.marginTop="4px"
@@ -58,20 +62,72 @@ export interface decompostion {
       input.className = "matrixIn";
       input.placeholder="3";
       input.id = "iter"
+      input2.style.width="60px"
+      input2.style.height="40px"
+      input2.style.marginTop="4px"
+      input2.style.marginLeft="5px"
+      input2.style.border="1px solid black"
+      input2.style.borderRadius = "10px"
+      input2.type = "number";
+      input2.min = "1";
+      input2.step = "1";
+      input2.className = "matrixIn";
+      input2.placeholder="3";
+      input2.id = "iter2"
       if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
         if(!this.createdIter){
           document.getElementById("main")?.appendChild(input);
-
+          document.getElementById("main")?.appendChild(input2);
           this.createdIter = true;
-
-
         }
       }
       else{
         this.createdIter = false;
         document.getElementById("iter")?.remove();
+        document.getElementById("iter2")?.remove();
       }
       
+    }
+    validateInput(){
+      for(let i = 0; i < this.matrixInput.length; i++){
+        for(let j = 0; j < this.matrixInput[i].length; j++){
+          var input = <HTMLInputElement>this.matrixInput[i][j];
+          var value = input.value;
+          console.log(value)
+          if(value == ""){
+            input.style.borderColor = "red"
+            this.validFlagInput = false; 
+          }
+          else{
+            input.style.borderColor = "black"
+            this.validFlagInput = true;
+          }
+        
+        }
+      }
+      if(this.createdIter){
+        var iter = <HTMLInputElement>document.getElementById("iter")
+        var valueIter = iter?.value;
+        if(valueIter == ""){
+          this.validFlagInput = false;
+          iter.style.borderColor = "red";
+        }
+        else{
+          this.validFlagInput = true;
+          iter.style.borderColor = "black";
+        }
+        var iter2 = <HTMLInputElement>document.getElementById("iter2")!
+        var valueIter2 = iter2?.value;
+        if(valueIter2 == ""){
+          this.validFlagInput = false;
+          iter2.style.borderColor = "red";
+        }
+        else{
+          this.validFlagInput = true;
+          iter2.style.borderColor = "black";
+        }
+      }
+     
     }
     delete(num:number)
     {
@@ -108,11 +164,12 @@ export interface decompostion {
         
     set(num:number)
     {
+      this.matrixInput = [];
       var set2 = document.createElement("div")
       set2.id = "0.5"
       for(let i = 0; i < num; i++)
       {
-        
+        this.matrixInput.push([]);
         var set = document.createElement("div")
         set.style.display="flex"
       
@@ -128,13 +185,15 @@ export interface decompostion {
           input.type = "number";
           input.className = "matrixIn";
           input.placeholder="0"
+          input.id = i.toString().concat(j.toString());
+          this.matrixInput[i].push(input);
           set.appendChild(input)
           var p = document.createElement("p")
           var text = document.createTextNode(this.coff[j])
           p.style.marginLeft="8px"
           p.appendChild(text)
-          set.appendChild(p)
-          set2.appendChild(set)
+          set.appendChild(p);
+          set2.appendChild(set);
           if(j!=num-1)
           { 
             var p2=document.createElement("p")
@@ -162,10 +221,12 @@ export interface decompostion {
           input2.type = "number";
           input2.className = "matrixIn";
           input2.placeholder="0"
+          this.matrixInput[i].push(input2);
           set.appendChild(input2) 
           set2.appendChild(set)
           document.getElementById("0")?.appendChild(set2)
       }
+      console.log(this.matrixInput)
     }
     flag:number=0
     $event:any

@@ -21,10 +21,29 @@ input
     left: 500px;
 }
 
+#validate {
+    width: 100px;
+    height: 30px;
+    font-size: 15px;
+    font-family: Fira code;
+    left: 5px;
+    border-radius: 7px;
+    position: relative;
+
+}
+
+#iter {
+    left: 0px;
+    position: relative;
+}
+
+
+
 #divSelect {
     left: 500px;
     position: relative;
 }
+
     
 
 
