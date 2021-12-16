@@ -3,7 +3,7 @@
 
 <div class = "main" style="display: flex;"> 
     <h3>enter number of equations</h3>
-    <div class="dropdown">
+    <div class="dropdown" id = "main">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           {{externalnum}}
         </button>
@@ -27,9 +27,6 @@
           </optgroup>
           
         </select>
-        <div id = "divSelect">
-          
-        </div>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li><a (click)="generate(1)"  (click)="delete(1)" class="dropdown-item" href="#">1</a></li>
           <li><a (click)="generate(2)" (click)="delete(2)" class="dropdown-item" href="#">2</a></li>

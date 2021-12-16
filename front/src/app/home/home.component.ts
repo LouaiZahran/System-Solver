@@ -15,6 +15,7 @@ export interface decompostion {
     styleUrls: ['./home.component.css']
   })
   export class homecomponent {
+    createdIter : boolean = false;
 
     DirectSolTypes : solverType[] = [
       {type : "Gauss Elmination", value : 1},
@@ -43,7 +44,33 @@ export interface decompostion {
     coff:any=[]   
     
     solutionTypeList(){
-      console.log(this.currentSolType)
+      var divOptn = document.createElement("div");
+      var input = document.createElement("input");
+      input.style.width="60px"
+      input.style.height="40px"
+      input.style.marginTop="4px"
+      input.style.marginLeft="5px"
+      input.style.border="1px solid black"
+      input.style.borderRadius = "10px"
+      input.type = "number";
+      input.min = "1";
+      input.step = "1";
+      input.className = "matrixIn";
+      input.placeholder="3";
+      input.id = "iter"
+      if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+        if(!this.createdIter){
+          document.getElementById("main")?.appendChild(input);
+
+          this.createdIter = true;
+
+
+        }
+      }
+      else{
+        this.createdIter = false;
+        document.getElementById("iter")?.remove();
+      }
       
     }
     delete(num:number)

@@ -20,6 +20,11 @@ input
     height: 35px;
     left: 500px;
 }
+
+#divSelect {
+    left: 500px;
+    position: relative;
+}
     
 
 
