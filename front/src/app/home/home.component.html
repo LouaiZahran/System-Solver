@@ -1,78 +1,101 @@
 <h1>solve linear equations</h1>
 
+<div class="container">
+  <div style="display: flex;">
 
-<div style="display: flex;"> 
-    <h3>enter number of equations</h3>
     <div class="dropdown" id = "main">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          {{externalnum}}
-        </button>
+        <label>Enter number of equations: </label>
+        <select [(ngModel)] = "externalnum" id="no_equ" (change)="generate(externalnum);delete(externalnum)">
+          <option value="1" >1</option>
+          <option value="2" >2</option>
+          <option value="3" >3</option>
+          <option value="4" >4</option>
+          <option value="5" >5</option>
+          <option value="6" >6</option>
+          <option value="7" >7</option>
+          <option value="8" >8</option>
+          <option value="9" >9</option>
+          <option value="10" >10</option>
+        </select>
+
+        <label>Enter the desired precision: </label>
+        <select [(ngModel)] = "significant_figure" id="significance">
+          <option value="1" >1</option>
+          <option value="2" >2</option>
+          <option value="3" >3</option>
+          <option value="4" >4</option>
+          <option value="5" >5</option>
+          <option value="6" >6</option>
+          <option value="7" >7</option>
+          <option value="8" >8</option>
+          <option value="9" >9</option>
+          <option value="10" >10</option>
+          <option value="11" >11</option>
+          <option value="12" >12</option>
+          <option value="13" >13</option>
+          <option value="14" >14</option>
+          <option value="15" >15</option>
+          <option value="16" >16</option>
+          <option value="17" >17</option>
+          <option value="18" >18</option>
+          <option value="19" >19</option>
+          <option value="20" >20</option>
+        </select>
+
         <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)="solutionTypeList()">
           <optgroup label="Direct Methods">
             <option *ngFor = "let sol of DirectSolTypes">
               {{sol.type}}
             </option>
           </optgroup>
-          
           <optgroup label="Iterative Methods">
             <option *ngFor = "let sol of iterativeSolTypes">
               {{sol.type}}
             </option>
           </optgroup>
-
           <optgroup Label = "LU Decomposition">
-              <option *ngFor = "let dec of decompostions">
-                {{dec.type}}
-              </option>
+            <option *ngFor = "let dec of decompostions">
+              {{dec.type}}
+            </option>
           </optgroup>
-          
         </select>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a (click)="generate(1)"  (click)="delete(1)" class="dropdown-item" href="#">1</a></li>
-          <li><a (click)="generate(2)" (click)="delete(2)" class="dropdown-item" href="#">2</a></li>
-          <li><a (click)="generate(3)" (click)="delete(3)" class="dropdown-item" href="#">3</a></li>
-          <li><a  (click)="generate(4)" (click)="delete(4)"  class="dropdown-item" href="#">4</a></li>
-          <li><a (click)="generate(5)" (click)="delete(5)" class="dropdown-item" href="#">5</a></li>
-          <li><a (click)="generate(6)" (click)="delete(6)" class="dropdown-item" href="#">6</a></li>
-          <li><a (click)="generate(7)" (click)="delete(7)" class="dropdown-item" href="#">7</a></li>
-          <li><a (click)="generate(8)" (click)="delete(8)" class="dropdown-item" href="#">8</a></li>
-          <li><a (click)="generate(9)" (click)="delete(9)" class="dropdown-item" href="#">9</a></li>
-          <li><a (click)="generate(10)" (click)="delete(10)" class="dropdown-item" href="#">10</a></li>
-        </ul>
+
         <button id = "validate" (click) = "validateInput();validateSymmetric()">Validate</button>
+    </div>
+  </div>
+
+  <div>
+
+  </div>
+  <div id="1000">
+    <button (click)="create()">Change the name of the varaibles in the system</button>
+    <div id="1">
+    </div>
+  </div>
+  <div id="0">
+      <div id="0.5">
+          <div  style="display: flex;">
+              <input placeholder="0" type="number" class="matrixIn">
+              <p>X1</p>
+              <p>+</p>
+              <input placeholder="0" type="number" class="matrixIn">
+              <p>X2</p>
+              <p>=</p>
+              <input placeholder="0" type="number" class="matrixIn">
+
+          </div>
+          <div  style="display: flex;">
+              <input placeholder="0" type="number" class="matrixIn">
+              <p>X1</p>
+              <p>+</p>
+              <input placeholder="0" type="number" class="matrixIn">
+              <p>X2</p>
+              <p>=</p>
+              <input placeholder="0" type="number" class="matrixIn">
+
+          </div>
       </div>
-</div>
-
-<div>
-
-</div>
-<div id="1000">
-  <button (click)="create()">Change the name of the varaibles in the system</button>
-  <div id="1">
   </div>
 </div>
-<div id="0">
-    <div id="0.5">
-        <div  style="display: flex;">
-            <input placeholder="0" type="number" class="matrixIn">
-            <p>X1</p>
-            <p>+</p>
-            <input placeholder="0" type="number" class="matrixIn">
-            <p>X2</p>
-            <p>=</p>
-            <input placeholder="0" type="number" class="matrixIn">
-        
-        </div>
-        <div  style="display: flex;">
-            <input placeholder="0" type="number" class="matrixIn">
-            <p>X1</p>
-            <p>+</p>
-            <input placeholder="0" type="number" class="matrixIn">
-            <p>X2</p>
-            <p>=</p>
-            <input placeholder="0" type="number" class="matrixIn">
-        
-        </div>
-    </div>
-   
-</div>
+
+
