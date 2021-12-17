@@ -96,15 +96,22 @@ export class homecomponent {
 
 
   parseSystem(){
-    var arrofCoffsNums : number[][] = [];
+    var input = this.systemInput;
 
+    input = input.replace(/ /g,'');
+
+    console.log("Input = ", input);
+
+    var arrofCoffsNums : number[][] = [];
     var arrofConstNums : number[] = [];
+    var arrofCoffsNames : string[] = [];
 
 
 
     var rows : number = 0;
     arrofCoffsNums.push([]);
 
+    var foundNumber : boolean = false;
     var foundEqu : boolean = false;
     var foundDot : boolean = false;
     var foundNegative : boolean = false;
@@ -112,42 +119,80 @@ export class homecomponent {
 
     var coffNum : string = "";
     var constNum : string = "";
+    var coffsName : string = ""
     var numberEntered : boolean = false;
 
 
     console.log(this.systemInput);
-    var input = this.systemInput;
 
     //5r +7y = 9
     
     for(let i = 0; i < input.length; i++){
-      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == " ") && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-"){
-        numberEntered = true;
+      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+"){
         console.log("Inside if");
+
+        
+        if(input.charAt(i) == "+" || input.charAt(i) == "-" ){
+          if(coffsName != ""){
+            arrofCoffsNames.push(coffsName);
+            coffsName = "";
+
+          }
+        }
+        if(input.charAt(i) != "+" && input.charAt(i) != "-"){
+          numberEntered = true;
+
+        }
         if(!foundEqu){  
           coffNum = coffNum.concat(input.charAt(i)); 
         }
         else{
           constNum = constNum.concat(input.charAt(i)); 
         }
+        foundNumber = true;
+
       }
-      else if(!Number(input.charAt(i)) && !(input.charAt(i) == "+") && !(input.charAt(i) == "-") && !(input.charAt(i) == "=") && !(input.charAt(i) == " ") && !(input.charAt(i) == "\n")){
+      else if(   !Number(input.charAt(i))
+              && !(input.charAt(i) == "+") 
+              && !(input.charAt(i) == "-") 
+              && !(input.charAt(i) == "=")  
+              && !(input.charAt(i) == "\n")
+              && !(input.charAt(i) == ".")){
+
         console.log("Inside if 2");
 
         console.log("Coff Number = ", coffNum);
-        if(Number(coffNum)){
+
+        console.log(foundNumber)
+        
+        if(!numberEntered && foundNumber){
+          if(coffNum == ""){
+            coffNum = "1";
+          }
+          else{
+            coffNum = coffNum.concat("1");
+          }
+        }
+        if(Number(coffNum) && foundNumber){
           arrofCoffsNums[rows].push(Number(coffNum));
 
         }
+        coffsName = coffsName.concat(input.charAt(i));
         
         coffNum = "";
         foundDot = false;
         foundNegative = false;
         numberEntered = false;
+        foundNumber = false;
       }
       else if(input.charAt(i) == "="){
       
        foundEqu = true;
+       if(coffsName != ""){
+        arrofCoffsNames.push(coffsName);
+        coffsName = "";
+
+       }
 
       }
       else if(input.charAt(i) == "\n"){
@@ -155,26 +200,23 @@ export class homecomponent {
         if(Number(constNum)){
           arrofConstNums.push(Number(constNum));
         }
-        
+
         rows++;
         arrofCoffsNums.push([]);
         console.log("Constant Number =", constNum);
         constNum = ""
         coffNum = ""
+        coffsName = "" 
         foundEqu = false;
 
         
         
       }
     }
-    console.log("Matrix of Coeffs = ", arrofCoffsNums)
-    console.log("Matrix of Constants = ", arrofConstNums)
+    console.log("Matrix of Coeffs = ", arrofCoffsNums);
+    console.log("Vector of Constants = ", arrofConstNums);
+    console.log("Vector of Coffs = ", arrofCoffsNames);
   }
-
-
-
-
-
 
 
   solutionTypeList(solType : string)
