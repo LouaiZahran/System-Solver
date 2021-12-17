@@ -1,3 +1,4 @@
+import { I18nPluralPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
@@ -8,7 +9,7 @@ export interface solverType {
   value : number;
 }
 export interface decompostion {
-  type : string;
+  type : string; 
   value : number;
 }
 export interface properties {
@@ -78,8 +79,102 @@ export class homecomponent {
   $event:any
   significant_figure:number = 1
 
+
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
+
+
+
+  systemInput : string;
+  
+  
+
+
+
+
+
+
+
+  parseSystem(){
+    var arrofCoffsNums : number[][] = [];
+
+    var arrofConstNums : number[] = [];
+
+
+
+    var rows : number = 0;
+    arrofCoffsNums.push([]);
+
+    var foundEqu : boolean = false;
+    var foundDot : boolean = false;
+    var foundNegative : boolean = false;
+
+
+    var coffNum : string = "";
+    var constNum : string = "";
+    var numberEntered : boolean = false;
+
+
+    console.log(this.systemInput);
+    var input = this.systemInput;
+
+    //5r +7y = 9
+    
+    for(let i = 0; i < input.length; i++){
+      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == " ") && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-"){
+        numberEntered = true;
+        console.log("Inside if");
+        if(!foundEqu){  
+          coffNum = coffNum.concat(input.charAt(i)); 
+        }
+        else{
+          constNum = constNum.concat(input.charAt(i)); 
+        }
+      }
+      else if(!Number(input.charAt(i)) && !(input.charAt(i) == "+") && !(input.charAt(i) == "-") && !(input.charAt(i) == "=") && !(input.charAt(i) == " ") && !(input.charAt(i) == "\n")){
+        console.log("Inside if 2");
+
+        console.log("Coff Number = ", coffNum);
+        if(Number(coffNum)){
+          arrofCoffsNums[rows].push(Number(coffNum));
+
+        }
+        
+        coffNum = "";
+        foundDot = false;
+        foundNegative = false;
+        numberEntered = false;
+      }
+      else if(input.charAt(i) == "="){
+      
+       foundEqu = true;
+
+      }
+      else if(input.charAt(i) == "\n"){
+       
+        if(Number(constNum)){
+          arrofConstNums.push(Number(constNum));
+        }
+        
+        rows++;
+        arrofCoffsNums.push([]);
+        console.log("Constant Number =", constNum);
+        constNum = ""
+        coffNum = ""
+        foundEqu = false;
+
+        
+        
+      }
+    }
+    console.log("Matrix of Coeffs = ", arrofCoffsNums)
+    console.log("Matrix of Constants = ", arrofConstNums)
+  }
+
+
+
+
+
 
 
   solutionTypeList(solType : string)

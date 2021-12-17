@@ -4,6 +4,8 @@
   <div style="display: flex;">
 
     <div class="dropdown" id = "main">
+      <textarea [(ngModel)] = "systemInput" id = "textinput" cols = "70" row = "2" (input) = parseSystem()>
+      </textarea>
         <label>Enter number of equations: </label>
         <select [(ngModel)] = "externalnum" id="no_equ" (change)="generate(externalnum);delete(externalnum)">
           <option value="1" >1</option>
