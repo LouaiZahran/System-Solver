@@ -110,7 +110,7 @@ export class homecomponent {
 
     var rows : number = 0;
     arrofCoffsNums.push([]);
-
+    var pushedCoff : boolean = false;
     var foundNumber : boolean = false;
     var foundEqu : boolean = false;
     var foundDot : boolean = false;
@@ -150,6 +150,7 @@ export class homecomponent {
           constNum = constNum.concat(input.charAt(i)); 
         }
         foundNumber = true;
+        pushedCoff = false;
 
       }
       else if(   !Number(input.charAt(i))
@@ -159,13 +160,15 @@ export class homecomponent {
               && !(input.charAt(i) == "\n")
               && !(input.charAt(i) == ".")){
 
+       
+
         console.log("Inside if 2");
 
         console.log("Coff Number = ", coffNum);
 
         console.log(foundNumber)
         
-        if(!numberEntered && foundNumber){
+        if((!numberEntered)){
           if(coffNum == ""){
             coffNum = "1";
           }
@@ -173,8 +176,9 @@ export class homecomponent {
             coffNum = coffNum.concat("1");
           }
         }
-        if(Number(coffNum) && foundNumber){
+        if(Number(coffNum) && !pushedCoff){
           arrofCoffsNums[rows].push(Number(coffNum));
+          pushedCoff= true;
 
         }
         coffsName = coffsName.concat(input.charAt(i));
@@ -196,6 +200,7 @@ export class homecomponent {
 
       }
       else if(input.charAt(i) == "\n"){
+        pushedCoff = false;
        
         if(Number(constNum)){
           arrofConstNums.push(Number(constNum));
