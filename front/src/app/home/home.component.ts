@@ -18,6 +18,7 @@ export interface properties {
   constants_matrix :number[];
   precision :number;
   method :string;
+  initials_values :number[];
 
 }
 class problem implements properties{
@@ -26,12 +27,14 @@ class problem implements properties{
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
-  constructor(number_of_unknowns:number,coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+  initials_values: number[] = [];
+  constructor(number_of_unknowns:number,coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string,initials_values :number[]){
     this.num_of_unknowns = number_of_unknowns;
     this.coeff_matrix = coeff_matrix;
     this.constants_matrix = constants_matrix;
     this.precision = precision;
-    this.method = method
+    this.method = method;
+    this.initials_values = initials_values;
   }
 }
 @Component({
