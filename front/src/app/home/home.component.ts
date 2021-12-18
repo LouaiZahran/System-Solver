@@ -13,28 +13,30 @@ export interface decompostion {
   value : number;
 }
 export interface properties {
-  num_of_unknowns : number;
+  numberofUnkown :number;
   coeff_matrix :number[][];
   constants_matrix :number[];
   precision :number;
   method :string;
   initials_values :number[];
 
+
 }
 class problem implements properties{
-  num_of_unknowns : number = 0;
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
-  initials_values: number[] = [];
-  constructor(number_of_unknowns:number,coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string,initials_values :number[]){
-    this.num_of_unknowns = number_of_unknowns;
+  initials_values :number [] = [];
+  numberofUnkown :number = 0
+  constructor(numberofUnkown :number, coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string, initials_values :number []){
+    this.numberofUnkown = numberofUnkown;
     this.coeff_matrix = coeff_matrix;
     this.constants_matrix = constants_matrix;
     this.precision = precision;
     this.method = method;
     this.initials_values = initials_values;
+
   }
 }
 @Component({
@@ -68,10 +70,7 @@ export class homecomponent {
   validFlagInput : boolean = false;
   symmFalg : boolean = false;
   currentSolType : string = this.DirectSolTypes[0].type;
-  matrixInput : HTMLInputElement[][]= [
-    [<HTMLInputElement>document.getElementById("input00"), <HTMLInputElement>document.getElementById("input01"), <HTMLInputElement>document.getElementById("input02")],
-    [<HTMLInputElement>document.getElementById("input10"), <HTMLInputElement>document.getElementById("input11"), <HTMLInputElement>document.getElementById("input12")]
-  ];
+
   variableNames : string[] = [];
   externalnum:number=2
   coff:any=[
@@ -94,7 +93,7 @@ export class homecomponent {
     input = input.replace(/\+-/g, "-");
     input = input.replace(/-\+/g, "-");
     input = input.replace(/\+\+/g, "+");
-    //input = input.toLowerCase();
+    input = input.toLowerCase();
 
 
     console.log("Input = ", input);
@@ -126,12 +125,12 @@ export class homecomponent {
     var arrofMappedValues : Map<string, number>[] = []
     arrofMappedValues.push(new Map<string, number>());
 
-    //5r +7y = 9
-    var check=false
+    var check=false;
     for(let i = 0; i < input.length; i++){
       if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+" && !foundEqu ){
         console.log("Inside if");
         if(input.charAt(i) == "+" || input.charAt(i) == "-"  ){
+
           if(coffsName != ""){
             if(arrofMappedValues[rows].get(coffsName)){
               arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
@@ -148,12 +147,12 @@ export class homecomponent {
             {
               if(arrofCoffsNames[i]==coffsName)
               {
-                  check=true
-                  break
+                  check=true;
+                  break;
               }
               else
               {
-                check=false
+                check = false;
               }
             }
 
@@ -191,8 +190,8 @@ export class homecomponent {
 
         if(input.charAt(i) != "+" && input.charAt(i) != "-"){
           numberEntered = true;
-
         }
+
         if(!foundEqu && checkletter==false){
 
           coffNum = coffNum.concat(input.charAt(i));
@@ -239,60 +238,83 @@ export class homecomponent {
             coffNum = coffNum.concat("1");
           }
         }
-        var enter=false
+        var enter=false;
+
         if(Number(coffNum) && !pushedCoff){
           arrofCoffsNums[rows].push(Number(coffNum));
-          tempCoffNum = Number(coffNum)
+          tempCoffNum = Number(coffNum);
           pushedCoff = true;
         }
-        checkletter=true
+
+        checkletter = true;
 
         coffsName = coffsName.concat(input.charAt(i));
         coffNum = "";
         for(let i=0;i<arrofCoffsNames.length;i++)
+        {
+            if(arrofCoffsNames[i]==coffsName)
             {
-              if(arrofCoffsNames[i]==coffsName)
-              {
-                  check=true
-                  break
-              }
-              else
-              {
-                check=false
-              }
+                check=true
+                break
             }
+            else
+            {
+              check=false
+            }
+        }
         numberEntered = false;
         foundNumber = false;
+
       }
       else if(input.charAt(i) == "="){
         foundEqu = true;
+<<<<<<< HEAD
         if(coffsName != "" && check==false ){
 
           arrofCoffsNames.push(coffsName);
 
+             {
+                 check=true
+                 break
+             }
+             else
+             {
+               check=false
+             }
+           }
+
+           if(check!=true)
+           {
+
+            console.log(coffsName)
+            arrofCoffsNames.push(coffsName);
+
+           }
+
+
+      }
+      if(coffsName != ""){
+        if(arrofMappedValues[rows].get(coffsName)){
+          arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+        }
+        else{
+          arrofMappedValues[rows].set(coffsName, 0);
+          arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
 
         }
-        if(coffsName != ""){
-          if(arrofMappedValues[rows].get(coffsName)){
-            arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
-          }
-          else{
-            arrofMappedValues[rows].set(coffsName, 0);
-            arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+        tempCoffNum = 0;
+        arrofCoffsNames2.push(coffsName);
 
-          }
-          tempCoffNum = 0;
-          arrofCoffsNames2.push(coffsName);
-        }
-        coffsName = "";
+      }
+      coffsName = "";
+      checkletter=false
+      check=false
 
-
-        checkletter=false
+>>>>>>> b3626409492c47307ac5d0ade8fb75dc827e71d4
       }
       else if(input.charAt(i) == "\n"){
 
 
-        rows++;
         arrofCoffsNums.push([]);
 
         for(let k = 0; k < rows; k++){
@@ -370,7 +392,7 @@ export class homecomponent {
       }
 
       var p3=document.createElement("p")
-      var text3=document.createTextNode("=")
+      var text3=document.createTextNode("= ")
       p3.style.marginLeft="8px"
       p3.appendChild(text3)
       set.appendChild(p3)
@@ -400,10 +422,12 @@ export class homecomponent {
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
     console.log("Mapped Values = ", arrofMappedValues);
+    this.coeff_matrix = arrofCoffsNums;
+    this.constants_matrix = arrofConstNums;
   }
 
 
-  solutionTypeList(solType : string)
+  /*solutionTypeList(solType : string)
   {
     this.currentSolType = solType;
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
@@ -421,9 +445,9 @@ export class homecomponent {
       document.getElementById("iterList")?.remove();
     }
 
-  }
+  }*/
 
-  createErrorIters(){
+  /*createErrorIters(){
     var input = document.createElement("input");
     var input2 = document.createElement("input");
     input.value = "3";
@@ -453,9 +477,9 @@ export class homecomponent {
     input2.id = "iter2";
     document.getElementById("main")?.appendChild(input);
     document.getElementById("main")?.appendChild(input2);
-  }
+  }*/
 
-  createInitList(num : number){
+  /*createInitList(num : number){
 
     var list = document.createElement("ul");
     list.id = "iterList";
@@ -480,7 +504,7 @@ export class homecomponent {
 
 
 
-  }
+  }*/
 
 
   /*validateInput()
@@ -528,7 +552,7 @@ export class homecomponent {
   }*/
 
 
-  validateSymmetric()
+  /*validateSymmetric()
   {
     var symm : boolean = true;
     for(let i = 0; i < this.externalnum; i++){
@@ -549,29 +573,17 @@ export class homecomponent {
       alert("Matrix Must be Symmetirc");
 
     }
-  }
+  }*/
+
 
 
 
   solve()
   {
 
-    //this.validateInput();
-    this.validateSymmetric();
-    if(this.validFlagInput == true && ((this.symmFalg == true && this.currentSolType == "Cholesky") || (this.symmFalg == false && this.currentSolType !== "Cholesky"))){
-      for(let i = 0; i < this.matrixInput.length; i++){
-        for(let j = 0; j < this.matrixInput[i].length; j++){
-          if(j !== (this.matrixInput[i].length - 1)){
-            this.coeff_matrix[i][j] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
-          }else{
-            this.constants_matrix[i] = parseFloat((<HTMLInputElement>this.matrixInput[i][j]).value);
-          }
+    this.server.postProblem(new problem(this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
 
-        }
-      }
 
-      this.server.postProblem(new problem(this.externalnum, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
-    }
   }
 
 }
