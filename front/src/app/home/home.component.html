@@ -28,7 +28,7 @@
           <option value="19" >19</option>
           <option value="20" >20</option>
         </select>
-        <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)="solutionTypeList(currentSolType)">
+        <select [(ngModel)] = "currentSolType" id = "selectSolver">
           <optgroup label="Direct Methods">
             <option *ngFor = "let sol of DirectSolTypes">
               {{sol.type}}
