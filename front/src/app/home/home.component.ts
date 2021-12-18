@@ -78,9 +78,11 @@ export class homecomponent {
 
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
+  numberofUnkowns : number = 1;
 
   systemInput : string;
   parseSystem(){
+    var validFlag : boolean = true;
     var input = this.systemInput;
 
     input = input.replace(/ /g,'');
@@ -125,7 +127,8 @@ export class homecomponent {
       if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+" && !foundEqu ){
         console.log("Inside if");     
         if(input.charAt(i) == "+" || input.charAt(i) == "-"  ){
-
+          numberEntered = false;
+          foundNumber = false;
           if(coffsName != ""){
             if(arrofMappedValues[rows].get(coffsName)){
               arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
@@ -206,6 +209,12 @@ export class homecomponent {
             arrofConstNums.pop()
             arrofConstNums.push(Number(constNum));
           }
+          else{
+            validFlag = false;
+          }
+        }
+        else{
+          validFlag = false;
         }
         pushedCoff = false;
 
@@ -239,6 +248,9 @@ export class homecomponent {
           arrofCoffsNums[rows].push(Number(coffNum));
           tempCoffNum = Number(coffNum);
           pushedCoff = true;
+        }
+        else{
+          validFlag = false;
         }
 
         checkletter = true;
@@ -311,6 +323,8 @@ export class homecomponent {
         
         rows++;
         arrofCoffsNums.push([]);
+        numberEntered = false;
+        foundNumber = false;
         
         for(let k = 0; k < rows; k++){  
 
@@ -420,6 +434,7 @@ export class homecomponent {
     this.numberofUnkowns = arrofCoffsNames.length;
     this.coeff_matrix = arrofCoffsNums;
     this.constants_matrix = arrofConstNums;
+    this.numberofUnkowns = arrofCoffsNames.length;
   }
 
 
@@ -547,16 +562,13 @@ export class homecomponent {
     }
   }*/
 
-
-  /*validateSymmetric()
+  validateSymmetric()
   {
     var symm : boolean = true;
-    for(let i = 0; i < this.externalnum; i++){
-      for(let j = 0; j < this.externalnum; j++){
-        var input = <HTMLInputElement>this.matrixInput[i][j];
-        var input2 = <HTMLInputElement>this.matrixInput[j][i];
-        var value = input.value;
-        var value2 = input2.value;
+    for(let i = 0; i < this.numberofUnkowns; i++){
+      for(let j = 0; j < this.numberofUnkowns; j++){
+        var value = this.coeff_matrix[i][j];
+        var value2 = this.coeff_matrix[j][i];
         if(value != value2){
           symm = false;
           break;
@@ -569,17 +581,24 @@ export class homecomponent {
       alert("Matrix Must be Symmetirc");
 
     }
-  }*/
+  }
   
 
 
+
+ 
   solve()
   {
-    console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
-    console.log(JSON.stringify(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)));
-    this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : any)=>(console.log(response)),(error:any)=>console.log("lol"));
-  }
+    this.validateSymmetric()
+    if(!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)){ 
+      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
+      console.log(JSON.stringify(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)));
+      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : any)=>(console.log(response)),(error:any)=>console.log("lol"));
 
+
+    }
+
+}
 }
 
 
