@@ -20,11 +20,13 @@ export interface properties {
 
 }
 class problem implements properties{
+  numberofUnkown : number = 0;
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
-  constructor(coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+  constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+    this.numberofUnkown = numberofUnkown;
     this.coeff_matrix = coeff_matrix;
     this.constants_matrix = constants_matrix;
     this.precision = precision;
@@ -72,7 +74,7 @@ export class homecomponent {
   flag:number=0
   $event:any
   significant_figure:number = 1
-
+  numberofUnkowns : number= 0;
 
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
@@ -415,6 +417,7 @@ export class homecomponent {
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
     console.log("Mapped Values = ", arrofMappedValues);
+    this.numberofUnkowns = arrofCoffsNames.length;
     this.coeff_matrix = arrofCoffsNums;
     this.constants_matrix = arrofConstNums;
   }
@@ -570,13 +573,11 @@ export class homecomponent {
   
 
 
-
   solve()
   {
-
-    this.server.postProblem(new problem(this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
-
-   
+    console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
+    console.log(JSON.stringify(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)));
+    this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : any)=>(console.log(response)),(error:any)=>console.log("lol"));
   }
 
 }

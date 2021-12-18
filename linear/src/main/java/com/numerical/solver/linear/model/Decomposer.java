@@ -9,13 +9,7 @@ public class Decomposer {
     private Matrix constant;
     private Matrix result;
 
-    public Decomposer(Matrix coeff, Matrix constant) throws IllegalArgumentException{
-        if(coeff.getDimension().getRow() != constant.getDimension().getRow()
-                || constant.getDimension().getCol() != 1)
-            throw new IllegalArgumentException("System's dimensions are not correct");
-        this.setCoeff(coeff);
-        this.setConstant(constant);
-    }
+
 
     public Matrix getCoeff() {
         return coeff;
