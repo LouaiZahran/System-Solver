@@ -2,22 +2,9 @@
 
 <div class="container">
   <div style="display: flex;">
-
     <div class="dropdown" id = "main">
-        <label>Enter number of equations: </label>
-        <select [(ngModel)] = "externalnum" id="no_equ" (change)="generate(externalnum);delete(externalnum)">
-          <option value="1" >1</option>
-          <option value="2" >2</option>
-          <option value="3" >3</option>
-          <option value="4" >4</option>
-          <option value="5" >5</option>
-          <option value="6" >6</option>
-          <option value="7" >7</option>
-          <option value="8" >8</option>
-          <option value="9" >9</option>
-          <option value="10" >10</option>
-        </select>
-
+      <textarea [(ngModel)] = "systemInput" id = "textinput" cols = "70" row = "10" spellcheck = "false" (input) = parseSystem()>
+      </textarea>
         <label>Enter the desired precision: </label>
         <select [(ngModel)] = "significant_figure" id="significance">
           <option value="1" >1</option>
@@ -41,7 +28,6 @@
           <option value="19" >19</option>
           <option value="20" >20</option>
         </select>
-
         <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)="solutionTypeList(currentSolType)">
           <optgroup label="Direct Methods">
             <option *ngFor = "let sol of DirectSolTypes">
@@ -59,13 +45,11 @@
             </option>
           </optgroup>
         </select>
-
-        <button id = "validate" (click) = "validateInput();validateSymmetric()">Validate</button>
-        <button id = "solve" (click) = "solve()">Solve</button>
+    
     </div>
   </div>
 
-
+  <button style="margin-left: 200px; margin-top: 40px;" id = "solve" (click) = "solve()">Solve</button>
   <!-- <div id="1000">
     <button (click)="create()">Change the name of the varaibles in the system</button>
     <div id="1">
@@ -74,26 +58,7 @@
 
   <div id="0">
       <div id="0.5">
-          <div  style="display: flex;">
-              <input placeholder="0" type="number" class="matrixIn" id = "input00">
-              <p>X1</p>
-              <p>+</p>
-              <input placeholder="0" type="number" class="matrixIn" id = "input01">
-              <p>X2</p>
-              <p>=</p>
-              <input placeholder="0" type="number" class="matrixIn" id = "input02">
-
-          </div>
-          <div  style="display: flex;">
-              <input placeholder="0" type="number" class="matrixIn" id = "input10">
-              <p>X1</p>
-              <p>+</p>
-              <input placeholder="0" type="number" class="matrixIn" id = "input11">
-              <p>X2</p>
-              <p>=</p>
-              <input placeholder="0" type="number" class="matrixIn" id = "input12">
-
-          </div>
+       
       </div>
   </div>
 </div>
