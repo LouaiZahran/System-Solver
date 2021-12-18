@@ -88,6 +88,12 @@ export class homecomponent {
     var input = this.systemInput;
 
     input = input.replace(/ /g,'');
+    input = input.replace(/--/g, "+");
+    input = input.replace(/\+-/g, "-");
+    input = input.replace(/-\+/g, "-");
+    input = input.replace(/\+\+/g, "+");
+    //input = input.toLowerCase();
+    
 
     console.log("Input = ", input);
 
@@ -104,14 +110,19 @@ export class homecomponent {
 
     var foundNumber : boolean = false;
     var foundEqu : boolean = false;
+    var pushedCoff : boolean = false;
    
     var coffNum : string = "";
     var constNum : string = "";
     var coffsName : string = ""
     var numberEntered : boolean = false;
     var checkletter=false
+    var tempCoffNum : number = 0;
 
     console.log(this.systemInput);
+
+    var arrofMappedValues : Map<string, number>[] = []
+    arrofMappedValues.push(new Map<string, number>());
     
     //5r +7y = 9
     var check=false 
@@ -120,7 +131,15 @@ export class homecomponent {
         console.log("Inside if");     
         if(input.charAt(i) == "+" || input.charAt(i) == "-"  ){
           if(coffsName != ""){
-            
+            if(arrofMappedValues[rows].get(coffsName)){
+              arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+            }
+            else{
+              arrofMappedValues[rows].set(coffsName, 0);
+              arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+
+            }
+            tempCoffNum = 0;
             console.log(coffsName)
             arrofCoffsNames2.push(coffsName);
             for(let i=0;i<arrofCoffsNames.length;i++)
@@ -139,9 +158,20 @@ export class homecomponent {
             if(check!=true)
             {
               
-              console.log(coffsName)
+              console.log(coffsName);
+
+              if(arrofMappedValues[rows].get(coffsName)){
+                arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+              }
+              else{
+                arrofMappedValues[rows].set(coffsName, 0);
+                arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+  
+              }
+              tempCoffNum = 0;
+             
               arrofCoffsNames.push(coffsName);
-               
+              arrofCoffsNames2.push(coffsName);
            
             }
 
@@ -150,11 +180,11 @@ export class homecomponent {
             check=false
           }
         }
-        if(Number(input.charAt(i)) && checkletter==true && !foundEqu )
+        if(Number(input.charAt(i)) && checkletter==true && !foundEqu)
         { 
-          console.log("hena")
-            coffsName=coffsName.concat(input.charAt(i));
-            console.log(coffsName)
+          
+          coffsName=coffsName.concat(input.charAt(i));
+          console.log(coffsName)
         }
        
         if(input.charAt(i) != "+" && input.charAt(i) != "-"){
@@ -167,17 +197,22 @@ export class homecomponent {
         }
         else if(foundEqu){
           constNum = constNum.concat(input.charAt(i)); 
+          console.log(constNum)
+
         }
         foundNumber = true;
       
-        if(Number(input.charAt(i)) )
+        if(Number(input.charAt(i)) || input.charAt(i) == "0")
         { 
           console.log("shpow")
           if(Number(constNum)){
+            console.log(constNum)
             arrofConstNums.pop()
             arrofConstNums.push(Number(constNum));
           }
         }
+        pushedCoff = false;
+
 
       }
      
@@ -194,7 +229,7 @@ export class homecomponent {
 
         console.log(foundNumber)
         
-        if(!numberEntered && foundNumber){
+        if(!numberEntered){
           if(coffNum == ""){
             coffNum = "1";
           }
@@ -203,8 +238,10 @@ export class homecomponent {
           }
         }
         var enter=false
-        if(Number(coffNum) && foundNumber){
+        if(Number(coffNum) && !pushedCoff){
           arrofCoffsNums[rows].push(Number(coffNum));
+          tempCoffNum = Number(coffNum)
+          pushedCoff = true;
         }
         checkletter=true
         
@@ -225,21 +262,58 @@ export class homecomponent {
         numberEntered = false;
         foundNumber = false;
       }
-      else if(input.charAt(i) == "=" ){
-       foundEqu = true;
-       arrofCoffsNames2.push(coffsName);
-       if(coffsName != "" && check==false ){
-        
-        arrofCoffsNames.push(coffsName);
+      else if(input.charAt(i) == "="){
+        foundEqu = true;
+        if(coffsName != "" && check==false ){
+          
+          arrofCoffsNames.push(coffsName);
+
+         
+        }
+        if(coffsName != ""){
+          if(arrofMappedValues[rows].get(coffsName)){
+            arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+          }
+          else{
+            arrofMappedValues[rows].set(coffsName, 0);
+            arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
+  
+          }
+          tempCoffNum = 0;
+          arrofCoffsNames2.push(coffsName);
+        }
         coffsName = "";
-       }
+       
       
-       checkletter=false
+        checkletter=false
       }
       else if(input.charAt(i) == "\n"){
-        enter=true
+
+        
         rows++;
         arrofCoffsNums.push([]);
+        
+        for(let k = 0; k < rows; k++){  
+
+          arrofCoffsNums[k] = [];
+          var ctr = 0;
+          for(var name of arrofCoffsNames){
+            if(!arrofMappedValues[k].get(name)){
+              arrofMappedValues[k].set(name, 0);
+            }
+            arrofCoffsNums[k][ctr] = arrofMappedValues[k].get(name)
+            ctr++;
+          }
+          ctr = 0;
+
+        }
+        arrofMappedValues.push(new Map<string, number>());
+
+
+
+        pushedCoff = false;
+        enter=true
+       
         arrofConstNums.push(0)
         constNum = ""
         coffNum = ""
@@ -250,8 +324,8 @@ export class homecomponent {
        var find=0
        var copy
     
-      var del =document.getElementById("0.5")
-      del?.parentNode?.removeChild(del)    
+    var del =document.getElementById("0.5")
+    del?.parentNode?.removeChild(del)    
     var set2 = document.createElement("div")
     set2.id = "0.5"
     set2.style.marginLeft="150px"
@@ -263,7 +337,6 @@ export class homecomponent {
       for(let j=0;j<arrofCoffsNums[i].length;j++)
       {
         var inputdown = document.createElement("div")
-        inputdown.style.width="40px"
         inputdown.style.height="30px"
         inputdown.style.border="1px solid black"
         inputdown.style.background="transparent"
@@ -300,7 +373,6 @@ export class homecomponent {
       p3.appendChild(text3)
       set.appendChild(p3)
       var input2 =document.createElement("div")
-      input2.style.width="40px"
       input2.style.height="30px"
       
       
@@ -325,6 +397,7 @@ export class homecomponent {
     console.log("Vector of Constants = ", arrofConstNums);
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
+    console.log("Mapped Values = ", arrofMappedValues);
   }
 
 
@@ -477,30 +550,6 @@ export class homecomponent {
   }
   
 
-  /*delete()
-  {
-    var del =document.getElementById("0.5")
-    del?.parentNode?.removeChild(del)
-   
-  }*/
-
-  
-
-  /*set(num:number)
-  {
-    document.getElementById("iter")?.remove();
-    document.getElementById("iter2")?.remove();
-    document.getElementById("iterList")?.remove();
-    if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
-      this.createInitList(num);
-      this.createErrorIters();
-
-    }
-    
-
-   
-    console.log(this.matrixInput)
-  }*/
 
 
   solve()
