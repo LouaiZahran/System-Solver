@@ -16,7 +16,11 @@
     margin-left: 5px;
 
 }
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .container{
     display: flexbox;
     -ms-flex-align: start;

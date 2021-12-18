@@ -83,18 +83,7 @@ export class homecomponent {
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
 
-
-
   systemInput : string;
-  
-  
-
-
-
-
-
-
-
   parseSystem(){
     var input = this.systemInput;
 
@@ -103,56 +92,95 @@ export class homecomponent {
     console.log("Input = ", input);
 
     var arrofCoffsNums : number[][] = [];
+   
     var arrofConstNums : number[] = [];
     var arrofCoffsNames : string[] = [];
+    var arrofCoffsNames2 : string[] = [];
 
 
 
     var rows : number = 0;
     arrofCoffsNums.push([]);
-    var pushedCoff : boolean = false;
+
     var foundNumber : boolean = false;
     var foundEqu : boolean = false;
-    var foundDot : boolean = false;
-    var foundNegative : boolean = false;
-
-
+   
     var coffNum : string = "";
     var constNum : string = "";
     var coffsName : string = ""
     var numberEntered : boolean = false;
-
+    var checkletter=false
 
     console.log(this.systemInput);
-
-    //5r +7y = 9
     
+    //5r +7y = 9
+    var check=false 
     for(let i = 0; i < input.length; i++){
-      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+"){
-        console.log("Inside if");
-
-        
-        if(input.charAt(i) == "+" || input.charAt(i) == "-" ){
+      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+" && !foundEqu ){
+        console.log("Inside if");     
+        if(input.charAt(i) == "+" || input.charAt(i) == "-"  ){
           if(coffsName != ""){
-            arrofCoffsNames.push(coffsName);
-            coffsName = "";
+            
+            console.log(coffsName)
+            arrofCoffsNames2.push(coffsName);
+            for(let i=0;i<arrofCoffsNames.length;i++)
+            {
+              if(arrofCoffsNames[i]==coffsName)
+              {
+                  check=true
+                  break
+              }
+              else
+              {
+                check=false
+              }
+            }
+            
+            if(check!=true)
+            {
+              
+              console.log(coffsName)
+              arrofCoffsNames.push(coffsName);
+               
+           
+            }
 
+            coffsName = "";
+            checkletter=false
+            check=false
           }
         }
+        if(Number(input.charAt(i)) && checkletter==true && !foundEqu )
+        { 
+          console.log("hena")
+            coffsName=coffsName.concat(input.charAt(i));
+            console.log(coffsName)
+        }
+       
         if(input.charAt(i) != "+" && input.charAt(i) != "-"){
           numberEntered = true;
 
         }
-        if(!foundEqu){  
+        if(!foundEqu && checkletter==false){  
+          
           coffNum = coffNum.concat(input.charAt(i)); 
         }
-        else{
+        else if(foundEqu){
           constNum = constNum.concat(input.charAt(i)); 
         }
         foundNumber = true;
-        pushedCoff = false;
+      
+        if(Number(input.charAt(i)) )
+        { 
+          console.log("shpow")
+          if(Number(constNum)){
+            arrofConstNums.pop()
+            arrofConstNums.push(Number(constNum));
+          }
+        }
 
       }
+     
       else if(   !Number(input.charAt(i))
               && !(input.charAt(i) == "+") 
               && !(input.charAt(i) == "-") 
@@ -160,15 +188,13 @@ export class homecomponent {
               && !(input.charAt(i) == "\n")
               && !(input.charAt(i) == ".")){
 
-       
-
         console.log("Inside if 2");
 
         console.log("Coff Number = ", coffNum);
 
         console.log(foundNumber)
         
-        if((!numberEntered)){
+        if(!numberEntered && foundNumber){
           if(coffNum == ""){
             coffNum = "1";
           }
@@ -176,60 +202,135 @@ export class homecomponent {
             coffNum = coffNum.concat("1");
           }
         }
-        if(Number(coffNum) && !pushedCoff){
+        var enter=false
+        if(Number(coffNum) && foundNumber){
           arrofCoffsNums[rows].push(Number(coffNum));
-          pushedCoff= true;
-
         }
-        coffsName = coffsName.concat(input.charAt(i));
+        checkletter=true
         
+        coffsName = coffsName.concat(input.charAt(i));
         coffNum = "";
-        foundDot = false;
-        foundNegative = false;
+        for(let i=0;i<arrofCoffsNames.length;i++)
+            {
+              if(arrofCoffsNames[i]==coffsName)
+              {
+                  check=true
+                  break
+              }
+              else
+              {
+                check=false
+              }
+            }
         numberEntered = false;
         foundNumber = false;
       }
-      else if(input.charAt(i) == "="){
-      
+      else if(input.charAt(i) == "=" ){
        foundEqu = true;
-       if(coffsName != ""){
+       arrofCoffsNames2.push(coffsName);
+       if(coffsName != "" && check==false ){
+        
         arrofCoffsNames.push(coffsName);
         coffsName = "";
-
        }
-
+      
+       checkletter=false
       }
       else if(input.charAt(i) == "\n"){
-        pushedCoff = false;
-       
-        if(Number(constNum)){
-          arrofConstNums.push(Number(constNum));
-        }
-
+        enter=true
         rows++;
         arrofCoffsNums.push([]);
-        console.log("Constant Number =", constNum);
+        arrofConstNums.push(0)
         constNum = ""
         coffNum = ""
         coffsName = "" 
         foundEqu = false;
+       console.log(arrofCoffsNums.length)
+       console.log(arrofCoffsNums[0].length)
+       var find=0
+       var copy
+    
+      var del =document.getElementById("0.5")
+      del?.parentNode?.removeChild(del)    
+    var set2 = document.createElement("div")
+    set2.id = "0.5"
+    set2.style.marginLeft="150px"
+    set2.style.marginTop="30px"
+    for(let i = 0; i<arrofCoffsNums.length-1; i++)
+    {  
+      var set = document.createElement("div")
+      set.style.display="flex"
+      for(let j=0;j<arrofCoffsNums[i].length;j++)
+      {
+        var inputdown = document.createElement("div")
+        inputdown.style.width="40px"
+        inputdown.style.height="30px"
+        inputdown.style.border="1px solid black"
+        inputdown.style.background="transparent"
+        inputdown.style.border = "3px solid rgb(206, 56, 76)"
+        inputdown.style.borderRadius = "10px"
+        var p4 = document.createElement("p")
+        var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())  
+        p4.appendChild(text4)
+        p4.style.textAlign="center"
+        inputdown.appendChild(p4)  
+        set.appendChild(inputdown)
+        var p = document.createElement("p")
+        var text = document.createTextNode(arrofCoffsNames[j])
+        p.style.marginLeft="8px"
+        p.appendChild(text)
+        set.appendChild(p);
+        set2.appendChild(set);
+        if(j!=arrofCoffsNums[0].length-1)
+        {
+          var p2=document.createElement("p")
+          var text2=document.createTextNode("+")
+          p2.style.marginLeft="8px"
+          p2.appendChild(text2)
+          set.appendChild(p2)
+          set2.appendChild(set)
+          document.getElementById("0")?.appendChild(set2)
+        }
 
-        
-        
+      }
+           
+      var p3=document.createElement("p")
+      var text3=document.createTextNode("=")
+      p3.style.marginLeft="8px"
+      p3.appendChild(text3)
+      set.appendChild(p3)
+      var input2 =document.createElement("div")
+      input2.style.width="40px"
+      input2.style.height="30px"
+      
+      
+      input2.style.border="2px solid black"
+      input2.style.borderRadius = "10px"
+      input2.style.backgroundColor="transparent"
+      input2.style.border = "3px solid rgb(206, 56, 76)"
+      input2.className = "matrixIn";
+      var p5= document.createElement("p")
+
+     var text5=document.createTextNode(arrofConstNums[i].toString())
+     p5.appendChild(text5)
+     p5.style.textAlign="center"
+      input2.appendChild(p5)
+      set.appendChild(input2)
+      set2.appendChild(set)
+      document.getElementById("0")?.appendChild(set2)
+    }
       }
     }
     console.log("Matrix of Coeffs = ", arrofCoffsNums);
     console.log("Vector of Constants = ", arrofConstNums);
     console.log("Vector of Coffs = ", arrofCoffsNames);
+    console.log("Vector of Coffs2 = ", arrofCoffsNames2);
   }
 
 
   solutionTypeList(solType : string)
   {
-
     this.currentSolType = solType;
-   
-    
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
         this.createErrorIters();
@@ -307,7 +408,7 @@ export class homecomponent {
   }
 
 
-  validateInput()
+  /*validateInput()
   {
     console.log(this.significant_figure);
     console.log(this.currentSolType);
@@ -349,7 +450,7 @@ export class homecomponent {
         iter2.style.borderColor = "black";
       }
     }
-  }
+  }*/
 
 
   validateSymmetric()
@@ -376,44 +477,16 @@ export class homecomponent {
   }
   
 
-  delete(num:number)
+  /*delete()
   {
-
     var del =document.getElementById("0.5")
     del?.parentNode?.removeChild(del)
-    this.externalnum=num
-    this.set(num)
-    if(this.flag==1)
-    {
-      this.delete2();
-    }
+   
+  }*/
 
-    //this.create();
-  }
+  
 
-  generate(y:number)
-  {
-
-    var x = 1;
-    for(let i = 0; i < y; i++)
-    {
-      var z = "X" + x
-      this.coff[i] = z.toString()
-      console.log(this.coff[i])
-      x = x + 1
-    }
-  }
-
-  delete2()
-  {
-    console.log(document.getElementById("1")?.nodeValue)
-    var del = document.getElementById("2")
-    del?.parentNode?.removeChild(del)
-    this.flag=0
-
-  }
-
-  set(num:number)
+  /*set(num:number)
   {
     document.getElementById("iter")?.remove();
     document.getElementById("iter2")?.remove();
@@ -425,135 +498,15 @@ export class homecomponent {
     }
     
 
-    this.matrixInput = [];
-    var set2 = document.createElement("div")
-    set2.id = "0.5"
-    for(let i = 0; i < num; i++)
-    {
-      this.matrixInput.push([]);
-      var set = document.createElement("div")
-      set.style.display="flex"
-
-      for(let j=0;j<num;j++)
-      {
-        var input = document.createElement("input")
-        input.style.width="60px"
-        input.style.height="40px"
-        input.style.marginTop="4px"
-        input.style.marginLeft="5px"
-        input.style.border="1px solid black"
-        input.style.borderRadius = "10px"
-        input.style.border = "3px solid rgb(141, 180, 43)"
-        input.type = "number";
-        input.className = "matrixIn";
-        input.placeholder="0"
-        input.id = i.toString().concat(j.toString());
-        this.matrixInput[i].push(input);
-        set.appendChild(input)
-        var p = document.createElement("p")
-        var text = document.createTextNode(this.coff[j])
-        p.style.marginLeft="8px"
-        p.appendChild(text)
-        set.appendChild(p);
-        set2.appendChild(set);
-        if(j!=num-1)
-        {
-          var p2=document.createElement("p")
-          var text2=document.createTextNode("+")
-          p2.style.marginLeft="8px"
-          p2.appendChild(text2)
-          set.appendChild(p2)
-          set2.appendChild(set)
-          document.getElementById("0")?.appendChild(set2)
-        }
-
-      }
-     
-
-      
-      var p3=document.createElement("p")
-      var text3=document.createTextNode("=")
-      p3.style.marginLeft="8px"
-      p3.appendChild(text3)
-      set.appendChild(p3)
-      var input2 =document.createElement("input")
-      input2.style.width="60px"
-      input2.style.height="40px"
-      input2.style.marginTop="4px"
-      input2.style.marginLeft="5px"
-      input2.style.border="1px solid black"
-      input2.style.borderRadius = "10px"
-      input2.style.border = "3px solid rgb(206, 56, 76)"
-
-      input2.type = "number";
-      input2.className = "matrixIn";
-      input2.placeholder="0"
-      this.matrixInput[i].push(input2);
-      set.appendChild(input2)
-    
-    
-      set2.appendChild(set)
-      document.getElementById("0")?.appendChild(set2)
-    }
+   
     console.log(this.matrixInput)
-  }
-
-  /*create()
-  {
-    if(this.flag==1)
-    {
-      this.delete2()
-      return
-    }
-    var set= document.createElement("div")
-    set.id="2"
-    set.style.display="flex"
-    var x=1
-    var p4=document.createElement("p")
-    var text4=document.createTextNode("{")
-    p4.appendChild(text4)
-    set.appendChild(p4)
-    for(let i=0 ;i<this.externalnum;i++)
-    {
-      var p=document.createElement("p")
-      var text=document.createTextNode(  x +" :")
-      p.style.marginLeft="5px"
-      p.style.marginTop="2px"
-      p.appendChild(text)
-      set.appendChild(p)
-      document.getElementById("1000")?.appendChild(set)
-      var input =document.createElement("input")
-        input.style.width="30px"
-        input.style.height="20px"
-        input.style.marginLeft="5px"
-        input.style.marginTop="5px"
-        input.style.border="1px solid black"
-        input.placeholder="x"+x
-        input.id=x.toString()
-        input.id=x.toString()
-        set.appendChild(input)
-        if(i!=this.externalnum-1)
-        {
-          var p2=document.createElement("p")
-          var text2=document.createTextNode(";")
-          p2.style.marginLeft="5px"
-          p2.appendChild(text2)
-          set.appendChild(p2)
-        }
-        x=x+1
-    }
-    var p3=document.createElement("p")
-    var text3=document.createTextNode("}")
-    p3.style.marginLeft="5px"
-    p3.appendChild(text3)
-    set.appendChild(p3)
-    this.flag=1
   }*/
+
 
   solve()
   {
 
-    this.validateInput();
+    //this.validateInput();
     this.validateSymmetric();
     if(this.validFlagInput == true && ((this.symmFalg == true && this.currentSolType == "Cholesky") || (this.symmFalg == false && this.currentSolType !== "Cholesky"))){
       for(let i = 0; i < this.matrixInput.length; i++){
