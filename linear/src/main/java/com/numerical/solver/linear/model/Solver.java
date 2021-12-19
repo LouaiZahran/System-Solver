@@ -66,7 +66,7 @@ public class Solver {
                 }
             }
 
-            BigDecimal newXi = numerator.divide(denominator, MathContext.DECIMAL128);
+            BigDecimal newXi = numerator.divide(denominator, MathContext.UNLIMITED);
             ret.setCell(curVariablePosition, newXi);
             if(immediateUpdate)
                 guessCopy.setCell(curVariablePosition, newXi);
@@ -93,7 +93,7 @@ public class Solver {
             BigDecimal denominator = current.getCell(curPosition);
             if(denominator.doubleValue() == 0)
                 return Double.POSITIVE_INFINITY;
-            error = Math.max(error, numerator.divide(denominator, MathContext.DECIMAL128).doubleValue());
+            error = Math.max(error, numerator.divide(denominator, MathContext.UNLIMITED).doubleValue());
         }
 
         return error;
@@ -110,5 +110,91 @@ public class Solver {
         if(getError(guess, curResult) <= tolerance)
             return curResult;
         return solveIterative(curResult, iterations - 1, tolerance, gaussSeidel);
+    }
+
+    public Matrix forwardSub() throws IllegalArgumentException{
+        Dimension dim = coeff.getDimension();
+        int rows = dim.getRow();
+        int cols = dim.getCol();
+        for(int i=1; i<=rows; i++){
+            for(int j=i+1; j<=cols; j++){
+                Dimension curPosition = new Dimension(i, j);
+                if(coeff.getCell(curPosition).doubleValue() != 0)
+                    throw new IllegalArgumentException("Matrix is not lower triangular");
+            }
+        }
+
+        Matrix ret = new Matrix(constant);
+        for(int i=1; i<=rows; i++){
+            Dimension curVariablePosition = new Dimension(i, 1);
+            for(int j=1; j<i; j++){
+                Dimension curPosition = new Dimension(i, j);
+                Dimension otherVariablesPosition = new Dimension(j, 1);
+                BigDecimal aij = coeff.getCell(curPosition);
+                BigDecimal bi = ret.getCell(curVariablePosition);
+                BigDecimal xj = ret.getCell(otherVariablesPosition);
+                BigDecimal newBi = bi.subtract(aij.multiply(xj));
+                ret.setCell(curVariablePosition, newBi);
+            }
+            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), MathContext.UNLIMITED));
+        }
+
+        return ret;
+    }
+
+    public Matrix backwardSub() throws IllegalArgumentException {
+        Dimension dim = coeff.getDimension();
+        int rows = dim.getRow();
+        int cols = dim.getCol();
+        for (int i = 1; i <= rows; i++) {
+            for (int j = 1; j < i; j++) {
+                Dimension curPosition = new Dimension(i, j);
+                if (coeff.getCell(curPosition).doubleValue() != 0)
+                    throw new IllegalArgumentException("Matrix is not upper triangular");
+            }
+        }
+
+        Matrix ret = new Matrix(constant);
+        for (int i = rows; i >= 1; i--) {
+            Dimension curVariablePosition = new Dimension(i, 1);
+            for (int j = i+1; j <= cols; j++) {
+                Dimension curPosition = new Dimension(i, j);
+                Dimension otherVariablesPosition = new Dimension(j, 1);
+                BigDecimal aij = coeff.getCell(curPosition);
+                BigDecimal bi = ret.getCell(curVariablePosition);
+                BigDecimal xj = ret.getCell(otherVariablesPosition);
+                BigDecimal newBi = bi.subtract(aij.multiply(xj));
+                ret.setCell(curVariablePosition, newBi);
+            }
+            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), MathContext.UNLIMITED));
+        }
+
+        return ret;
+    }
+
+    //Under Progress
+    public Matrix applyPivoting(Matrix matrix, Dimension pivotPosition){
+        Dimension dim = matrix.getDimension();
+        int rows = dim.getRow();
+        int cols = dim.getCol();
+        BigDecimal curMax = matrix.getCell(pivotPosition);
+
+
+        return new Matrix();
+    }
+
+    //Under Progress
+    public Matrix GaussElimination(boolean Jordan){
+        Dimension dim = coeff.getDimension();
+        int rows = dim.getRow();
+        int cols = dim.getCol();
+
+        Matrix cur = new Matrix(coeff);
+        for(int i=1; i<=rows; i++){
+            cur = applyPivoting(cur, new Dimension(i, i));
+
+        }
+
+        return new Matrix();
     }
 }

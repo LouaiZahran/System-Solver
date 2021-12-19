@@ -1,0 +1,116 @@
+
+#input00, #input01,
+#input10, #input11
+{
+    width: 50px;
+    height: 30px;
+    border: 3px solid rgb(141, 180, 43);
+    margin-top: 4px;
+    margin-left: 5px;
+}
+#input02, #input12 {
+    width: 50px;
+    height: 30px;
+    border: 3px solid rgb(146, 31, 46);
+    margin-top: 4px;
+    margin-left: 5px;
+
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.container{
+    display: flexbox;
+    -ms-flex-align: start;
+    top: 700px;
+    left: 500px;
+    width: 700px;
+    height: 900px;
+}
+
+.matrixIn {
+    border-radius: 10px;
+
+}
+
+#selectSolver {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: Fira code;
+    font-size: 20px;
+    height: 35px;
+    left: 500px;
+}
+
+#significance {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: Fira code;
+    font-size: 20px;
+    height: 35px;
+    left: 40px;
+}
+#no_equ {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: Fira code;
+    font-size: 20px;
+    height: 35px;
+    left: 40px;
+}
+
+#validate {
+    background-color: rgb(16, 34, 63);
+    color: rgb(255, 255, 255);
+    font-family: Fira code;
+    font-size: 18px;
+    width: 100px;
+    height: 30px;
+    left: 5px;
+    border-radius: 7px;
+    position: relative;
+
+}
+button {
+    background-color: darkslategrey;
+    color: rgb(255, 255, 255);
+    font-family: Fira code;
+    font-size: 18px;
+    width: 100px;
+    height: 30px;
+    left: 5px;
+    border-radius: 7px;
+    position: relative;
+
+}
+button:hover{
+  background-color: rgb(34, 56, 56);
+
+}
+
+#iter {
+    left: 0px;
+    position: relative;
+}
+
+#divSelect {
+    left: 500px;
+    position: relative;
+}
+
+p
+{
+    margin-left: 8px;
+
+}
+#placeholder
+{
+    text-align: center;
+}
+select
+{
+    margin-top: 15px;
+    margin-left: 20px;
+}
