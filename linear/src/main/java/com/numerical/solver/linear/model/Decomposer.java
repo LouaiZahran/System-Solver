@@ -43,23 +43,23 @@ public class Decomposer {
             for (int j = 1; j <= i; j++) {
                 BigDecimal sum = new BigDecimal(0);
                 if (j == i) {
-                    for (int k = 1; k < j; k++)
-                        sum.add(lower.getCell(new Dimension(j,k)).round(mc)
-                                .multiply(lower.getCell(new Dimension(j,k)).round(mc)).round(mc));
-
+                    for (int k = 1; k < j; k++) {
+                        sum=sum.add(lower.getCell(new Dimension(j, k)).round(mc)
+                                .multiply(lower.getCell(new Dimension(j, k)).round(mc)).round(mc));
+                    }
                     lower.setCell(new Dimension(j,j),
                             matrix.getCell(new Dimension(j,j)).round(mc)
                                     .subtract(sum).round(mc).sqrt(mc));
                 }
                 else {
                     for (int k = 1; k < j; k++)
-                        sum.add(lower.getCell(new Dimension(i,k)).round(mc)
+                        sum=sum.add(lower.getCell(new Dimension(i,k)).round(mc)
                                 .multiply(lower.getCell(new Dimension(j,k)).round(mc)).round(mc));
 
                     lower.setCell(new Dimension(i,j),
                             matrix.getCell(new Dimension(i,j)).round(mc)
                                     .subtract(sum).round(mc)
-                                    .divide(lower.getCell(new Dimension(j,j)).round(mc)).round(mc));
+                                    .divide(lower.getCell(new Dimension(j,j)),mc).round(mc));
                 }
             }
         }
@@ -76,12 +76,11 @@ public class Decomposer {
         for (int i = 1; i <= rows; i++) {
             upper.setCell(new Dimension(i,i),new BigDecimal(1));
         }
-
         for (int j = 1; j <= rows; j++) {
             for (int i = j; i <=rows; i++) {
                 BigDecimal sum = new BigDecimal(0);
                 for (int k = 1; k < j; k++)
-                    sum.add(lower.getCell(new Dimension(i,k)).round(mc)
+                    sum=sum.add(lower.getCell(new Dimension(i,k)).round(mc)
                             .multiply(upper.getCell(new Dimension(k,j)).round(mc)).round(mc));
 
                 lower.setCell(new Dimension(i,j),
@@ -91,7 +90,7 @@ public class Decomposer {
             for (int i = j; i <= rows; i++) {
                 BigDecimal sum = new BigDecimal(0);
                 for(int k = 1; k < j; k++)
-                    sum.add(lower.getCell(new Dimension(j,k)).round(mc)
+                    sum=sum.add(lower.getCell(new Dimension(j,k)).round(mc)
                             .multiply(upper.getCell(new Dimension(k,i)).round(mc)).round(mc));
 
                 if (lower.getCell(new Dimension(j,j)).equals(new BigDecimal(0)))
@@ -100,8 +99,7 @@ public class Decomposer {
                 upper.setCell(new Dimension(j,i),
                         matrix.getCell(new Dimension(j,i)).round(mc)
                                 .subtract(sum).round(mc)
-                                .divide(lower.getCell(new Dimension(j,j)).round(mc)).round(mc));
-                System.out.println(lower.getCell(new Dimension(j,j)).round(mc));
+                                .divide(lower.getCell(new Dimension(j,j)),mc).round(mc));
             }
         }
         ArrayList<Matrix> ret=new ArrayList<Matrix>();
