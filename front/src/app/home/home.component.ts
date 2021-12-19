@@ -5,15 +5,20 @@ import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
 import { HomeService } from './home.service';
 
+//-------------------------------------------------------------------------------//
 
 export interface solverType {
   type : string;
   value : number;
 }
+//-------------------------------------------------------------------------------//
+
 export interface decompostion {
-  type : string; 
+  type : string;
   value : number;
 }
+//-------------------------------------------------------------------------------//
+
 export interface properties {
   coeff_matrix :number[][];
   constants_matrix :number[];
@@ -21,6 +26,8 @@ export interface properties {
   method :string;
 
 }
+//-------------------------------------------------------------------------------//
+
 class problem implements properties{
   numberofUnkown : number = 0;
   coeff_matrix :number[][] = [];
@@ -35,16 +42,18 @@ class problem implements properties{
     this.method = method
   }
 }
+//-------------------------------------------------------------------------------//
+
 @Component({
     selector: 'solve',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
   })
- 
 export class homecomponent {
 
   
   constructor(private server : HomeService){}
+//-------------------------------------------------------------------------------//
 
   DirectSolTypes : solverType[] = [
     {type : "Gauss Elmination", value : 1},
@@ -58,36 +67,37 @@ export class homecomponent {
 
 
   decompostions : decompostion[] = [
-    {type : "Do Little Decompostion", value : 1},
+    {type : "Doo Little Decompostion", value : 1},
     {type : "Crout Decompostion", value : 2},
     {type : "Cholesky Decompostion", value : 3}
   ]
 
-
+//-------------------------------------------------------------------------------//
   createdIter : boolean = false;
   validFlagInput : boolean = false;
   symmFalg : boolean = false;
+  squareFlag : boolean =false;
   currentSolType : string = this.DirectSolTypes[0].type;
-
   variableNames : string[] = [];
   externalnum:number=2
   coff:any=[
-    "X1", "X2" 
+    "X1", "X2"
   ]
   flag:number=0
   $event:any
   significant_figure:number = 1
-
-
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
+  unknowns_matrix :string[] = [];
   numberofUnkowns : number = 1;
-
   systemInput : string;
-  mehtodname:string=""
-  solution()
+  solution :number[][][] = [];
+  steps :number[][][] = [];
+//-------------------------------------------------------------------------------//
+
+  displaySolution()
   {
-   
+
     var div2=document.createElement("div")
     var p =document.createElement("h1")
     var text =document.createTextNode("Solution")
@@ -96,76 +106,76 @@ export class homecomponent {
     p.style.marginTop="20px"
     div2.appendChild(p)
     document.getElementById("soln")?.appendChild(div2)
-    var arrofCoffsNums : number[][][] = [[[1,5,4],[2,3,4],[3,5,6]],[[1,5,4],[2,3,4],[3,5,6]]];
-   var variableNames : string[] = ["a","b","c"];
-   if(this.mehtodname=="Gauss Elmination" || this.mehtodname=="Gauss-Jordan" || this.mehtodname=="Gauss-Seidil" || this.mehtodname=="Jacobi-Iteration")
-   {
-   for(let i=0 ;i<arrofCoffsNums.length;i++)
-   {
-     for(let j=0;j<arrofCoffsNums[i].length;j++)
-     {
-       for(let k=0;k<arrofCoffsNums[i][j].length;k++)
-       {
-        var p =document.createElement("h3")
-        var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
-        p.appendChild(text)
-        p.style.marginLeft="100px"
-        div2.appendChild(p)
-        document.getElementById("soln")?.appendChild(div2)
-       }
-     }
-   }
-  }
-  else
-  {
-    var div=document.createElement("div")
-    div.style.display="flex"
-    for(let i=0 ;i<arrofCoffsNums.length;i++)
+    var arrofCoffsNums : number[][][] = this.solution;
+    var variableNames : string[] = this.unknowns_matrix;
+    if(this.currentSolType=="Gauss Elmination" || this.currentSolType=="Gauss-Jordan" || this.currentSolType=="Gauss-Seidil" || this.currentSolType=="Jacobi-Iteration")
     {
-      if(i==0)
+      for(let i=0 ;i<arrofCoffsNums.length;i++)
       {
-       var p =document.createElement("h3")
-       var text =document.createTextNode("L = " )
-       p.appendChild(text)
-       div.appendChild(p)
+        for(let j=0;j<arrofCoffsNums[i].length;j++)
+        {
+          for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+          {
+            var p =document.createElement("h3")
+            var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
+            p.appendChild(text)
+            p.style.marginLeft="100px"
+            div2.appendChild(p)
+            document.getElementById("soln")?.appendChild(div2)
+          }
+        }
       }
-      else
+    }
+    else
+    {
+      var div=document.createElement("div")
+      div.style.display="flex"
+      for(let i=0 ;i<arrofCoffsNums.length;i++)
       {
-       var p2 =document.createElement("h3")
-       var text =document.createTextNode("U = " )
-       p2.appendChild(text)
-       p2.style.marginLeft="30px"
-       div.appendChild(p2)
-      }
-      var width2 = variableNames.length*40;  
-      var table2 =document.createElement("table")
-        
-        table2.style.marginLeft="20px" 
+        if(i==0)
+        {
+          var p =document.createElement("h3")
+          var text =document.createTextNode("L = " )
+          p.appendChild(text)
+          div.appendChild(p)
+        }
+        else
+        {
+          var p2 =document.createElement("h3")
+          var text =document.createTextNode("U = " )
+          p2.appendChild(text)
+          p2.style.marginLeft="30px"
+          div.appendChild(p2)
+        }
+        var width2 = variableNames.length*40;
+        var table2 =document.createElement("table")
+
+        table2.style.marginLeft="20px"
         table2.width=width2.toString()
         table2.border="2"
-        
-     
-      for(let j=0;j<arrofCoffsNums[i].length;j++)
-      {
-        
-          
-        var tr=document.createElement("tr")
-        for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+
+
+        for(let j=0;j<arrofCoffsNums[i].length;j++)
         {
-         
-          var td= document.createElement("td")
-          td.innerHTML=arrofCoffsNums[i][j][k].toString()
-         
-          tr.appendChild(td)
-      
+
+
+          var tr=document.createElement("tr")
+          for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+          {
+
+            var td= document.createElement("td")
+            td.innerHTML=arrofCoffsNums[i][j][k].toString()
+
+            tr.appendChild(td)
+
+          }
+          table2.appendChild(tr)
         }
-        table2.appendChild(tr)
+        div.appendChild(table2)
+        div2.appendChild(div)
+        document.getElementById("soln")?.appendChild(div2)
       }
-         div.appendChild(table2)
-         div2.appendChild(div)
-         document.getElementById("soln")?.appendChild(div2)
-    } 
-  }
+    }
     var button =document.createElement("button")
     var text=document.createTextNode("show steps")
     button.style.width="90px"
@@ -174,67 +184,64 @@ export class homecomponent {
     button.style.marginTop="30px"
     button.appendChild(text)
     div2.appendChild(button)
-   var steps: number[][][] = [[[1,5,4],[1,2,3],[4,5,6]],[[4,5,2],[1,1,1],[3,3,3]],[[4,5,2],[1,1,1],[3,3,3]]];
+    var steps: number[][][] = this.steps;
     button.onclick=function()
     {
-     
-       var width2 = variableNames.length*40;  
-       for(let i=0 ;i<steps.length;i++)
-       {
+      var width2 = variableNames.length*40;
+      for(let i=0 ;i<steps.length;i++)
+      {
         var div =document.createElement("div")
         div.style.display="flex"
-      
-         var table =document.createElement("table")
-         table.style.marginTop="50px"
-         table.style.marginLeft="20px" 
-         table.width=width2.toString()
-         table.border="2"
-         var tr=document.createElement("tr")
-         table.appendChild(tr)
-         for(let n=0;n<variableNames.length;n++)
-         {
-         
-           var th=document.createElement("th")
-           th.innerHTML=variableNames[n]
-           tr.appendChild(th)
-         }        
-         for(let j=0 ;j<steps[i].length;j++)
-         {
-           var tr=document.createElement("tr")
-           for(let k=0;k<steps[i][j].length;k++)
-           {
-             var td= document.createElement("td")
-             td.innerHTML=steps[i][j][k].toString()
-            
-             tr.appendChild(td)
-           }
-           table.appendChild(tr)
-         }
-         div.appendChild(table)
-         document.getElementById("soln")?.appendChild(div)
-       }       
+
+        var table =document.createElement("table")
+        table.style.marginTop="50px"
+        table.style.marginLeft="20px"
+        table.width=width2.toString()
+        table.border="2"
+        var tr=document.createElement("tr")
+        table.appendChild(tr)
+        for(let n=0;n<variableNames.length;n++)
+        {
+
+          var th=document.createElement("th")
+          th.innerHTML=variableNames[n]
+          tr.appendChild(th)
+        }
+        for(let j=0 ;j<steps[i].length;j++)
+        {
+          var tr=document.createElement("tr")
+          for(let k=0;k<steps[i][j].length;k++)
+          {
+            var td= document.createElement("td")
+            td.innerHTML=steps[i][j][k].toString()
+            tr.appendChild(td)
+          }
+          table.appendChild(tr)
+        }
+        div.appendChild(table)
+        document.getElementById("soln")?.appendChild(div)
+      }
     }
   }
+//-------------------------------------------------------------------------------//
+
   parseSystem(){
     var validFlag : boolean = true;
     var input = this.systemInput;
-
     input = input.replace(/ /g,'');
     input = input.replace(/--/g, "+");
     input = input.replace(/\+-/g, "-");
     input = input.replace(/-\+/g, "-");
     input = input.replace(/\+\+/g, "+");
     input = input.toLowerCase();
-    
 
     console.log("Input = ", input);
 
     var arrofCoffsNums : number[][] = [];
-   
     var arrofConstNums : number[] = [];
     var arrofCoffsNames : string[] = [];
     var arrofCoffsNames2 : string[] = [];
-
+    var sumofNumber : number = 0;
 
 
     var rows : number = 0;
@@ -243,7 +250,6 @@ export class homecomponent {
     var foundNumber : boolean = false;
     var foundEqu : boolean = false;
     var pushedCoff : boolean = false;
-   
     var coffNum : string = "";
     var constNum : string = "";
     var coffsName : string = ""
@@ -264,9 +270,17 @@ export class homecomponent {
       || input.charAt(i) == "." 
       || input.charAt(i) == "-" 
       || input.charAt(i) == "+" 
-      || (foundEqu && (input.charAt(i) == "*" || input.charAt(i) == "/"))){
+      || input.charAt(i) == "*" 
+      || input.charAt(i) == "/"){
         console.log("Inside if");     
         if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+          if(!checkletter && !foundEqu){
+            if(coffNum != "" && Number(coffNum)){
+              sumofNumber = sumofNumber + Number(coffNum);
+              coffNum = "";
+            }
+          }
+         
           numberEntered = false;
           foundNumber = false;
           if(coffsName != ""){
@@ -293,10 +307,10 @@ export class homecomponent {
                 check = false;
               }
             }
-            
+
             if(check!=true)
             {
-              
+
               console.log(coffsName);
 
               if(arrofMappedValues[rows].get(coffsName)){
@@ -305,13 +319,11 @@ export class homecomponent {
               else{
                 arrofMappedValues[rows].set(coffsName, 0);
                 arrofMappedValues[rows].set(coffsName, tempCoffNum + arrofMappedValues[rows].get(coffsName));
-  
+
               }
               tempCoffNum = 0;
-             
               arrofCoffsNames.push(coffsName);
               arrofCoffsNames2.push(coffsName);
-           
             }
 
             coffsName = "";
@@ -320,19 +332,18 @@ export class homecomponent {
           }
         }
         if(Number(input.charAt(i)) && checkletter==true && !foundEqu)
-        { 
-          
+        {
+
           coffsName=coffsName.concat(input.charAt(i));
           console.log(coffsName)
         }
-       
         if(input.charAt(i) != "+" && input.charAt(i) != "-"){
           numberEntered = true;
         }
 
-        if(!foundEqu && checkletter==false){  
-          
-          coffNum = coffNum.concat(input.charAt(i)); 
+        if(!foundEqu && checkletter==false){
+          console.log(coffNum)
+          coffNum = coffNum.concat(input.charAt(i));
         }
         if(foundEqu){
           console.log(input)
@@ -341,15 +352,16 @@ export class homecomponent {
 
         }
         foundNumber = true;
-      
+
         if(Number(input.charAt(i)) || input.charAt(i) == "0")
-        { 
+        {
           console.log("shpow")
           var tempEqnNum : number = eval(constNum);
           if(Number(tempEqnNum)){
             console.log(constNum)
             arrofConstNums.pop();
             arrofConstNums.push(tempEqnNum);
+            arrofConstNums[arrofConstNums.length - 1] = arrofConstNums[arrofConstNums.length - 1] - sumofNumber;
           }
           else{
             validFlag = false;
@@ -362,11 +374,12 @@ export class homecomponent {
 
 
       }
-     
       else if(   !Number(input.charAt(i))
-              && !(input.charAt(i) == "+") 
-              && !(input.charAt(i) == "-") 
-              && !(input.charAt(i) == "=")  
+              && !(input.charAt(i) == "+")
+              && !(input.charAt(i) == "-")
+              && !(input.charAt(i) == "*")
+              && !(input.charAt(i) == "/")
+              && !(input.charAt(i) == "=")
               && !(input.charAt(i) == "\n")
               && !(input.charAt(i) == ".")){
 
@@ -375,7 +388,7 @@ export class homecomponent {
         console.log("Coff Number = ", coffNum);
 
         console.log(foundNumber)
-        
+
         if(!numberEntered){
           if(coffNum == ""){
             coffNum = "1";
@@ -396,7 +409,7 @@ export class homecomponent {
         }
 
         checkletter = true;
-        
+
         coffsName = coffsName.concat(input.charAt(i));
         coffNum = "";
         for(let i=0;i<arrofCoffsNames.length;i++)
@@ -417,30 +430,35 @@ export class homecomponent {
       }
       else if(input.charAt(i) == "="){
         foundEqu = true;
+        if(!checkletter){
+          if(coffNum != "" && Number(coffNum)){
+            sumofNumber = sumofNumber + Number(coffNum);
+
+          }
+        }
         if(coffsName != ""  ){
- 
-           for(let i=0;i<arrofCoffsNames.length;i++)
-           {
-             if(arrofCoffsNames[i]==coffsName)
-             {
-                 check=true
-                 break
-             }
-             else
-             {
-               check=false
-             }
-           }
- 
-           if(check!=true)
-           {
- 
+
+          for(let i=0;i<arrofCoffsNames.length;i++)
+          {
+            if(arrofCoffsNames[i]==coffsName)
+            {
+                check=true
+                break
+            }
+            else
+            {
+              check=false
+            }
+          }
+
+          if(check!=true)
+          {
+
             console.log(coffsName)
             arrofCoffsNames.push(coffsName);
- 
-           }
-           
- 
+
+          }
+
       }
       if(coffsName != ""){
         if(arrofMappedValues[rows].get(coffsName)){
@@ -458,17 +476,17 @@ export class homecomponent {
       coffsName = "";
       checkletter=false
       check=false
-       
+
       }
       else if(input.charAt(i) == "\n"){
 
-        
+
         rows++;
         arrofCoffsNums.push([]);
         numberEntered = false;
         foundNumber = false;
-        
-        for(let k = 0; k < rows; k++){  
+
+        for(let k = 0; k < rows; k++){
 
           arrofCoffsNums[k] = [];
           var ctr = 0;
@@ -488,25 +506,25 @@ export class homecomponent {
 
         pushedCoff = false;
         enter=true
-       
+
         arrofConstNums.push(0)
         constNum = ""
         coffNum = ""
-        coffsName = "" 
+        coffsName = ""
         foundEqu = false;
-       console.log(arrofCoffsNums.length)
-       console.log(arrofCoffsNums[0].length)
-       var find=0
-       var copy
-    
+      console.log(arrofCoffsNums.length)
+      console.log(arrofCoffsNums[0].length)
+      var find=0
+      var copy
+
     var del =document.getElementById("0.5")
-    del?.parentNode?.removeChild(del)    
+    del?.parentNode?.removeChild(del)
     var set2 = document.createElement("div")
     set2.id = "0.5"
     set2.style.marginLeft="150px"
     set2.style.marginTop="30px"
     for(let i = 0; i<arrofCoffsNums.length-1; i++)
-    {  
+    {
       var set = document.createElement("div")
       set.style.display="flex"
       for(let j=0;j<arrofCoffsNums[i].length;j++)
@@ -518,10 +536,10 @@ export class homecomponent {
         inputdown.style.border = "3px solid rgb(206, 56, 76)"
         inputdown.style.borderRadius = "5px"
         var p4 = document.createElement("p")
-        var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())  
+        var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())
         p4.appendChild(text4)
         p4.style.textAlign="center"
-        inputdown.appendChild(p4)  
+        inputdown.appendChild(p4)
         set.appendChild(inputdown)
         var p = document.createElement("p")
         var text = document.createTextNode(arrofCoffsNames[j])
@@ -541,7 +559,7 @@ export class homecomponent {
         }
 
       }
-           
+
       var p3=document.createElement("p")
       var text3=document.createTextNode("= ")
       p3.style.marginLeft="8px"
@@ -549,7 +567,6 @@ export class homecomponent {
       set.appendChild(p3)
       var input2 =document.createElement("div")
       input2.style.height="30px"
-      
       input2.style.border="2px solid black"
       input2.style.borderRadius = "5px"
       input2.style.backgroundColor="transparent"
@@ -557,9 +574,9 @@ export class homecomponent {
       input2.className = "matrixIn";
       var p5= document.createElement("p")
 
-     var text5=document.createTextNode(arrofConstNums[i].toString())
-     p5.appendChild(text5)
-     p5.style.textAlign="center"
+    var text5=document.createTextNode(arrofConstNums[i].toString())
+    p5.appendChild(text5)
+    p5.style.textAlign="center"
       input2.appendChild(p5)
       set.appendChild(input2)
       set2.appendChild(set)
@@ -567,16 +584,22 @@ export class homecomponent {
     }
       }
     }
+    while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0 && arrofCoffsNums.length > 0 && arrofCoffsNums[0].length > 1){
+      arrofCoffsNums.pop()
+      arrofConstNums.pop()
+    }
     console.log("Matrix of Coeffs = ", arrofCoffsNums);
     console.log("Vector of Constants = ", arrofConstNums);
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
     console.log("Mapped Values = ", arrofMappedValues);
+    console.log("Entered Values = ", sumofNumber);
     this.coeff_matrix = arrofCoffsNums;
     this.constants_matrix = arrofConstNums;
+    this.unknowns_matrix = arrofCoffsNames;
     this.numberofUnkowns = arrofCoffsNames.length;
   }
-
+//-------------------------------------------------------------------------------//
 
   /*solutionTypeList(solType : string)
   {
@@ -654,7 +677,7 @@ export class homecomponent {
     document.getElementById("main")?.appendChild(list);
 
 
-    
+
   }*/
 
 
@@ -702,11 +725,13 @@ export class homecomponent {
     }
   }*/
 
+//-------------------------------------------------------------------------------//
+
   validateSymmetric()
   {
     var symm : boolean = true;
-    for(let i = 0; i < this.numberofUnkowns; i++){
-      for(let j = 0; j < this.numberofUnkowns; j++){
+    for(let i = 0; i < Math.min(this.coeff_matrix.length,this.coeff_matrix[0].length); i++){
+      for(let j = 0; j < Math.min(this.coeff_matrix.length,this.coeff_matrix[0].length); j++){
         var value = this.coeff_matrix[i][j];
         var value2 = this.coeff_matrix[j][i];
         if(value != value2){
@@ -722,21 +747,48 @@ export class homecomponent {
 
     }
   }
-  
+//-------------------------------------------------------------------------------//
 
+  validateSquare()
+  {
+    var square : boolean = true;
 
+    var rows = this.coeff_matrix.length;
+    var cols = this.coeff_matrix[0].length;
+    if(rows != cols){
+      square = false;
+    }
+
+    this.squareFlag = square;
+    if(!this.squareFlag){
+      alert("Matrix Must be Square");
+
+    }
+  }
+
+//-------------------------------------------------------------------------------//
 
  
   solve()
   {
+   
+
     this.validateSymmetric()
-    if(!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)){
-      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : any)=>(console.log(response)),(error:any)=>console.log("lol"));
+    this.validateSquare()
+    if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
+      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
+      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : number[][][])=>{
+        this.solution = response
+        this.displaySolution()
+
+
+      },(error:any)=>console.log("error in server"));
 
 
     }
 
 }
+
 }
 
 

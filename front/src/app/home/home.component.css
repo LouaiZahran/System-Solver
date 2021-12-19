@@ -1,4 +1,21 @@
 
+body {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 #input00, #input01,
 #input10, #input11
 {
@@ -12,6 +29,7 @@
     width: 50px;
     height: 30px;
     border: 3px solid rgb(146, 31, 46);
+    font-family: consolas;
     margin-top: 4px;
     margin-left: 5px;
 
@@ -35,10 +53,32 @@ input::-webkit-inner-spin-button {
 
 }
 
+p{
+    font-family: consolas;
+    font-size: 20px;
+}
+
+#textinput {
+    left: -12px;
+    text-align: center;
+    font-family: consolas;
+    font-weight:bold;
+    font-size: 30px;
+    position: relative;
+    height: 200px;
+    width: 700px;
+}
+#labelsol{
+    font-family: consolas;
+    font-weight:bold;
+    font-size: 18px;
+}
+
 #selectSolver {
     border-radius: 8px;
     background-color: rgb(251, 197, 161);
-    font-family: Fira code;
+    font-family: consolas;
+    font-weight: bold;
     font-size: 20px;
     height: 35px;
     left: 500px;
@@ -47,7 +87,8 @@ input::-webkit-inner-spin-button {
 #significance {
     border-radius: 8px;
     background-color: rgb(251, 197, 161);
-    font-family: Fira code;
+    font-family: consolas;
+    font-weight: bold;
     font-size: 20px;
     height: 35px;
     left: 40px;
@@ -64,7 +105,7 @@ input::-webkit-inner-spin-button {
 #validate {
     background-color: rgb(16, 34, 63);
     color: rgb(255, 255, 255);
-    font-family: Fira code;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
     width: 100px;
     height: 30px;
@@ -74,19 +115,31 @@ input::-webkit-inner-spin-button {
 
 }
 button {
-    background-color: darkslategrey;
+    background-color: rgb(148, 6, 6);
     color: rgb(255, 255, 255);
-    font-family: Fira code;
-    font-size: 18px;
-    width: 100px;
-    height: 30px;
-    left: 5px;
+    font-family: consolas;
+    font-weight: bold;
+    font-size: 28px;
+    width: 150px;
+    height: 45px;
+    left: 80px;
+    color:;
     border-radius: 7px;
     position: relative;
+    transition-duration: 2ms;
 
 }
+h1{
+    text-align: center;
+    font-family:consolas;
+    font-weight: bold;
+    
+}
+
 button:hover{
-  background-color: rgb(34, 56, 56);
+    background-color: rgb(35, 75, 75);
+
+    transition-duration: 2ms;
 
 }
 
@@ -114,4 +167,3 @@ select
     margin-top: 15px;
     margin-left: 20px;
 }
-

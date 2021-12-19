@@ -9,7 +9,7 @@ public class ApiProblem {
     private int precision;
     private String method;
     public ApiProblem(int numberofUnknown, BigDecimal[][] coeff_matrix, BigDecimal[] constant_matrix,
-               int precision, String method){
+                      int precision, String method){
         this.numberofUnknown=numberofUnknown;
         this.coeff_matrix=new BigDecimal[numberofUnknown][numberofUnknown];
         this.constant_matrix=new BigDecimal[numberofUnknown];
@@ -41,4 +41,23 @@ public class ApiProblem {
         return this.method;
     }
 
+    public void setCoeff_matrix(BigDecimal[][] coeff_matrix) {
+        this.coeff_matrix = coeff_matrix;
+    }
+
+    public void setConstant_matrix(BigDecimal[] constant_matrix) {
+        this.constant_matrix = constant_matrix;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setNumberofUnknown(int numberofUnknown) {
+        this.numberofUnknown = numberofUnknown;
+    }
+
+    public void setPrecision(int precision) {
+        this.precision = precision;
+    }
 }

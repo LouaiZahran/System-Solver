@@ -1,11 +1,11 @@
-<h1>solve linear equations</h1>
+<h1>System of Linear Equations Solver</h1>
 
 <div class="container">
   <div style="display: flex;">
     <div class="dropdown" id = "main">
-      <textarea [(ngModel)] = "systemInput" id = "textinput" cols = "70" row = "10" spellcheck = "false" (input) = parseSystem()>
+      <textarea [(ngModel)] = "systemInput" id = "textinput" cols = "70" row = "10"  spellcheck = "false" (input) = parseSystem()>
       </textarea>
-        <label>Enter the desired precision: </label>
+        <label id ="labelsol">Enter the desired precision: </label>
         <select [(ngModel)] = "significant_figure" id="significance">
           <option value="1" >1</option>
           <option value="2" >2</option>
@@ -45,24 +45,22 @@
             </option>
           </optgroup>
         </select>
-    
+
     </div>
   </div>
 
-  <button style="margin-left: 200px; margin-top: 40px;" id = "solve"  (click)="solution()">Solve</button>
+  <button style="margin-left: 200px; margin-top: 40px;" id = "solve"  (click)="solve()">Solve</button>
   <!-- <div id="1000">
     <button (click)="create()">Change the name of the varaibles in the system</button>
     <div id="1">
     </div>
   </div> -->
- 
   <div id="0">
       <div id="0.5">
-       
+
       </div>
   </div>
   <div id="soln">
-  
+
   </div>
 </div>
-
