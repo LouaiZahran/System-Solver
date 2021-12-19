@@ -41,6 +41,8 @@ public class Matrix {
     }
 
     public void setData(ArrayList<ArrayList<BigDecimal>> data) throws IllegalArgumentException{
+        if(data.size()==0)
+            return;
         if(data == null)
             throw new IllegalArgumentException("Empty Matrix");
         int numOfCol = data.get(0).size();

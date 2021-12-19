@@ -16,18 +16,19 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+
 @RestController
 @EnableWebMvc
 @CrossOrigin("http://localhost:4200")
 public class SystemController {
 
-    ArrayList<ArrayList<BigDecimal>> generateData(BigDecimal[][] arrayData,int precision){
+    ArrayList<ArrayList<BigDecimal>> generateData(BigDecimal[][] arrayData,MathContext mc){
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
         for(int i=0;i<arrayData.length;i++){
             ArrayList<BigDecimal> retRow=new ArrayList<>();
             for(int j=0;j<arrayData.length;j++){
-                retRow.add(arrayData[i][j].round(new MathContext(precision, RoundingMode.HALF_UP)));
+                retRow.add(arrayData[i][j].round(mc));
             }
             ret.add(retRow);
         }
@@ -39,23 +40,21 @@ public class SystemController {
         ApiProblem apiProblem=new Gson().fromJson(apiProblemString,ApiProblem.class);
         Decomposer decomposer=new Decomposer();
         Matrix coeffMatrix =new Matrix();
-        coeffMatrix.setData(generateData(apiProblem.getCoeff_matrix(),apiProblem.getPrecision()));
+        MathContext mc=new MathContext(apiProblem.getPrecision(), RoundingMode.HALF_UP);
+        coeffMatrix.setData(generateData(apiProblem.getCoeff_matrix(),mc));
         ArrayList<ArrayList<ArrayList<BigDecimal>>> result=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
         if(apiProblem.getMethod().equalsIgnoreCase("Cholesky Decompostion")){
-            /*ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix);
+            ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,mc);
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
-            for(int i=0;i<coeffMatrix.getData().size();i++){
-                for (int j=0;j<coeffMatrix.getData().size();j++){
-                    System.out.println(coeffMatrix.getData().get(i).get(j));
-                }
-            }*/
-            result.add(coeffMatrix.getData());
             return result;
         }
         else if(apiProblem.getMethod().equalsIgnoreCase("Crout Decompostion")){
-
+            ArrayList<Matrix>decomposed = decomposer.croutDecomposition(coeffMatrix,mc);
+            result.add(decomposed.get(0).getData());
+            result.add(decomposed.get(1).getData());
+            return result;
         }
-        return null;
+        return result;
     }
 }

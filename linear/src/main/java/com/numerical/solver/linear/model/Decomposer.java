@@ -35,27 +35,31 @@ public class Decomposer {
         this.result = result;
     }
 
-    public ArrayList<Matrix> cholskeyDecomposition(Matrix matrix)
+    public ArrayList<Matrix> cholskeyDecomposition(Matrix matrix,MathContext mc)
     {
         int rows=matrix.getDimension().getRow();
-        MathContext mc = new MathContext(10);
-        Matrix lower= new Matrix(constant.getDimension());
+        Matrix lower= new Matrix(matrix.getDimension());
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= i; j++) {
                 BigDecimal sum = new BigDecimal(0);
                 if (j == i) {
                     for (int k = 1; k < j; k++)
-                        sum.add(lower.getCell(new Dimension(j,k)).multiply(lower.getCell(new Dimension(j,k))));
+                        sum.add(lower.getCell(new Dimension(j,k)).round(mc)
+                                .multiply(lower.getCell(new Dimension(j,k)).round(mc)).round(mc));
 
                     lower.setCell(new Dimension(j,j),
-                            matrix.getCell(new Dimension(j,j)).subtract(sum).sqrt(mc));
+                            matrix.getCell(new Dimension(j,j)).round(mc)
+                                    .subtract(sum).round(mc).sqrt(mc));
                 }
                 else {
                     for (int k = 1; k < j; k++)
-                        sum.add(lower.getCell(new Dimension(i,k)).multiply(lower.getCell(new Dimension(j,k))));
+                        sum.add(lower.getCell(new Dimension(i,k)).round(mc)
+                                .multiply(lower.getCell(new Dimension(j,k)).round(mc)).round(mc));
 
                     lower.setCell(new Dimension(i,j),
-                            matrix.getCell(new Dimension(i,j)).subtract(sum).divide(lower.getCell(new Dimension(j,j))));
+                            matrix.getCell(new Dimension(i,j)).round(mc)
+                                    .subtract(sum).round(mc)
+                                    .divide(lower.getCell(new Dimension(j,j)).round(mc)).round(mc));
                 }
             }
         }
@@ -65,11 +69,10 @@ public class Decomposer {
         ret.add(upper);
         return ret;
     }
-    public ArrayList<Matrix> croutDecomposition(Matrix matrix) {
+    public ArrayList<Matrix> croutDecomposition(Matrix matrix,MathContext mc) {
         int rows=matrix.getDimension().getRow();
-        Matrix lower = new Matrix(constant.getDimension());
-        Matrix upper = new Matrix(constant.getDimension());
-
+        Matrix lower = new Matrix(matrix.getDimension());
+        Matrix upper = new Matrix(matrix.getDimension());
         for (int i = 1; i <= rows; i++) {
             upper.setCell(new Dimension(i,i),new BigDecimal(1));
         }
@@ -77,22 +80,28 @@ public class Decomposer {
         for (int j = 1; j <= rows; j++) {
             for (int i = j; i <=rows; i++) {
                 BigDecimal sum = new BigDecimal(0);
-                for (int k = 0; k < j; k++)
-                    sum.add(lower.getCell(new Dimension(i,k)).multiply(upper.getCell(new Dimension(k,j))));
+                for (int k = 1; k < j; k++)
+                    sum.add(lower.getCell(new Dimension(i,k)).round(mc)
+                            .multiply(upper.getCell(new Dimension(k,j)).round(mc)).round(mc));
 
-                lower.setCell(new Dimension(i,j),matrix.getCell(new Dimension(i,j)).subtract(sum));
+                lower.setCell(new Dimension(i,j),
+                        matrix.getCell(new Dimension(i,j)).round(mc)
+                                .subtract(sum).round(mc));
             }
-
             for (int i = j; i <= rows; i++) {
                 BigDecimal sum = new BigDecimal(0);
                 for(int k = 1; k < j; k++)
-                    sum.add(lower.getCell(new Dimension(j,k)).multiply(upper.getCell(new Dimension(k,i))));
+                    sum.add(lower.getCell(new Dimension(j,k)).round(mc)
+                            .multiply(upper.getCell(new Dimension(k,i)).round(mc)).round(mc));
 
                 if (lower.getCell(new Dimension(j,j)).equals(new BigDecimal(0)))
                     System.out.printf("det(L) close to 0!\n Can't divide by 0...\n");
 
                 upper.setCell(new Dimension(j,i),
-                        matrix.getCell(new Dimension(j,i)).subtract(sum).divide(lower.getCell(new Dimension(j,j))));
+                        matrix.getCell(new Dimension(j,i)).round(mc)
+                                .subtract(sum).round(mc)
+                                .divide(lower.getCell(new Dimension(j,j)).round(mc)).round(mc));
+                System.out.println(lower.getCell(new Dimension(j,j)).round(mc));
             }
         }
         ArrayList<Matrix> ret=new ArrayList<Matrix>();

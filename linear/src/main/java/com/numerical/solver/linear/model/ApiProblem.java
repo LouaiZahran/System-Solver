@@ -41,4 +41,23 @@ public class ApiProblem {
         return this.method;
     }
 
+    public void setCoeff_matrix(BigDecimal[][] coeff_matrix) {
+        this.coeff_matrix = coeff_matrix;
+    }
+
+    public void setConstant_matrix(BigDecimal[] constant_matrix) {
+        this.constant_matrix = constant_matrix;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setNumberofUnknown(int numberofUnknown) {
+        this.numberofUnknown = numberofUnknown;
+    }
+
+    public void setPrecision(int precision) {
+        this.precision = precision;
+    }
 }
