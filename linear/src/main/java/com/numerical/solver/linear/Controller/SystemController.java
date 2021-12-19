@@ -35,24 +35,52 @@ public class SystemController {
         return ret;
 
     }
+    ArrayList<ArrayList<BigDecimal>> generateConst(BigDecimal[] arrayData,MathContext mc){
+        ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
+
+        for(int i=0;i<arrayData.length;i++){
+            ArrayList<BigDecimal> retRow=new ArrayList<>();
+            retRow.add(arrayData[i].round(mc));
+            ret.add(retRow);
+        }
+        return ret;
+
+    }
     @PostMapping("/postProblem")
-    public ArrayList<ArrayList<ArrayList<BigDecimal>>> matrixGenerator(@RequestBody String apiProblemString){
-        ApiProblem apiProblem=new Gson().fromJson(apiProblemString,ApiProblem.class);
+    public ArrayList<ArrayList<ArrayList<BigDecimal>>> matrixGenerator(@RequestBody ApiProblem apiProblem){
         Decomposer decomposer=new Decomposer();
         Matrix coeffMatrix =new Matrix();
         MathContext mc=new MathContext(apiProblem.getPrecision(), RoundingMode.HALF_UP);
+        Matrix constantMatrix=new Matrix();
+        constantMatrix.setData(generateConst(apiProblem.getConstants_matrix(),mc));
+
         coeffMatrix.setData(generateData(apiProblem.getCoeff_matrix(),mc));
         ArrayList<ArrayList<ArrayList<BigDecimal>>> result=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
         if(apiProblem.getMethod().equalsIgnoreCase("Cholesky Decompostion")){
             ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,mc);
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
+            //LUx=B   LY=B   Ux=B
+            Solver ySolver=new Solver(decomposed.get(0),constantMatrix,mc);
+            Matrix Y=ySolver.forwardSub();
+            Solver xSolver=new Solver(decomposed.get(1),Y,mc);
+            Matrix x=xSolver.backwardSub();
+            result.add(x.getData());
+            x.print();
             return result;
         }
         else if(apiProblem.getMethod().equalsIgnoreCase("Crout Decompostion")){
             ArrayList<Matrix>decomposed = decomposer.croutDecomposition(coeffMatrix,mc);
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
+            //LUx=B   LY=B   Ux=B
+
+            Solver ySolver=new Solver(decomposed.get(0),constantMatrix,mc);
+            Matrix Y=ySolver.forwardSub();
+            Solver xSolver=new Solver(decomposed.get(1),Y,mc);
+            Matrix x=xSolver.backwardSub();
+            result.add(x.getData());
+            x.print();
             return result;
         }
         return result;

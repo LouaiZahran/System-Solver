@@ -29,16 +29,22 @@ export interface properties {
 //-------------------------------------------------------------------------------//
 
 class problem implements properties{
+  errorValue : number = 0;
+  numofIterations: number = 0;
+  arrofInitList:number[] = [];
   numberofUnkown : number = 0;
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
-  constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+  constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[], precision :number, numofIterations : number, arrofInitList : number[], errorValue:number,method :string){
+    this.errorValue = errorValue;
     this.numberofUnkown = numberofUnkown;
     this.coeff_matrix = coeff_matrix;
     this.constants_matrix = constants_matrix;
     this.precision = precision;
+    this.numofIterations = numofIterations;
+    this.arrofInitList = arrofInitList;
     this.method = method
   }
 }
@@ -49,7 +55,10 @@ class problem implements properties{
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
   })
+<<<<<<< HEAD
 
+=======
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 export class homecomponent {
 
 
@@ -68,7 +77,7 @@ export class homecomponent {
 
 
   decompostions : decompostion[] = [
-    {type : "Do Little Decompostion", value : 1},
+    {type : "Doo Little Decompostion", value : 1},
     {type : "Crout Decompostion", value : 2},
     {type : "Cholesky Decompostion", value : 3}
   ]
@@ -94,6 +103,15 @@ export class homecomponent {
   systemInput : string;
   solution :number[][][] = [];
   steps :number[][][] = [];
+<<<<<<< HEAD
+=======
+  arrofInitList : number[] = [];
+  numofIterations : number = 0;
+  inputNumofIter : HTMLInputElement = null;
+  errorValue : number = 0;
+  inputErrorValue : HTMLInputElement = null;
+  arrofInputInitList : HTMLInputElement[] = [];
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 //-------------------------------------------------------------------------------//
 
   displaySolution()
@@ -227,6 +245,10 @@ export class homecomponent {
 //-------------------------------------------------------------------------------//
 
   parseSystem(){
+    document.getElementById("iter")?.remove();
+    document.getElementById("iter2")?.remove();
+    document.getElementById("iterList")?.remove();
+    
     var validFlag : boolean = true;
     var input = this.systemInput;
     input = input.replace(/ /g,'');
@@ -242,9 +264,9 @@ export class homecomponent {
     var arrofConstNums : number[] = [];
     var arrofCoffsNames : string[] = [];
     var arrofCoffsNames2 : string[] = [];
+    var sumofNumber : number = 0;
 
-
-
+  
     var rows : number = 0;
     arrofCoffsNums.push([]);
 
@@ -265,6 +287,7 @@ export class homecomponent {
 
     var check=false;
     for(let i = 0; i < input.length; i++){
+<<<<<<< HEAD
       if(Number(input.charAt(i))
       || input.charAt(i) == "0"
       && !(input.charAt(i) == "\n")
@@ -273,7 +296,25 @@ export class homecomponent {
       || input.charAt(i) == "+"
       || (foundEqu && (input.charAt(i) == "*" || input.charAt(i) == "/"))){
         console.log("Inside if");
+=======
+      if(Number(input.charAt(i)) 
+      || input.charAt(i) == "0" 
+      && !(input.charAt(i) == "\n") 
+      || input.charAt(i) == "." 
+      || input.charAt(i) == "-" 
+      || input.charAt(i) == "+" 
+      || input.charAt(i) == "*" 
+      || input.charAt(i) == "/"){
+        console.log("Inside if");     
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
         if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+          if(!checkletter && !foundEqu){
+            if(coffNum != "" && Number(coffNum)){
+              sumofNumber = sumofNumber + Number(coffNum);
+              coffNum = "";
+            }
+          }
+         
           numberEntered = false;
           foundNumber = false;
           if(coffsName != ""){
@@ -335,7 +376,11 @@ export class homecomponent {
         }
 
         if(!foundEqu && checkletter==false){
+<<<<<<< HEAD
 
+=======
+          console.log(coffNum)
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
           coffNum = coffNum.concat(input.charAt(i));
         }
         if(foundEqu){
@@ -350,10 +395,11 @@ export class homecomponent {
         {
           console.log("shpow")
           var tempEqnNum : number = eval(constNum);
-          if(Number(tempEqnNum)){
+          if(Number(tempEqnNum) || tempEqnNum == 0){
             console.log(constNum)
             arrofConstNums.pop();
             arrofConstNums.push(tempEqnNum);
+            arrofConstNums[arrofConstNums.length - 1] = arrofConstNums[arrofConstNums.length - 1] - sumofNumber;
           }
           else{
             validFlag = false;
@@ -369,6 +415,11 @@ export class homecomponent {
       else if(   !Number(input.charAt(i))
               && !(input.charAt(i) == "+")
               && !(input.charAt(i) == "-")
+<<<<<<< HEAD
+=======
+              && !(input.charAt(i) == "*")
+              && !(input.charAt(i) == "/")
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
               && !(input.charAt(i) == "=")
               && !(input.charAt(i) == "\n")
               && !(input.charAt(i) == ".")){
@@ -420,6 +471,12 @@ export class homecomponent {
       }
       else if(input.charAt(i) == "="){
         foundEqu = true;
+        if(!checkletter){
+          if(coffNum != "" && Number(coffNum)){
+            sumofNumber = sumofNumber + Number(coffNum);
+
+          }
+        }
         if(coffsName != ""  ){
 
           for(let i=0;i<arrofCoffsNames.length;i++)
@@ -519,6 +576,7 @@ export class homecomponent {
         inputdown.style.background="transparent"
         inputdown.style.border = "3px solid rgb(206, 56, 76)"
         inputdown.style.borderRadius = "5px"
+
         var p4 = document.createElement("p")
         var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())
         p4.appendChild(text4)
@@ -551,7 +609,10 @@ export class homecomponent {
       set.appendChild(p3)
       var input2 =document.createElement("div")
       input2.style.height="30px"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
       input2.style.border="2px solid black"
       input2.style.borderRadius = "5px"
       input2.style.backgroundColor="transparent"
@@ -569,7 +630,11 @@ export class homecomponent {
     }
       }
     }
+<<<<<<< HEAD
     while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0){
+=======
+    while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0 && arrofCoffsNums.length > 0 && arrofCoffsNums[0].length > 1){
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
       arrofCoffsNums.pop()
       arrofConstNums.pop()
     }
@@ -578,36 +643,64 @@ export class homecomponent {
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
     console.log("Mapped Values = ", arrofMappedValues);
+    console.log("Entered Values = ", sumofNumber);
     this.coeff_matrix = arrofCoffsNums;
     this.constants_matrix = arrofConstNums;
     this.unknowns_matrix = arrofCoffsNames;
     this.numberofUnkowns = arrofCoffsNames.length;
+<<<<<<< HEAD
   }
 //-------------------------------------------------------------------------------//
 
   /*solutionTypeList(solType : string)
   {
     this.currentSolType = solType;
+=======
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
+        this.createInitList(this.numberofUnkowns);
         this.createErrorIters();
-        this.createInitList(this.externalnum);
-        this.createdIter = true;
       }
     }
-    else{
+    this.readInitList();
+    this.readError();
+    this.readNumofIter();
+    
 
-      this.createdIter = false;
+  }
+//-------------------------------------------------------------------------------//
+
+  readInitList(){
+    for(let i = 0; i < this.numberofUnkowns; i++){
+      this.arrofInitList[i] = Number(this.arrofInputInitList[i].value);
+    }
+  }
+  readNumofIter(){
+    this.numofIterations = Number(this.inputNumofIter.value)
+  }
+  readError(){
+    this.errorValue = Number(this.inputErrorValue.value)
+  }
+  solutionTypeList(solType : string)
+  {
+    this.currentSolType = solType;
+    this.parseSystem();
+   
+
+    if(!(this.currentSolType == this.iterativeSolTypes[0].type) && !(this.currentSolType == this.iterativeSolTypes[1].type)){
       document.getElementById("iter")?.remove();
       document.getElementById("iter2")?.remove();
       document.getElementById("iterList")?.remove();
     }
 
-  }*/
+  }
 
-  /*createErrorIters(){
+  createErrorIters(){
     var input = document.createElement("input");
     var input2 = document.createElement("input");
+    this.inputNumofIter = input;
+    this.inputErrorValue = input2;
     input.value = "3";
     input.style.width="60px"
     input.style.height="40px"
@@ -635,9 +728,10 @@ export class homecomponent {
     input2.id = "iter2";
     document.getElementById("main")?.appendChild(input);
     document.getElementById("main")?.appendChild(input2);
-  }*/
+  }
 
-  /*createInitList(num : number){
+
+  createInitList(num : number){
 
     var list = document.createElement("ul");
     list.id = "iterList";
@@ -654,13 +748,16 @@ export class homecomponent {
       input3.style.borderRadius = "10px"
       input3.type = "number";
       input3.className = "matrixIn";
-      input3.placeholder = this.coff[i];
+      input3.placeholder = this.unknowns_matrix[i];
       li.appendChild(input3);
+      this.arrofInputInitList.push(input3);
     }
     list.appendChild(li);
     document.getElementById("main")?.appendChild(list);
 
+  }
 
+<<<<<<< HEAD
 
   }*/
 
@@ -682,32 +779,10 @@ export class homecomponent {
           input.style.borderColor = "black"
           this.validFlagInput = true;
         }
+=======
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 
-      }
-    }
-    if(this.createdIter){
-      var iter = <HTMLInputElement>document.getElementById("iter")
-      var valueIter = iter?.value;
-      if(valueIter == ""){
-        this.validFlagInput = false;
-        iter.style.borderColor = "red";
-      }
-      else{
-        this.validFlagInput = true;
-        iter.style.borderColor = "black";
-      }
-      var iter2 = <HTMLInputElement>document.getElementById("iter2")!
-      var valueIter2 = iter2?.value;
-      if(valueIter2 == ""){
-        this.validFlagInput = false;
-        iter2.style.borderColor = "red";
-      }
-      else{
-        this.validFlagInput = true;
-        iter2.style.borderColor = "black";
-      }
-    }
-  }*/
+//-------------------------------------------------------------------------------//
 
 //-------------------------------------------------------------------------------//
 
@@ -732,6 +807,7 @@ export class homecomponent {
     }
   }
 //-------------------------------------------------------------------------------//
+<<<<<<< HEAD
 
   validateSquare()
   {
@@ -750,16 +826,45 @@ export class homecomponent {
     }
   }
 
+=======
+
+  validateSquare()
+  {
+    var square : boolean = true;
+
+    var rows = this.coeff_matrix.length;
+    var cols = this.coeff_matrix[0].length;
+    if(rows != cols){
+      square = false;
+    }
+
+    this.squareFlag = square;
+    if(!this.squareFlag){
+      alert("Matrix Must be Square");
+
+    }
+  }
+
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 //-------------------------------------------------------------------------------//
 
   solve()
   {
+<<<<<<< HEAD
+=======
+   
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 
     this.validateSymmetric()
     this.validateSquare()
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
+<<<<<<< HEAD
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : number[][][])=>{
+=======
+      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
+      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
+>>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
         this.solution = response
         this.displaySolution()
 
@@ -770,6 +875,7 @@ export class homecomponent {
     }
 
 }
+
 }
 
 

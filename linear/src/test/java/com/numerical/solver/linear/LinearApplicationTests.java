@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -32,7 +34,7 @@ class LinearApplicationTests {
 		row.add(new BigDecimal(1));
 		b.insertColumn(row);
 
-		Solver solver = new Solver(matrix, b);
+		Solver solver = new Solver(matrix, b,new MathContext(10, RoundingMode.HALF_UP));
 		solver.backwardSub().print();
 	}
 
