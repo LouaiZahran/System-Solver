@@ -74,7 +74,6 @@ export class homecomponent {
   flag:number=0
   $event:any
   significant_figure:number = 1
-  numberofUnkowns : number= 0;
 
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
