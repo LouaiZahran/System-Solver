@@ -55,10 +55,6 @@ class problem implements properties{
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
   })
-<<<<<<< HEAD
-
-=======
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 export class homecomponent {
 
 
@@ -103,15 +99,12 @@ export class homecomponent {
   systemInput : string;
   solution :number[][][] = [];
   steps :number[][][] = [];
-<<<<<<< HEAD
-=======
   arrofInitList : number[] = [];
   numofIterations : number = 0;
   inputNumofIter : HTMLInputElement = null;
   errorValue : number = 0;
   inputErrorValue : HTMLInputElement = null;
   arrofInputInitList : HTMLInputElement[] = [];
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 //-------------------------------------------------------------------------------//
 
   displaySolution()
@@ -287,16 +280,6 @@ export class homecomponent {
 
     var check=false;
     for(let i = 0; i < input.length; i++){
-<<<<<<< HEAD
-      if(Number(input.charAt(i))
-      || input.charAt(i) == "0"
-      && !(input.charAt(i) == "\n")
-      || input.charAt(i) == "."
-      || input.charAt(i) == "-"
-      || input.charAt(i) == "+"
-      || (foundEqu && (input.charAt(i) == "*" || input.charAt(i) == "/"))){
-        console.log("Inside if");
-=======
       if(Number(input.charAt(i)) 
       || input.charAt(i) == "0" 
       && !(input.charAt(i) == "\n") 
@@ -306,7 +289,6 @@ export class homecomponent {
       || input.charAt(i) == "*" 
       || input.charAt(i) == "/"){
         console.log("Inside if");     
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
         if(input.charAt(i) == "+" || input.charAt(i) == "-"){
           if(!checkletter && !foundEqu){
             if(coffNum != "" && Number(coffNum)){
@@ -376,11 +358,7 @@ export class homecomponent {
         }
 
         if(!foundEqu && checkletter==false){
-<<<<<<< HEAD
-
-=======
           console.log(coffNum)
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
           coffNum = coffNum.concat(input.charAt(i));
         }
         if(foundEqu){
@@ -415,11 +393,8 @@ export class homecomponent {
       else if(   !Number(input.charAt(i))
               && !(input.charAt(i) == "+")
               && !(input.charAt(i) == "-")
-<<<<<<< HEAD
-=======
               && !(input.charAt(i) == "*")
               && !(input.charAt(i) == "/")
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
               && !(input.charAt(i) == "=")
               && !(input.charAt(i) == "\n")
               && !(input.charAt(i) == ".")){
@@ -609,10 +584,6 @@ export class homecomponent {
       set.appendChild(p3)
       var input2 =document.createElement("div")
       input2.style.height="30px"
-<<<<<<< HEAD
-
-=======
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
       input2.style.border="2px solid black"
       input2.style.borderRadius = "5px"
       input2.style.backgroundColor="transparent"
@@ -630,11 +601,7 @@ export class homecomponent {
     }
       }
     }
-<<<<<<< HEAD
-    while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0){
-=======
     while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0 && arrofCoffsNums.length > 0 && arrofCoffsNums[0].length > 1){
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
       arrofCoffsNums.pop()
       arrofConstNums.pop()
     }
@@ -648,15 +615,6 @@ export class homecomponent {
     this.constants_matrix = arrofConstNums;
     this.unknowns_matrix = arrofCoffsNames;
     this.numberofUnkowns = arrofCoffsNames.length;
-<<<<<<< HEAD
-  }
-//-------------------------------------------------------------------------------//
-
-  /*solutionTypeList(solType : string)
-  {
-    this.currentSolType = solType;
-=======
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
         this.createInitList(this.numberofUnkowns);
@@ -757,30 +715,6 @@ export class homecomponent {
 
   }
 
-<<<<<<< HEAD
-
-  }*/
-
-
-  /*validateInput()
-  {
-    console.log(this.significant_figure);
-    console.log(this.currentSolType);
-    for(let i = 0; i < this.matrixInput.length; i++){
-      for(let j = 0; j < this.matrixInput[i].length; j++){
-        var input = <HTMLInputElement>this.matrixInput[i][j];
-        var value = input.value;
-        console.log(value)
-        if(value == ""){
-          input.style.borderColor = "red"
-          this.validFlagInput = false;
-        }
-        else{
-          input.style.borderColor = "black"
-          this.validFlagInput = true;
-        }
-=======
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 
 //-------------------------------------------------------------------------------//
 
@@ -807,7 +741,6 @@ export class homecomponent {
     }
   }
 //-------------------------------------------------------------------------------//
-<<<<<<< HEAD
 
   validateSquare()
   {
@@ -826,45 +759,17 @@ export class homecomponent {
     }
   }
 
-=======
-
-  validateSquare()
-  {
-    var square : boolean = true;
-
-    var rows = this.coeff_matrix.length;
-    var cols = this.coeff_matrix[0].length;
-    if(rows != cols){
-      square = false;
-    }
-
-    this.squareFlag = square;
-    if(!this.squareFlag){
-      alert("Matrix Must be Square");
-
-    }
-  }
-
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 //-------------------------------------------------------------------------------//
 
   solve()
   {
-<<<<<<< HEAD
-=======
    
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
 
     this.validateSymmetric()
     this.validateSquare()
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
-<<<<<<< HEAD
-      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
-      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : number[][][])=>{
-=======
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
->>>>>>> 920178380116b164d26e8e6a89aa625d8cc1fff7
         this.solution = response
         this.displaySolution()
 
