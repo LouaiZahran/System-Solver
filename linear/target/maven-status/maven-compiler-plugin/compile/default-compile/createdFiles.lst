@@ -1,0 +1,7 @@
+com\numerical\solver\linear\model\Solver.class
+com\numerical\solver\linear\model\Decomposer.class
+com\numerical\solver\linear\Controller\SystemController.class
+com\numerical\solver\linear\LinearApplication.class
+com\numerical\solver\linear\model\Dimension.class
+com\numerical\solver\linear\model\ApiProblem.class
+com\numerical\solver\linear\model\Matrix.class
