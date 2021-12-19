@@ -1,8 +1,10 @@
 import { I18nPluralPipe } from '@angular/common';
+import { variable } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { from } from 'rxjs';
 import { HomeService } from './home.service';
+
 
 export interface solverType {
   type : string;
@@ -38,9 +40,10 @@ class problem implements properties{
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
   })
+ 
 export class homecomponent {
 
-
+  
   constructor(private server : HomeService){}
 
   DirectSolTypes : solverType[] = [
@@ -75,11 +78,143 @@ export class homecomponent {
   $event:any
   significant_figure:number = 1
 
+
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
   numberofUnkowns : number = 1;
 
   systemInput : string;
+  mehtodname:string=""
+  solution()
+  {
+   
+    var div2=document.createElement("div")
+    var p =document.createElement("h1")
+    var text =document.createTextNode("Solution")
+    p.appendChild(text)
+    p.style.marginLeft="180px"
+    p.style.marginTop="20px"
+    div2.appendChild(p)
+    document.getElementById("soln")?.appendChild(div2)
+    var arrofCoffsNums : number[][][] = [[[1,5,4],[2,3,4],[3,5,6]],[[1,5,4],[2,3,4],[3,5,6]]];
+   var variableNames : string[] = ["a","b","c"];
+   if(this.mehtodname=="Gauss Elmination" || this.mehtodname=="Gauss-Jordan" || this.mehtodname=="Gauss-Seidil" || this.mehtodname=="Jacobi-Iteration")
+   {
+   for(let i=0 ;i<arrofCoffsNums.length;i++)
+   {
+     for(let j=0;j<arrofCoffsNums[i].length;j++)
+     {
+       for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+       {
+        var p =document.createElement("h3")
+        var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
+        p.appendChild(text)
+        p.style.marginLeft="100px"
+        div2.appendChild(p)
+        document.getElementById("soln")?.appendChild(div2)
+       }
+     }
+   }
+  }
+  else
+  {
+    var div=document.createElement("div")
+    div.style.display="flex"
+    for(let i=0 ;i<arrofCoffsNums.length;i++)
+    {
+      if(i==0)
+      {
+       var p =document.createElement("h3")
+       var text =document.createTextNode("L = " )
+       p.appendChild(text)
+       div.appendChild(p)
+      }
+      else
+      {
+       var p2 =document.createElement("h3")
+       var text =document.createTextNode("U = " )
+       p2.appendChild(text)
+       p2.style.marginLeft="30px"
+       div.appendChild(p2)
+      }
+      var width2 = variableNames.length*40;  
+      var table2 =document.createElement("table")
+        
+        table2.style.marginLeft="20px" 
+        table2.width=width2.toString()
+        table2.border="2"
+        
+     
+      for(let j=0;j<arrofCoffsNums[i].length;j++)
+      {
+        
+          
+        var tr=document.createElement("tr")
+        for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+        {
+         
+          var td= document.createElement("td")
+          td.innerHTML=arrofCoffsNums[i][j][k].toString()
+         
+          tr.appendChild(td)
+      
+        }
+        table2.appendChild(tr)
+      }
+         div.appendChild(table2)
+         div2.appendChild(div)
+         document.getElementById("soln")?.appendChild(div2)
+    } 
+  }
+    var button =document.createElement("button")
+    var text=document.createTextNode("show steps")
+    button.style.width="90px"
+    button.style.backgroundColor="black"
+    button.style.color="white"
+    button.style.marginTop="30px"
+    button.appendChild(text)
+    div2.appendChild(button)
+   var steps: number[][][] = [[[1,5,4],[1,2,3],[4,5,6]],[[4,5,2],[1,1,1],[3,3,3]],[[4,5,2],[1,1,1],[3,3,3]]];
+    button.onclick=function()
+    {
+     
+       var width2 = variableNames.length*40;  
+       for(let i=0 ;i<steps.length;i++)
+       {
+        var div =document.createElement("div")
+        div.style.display="flex"
+      
+         var table =document.createElement("table")
+         table.style.marginTop="50px"
+         table.style.marginLeft="20px" 
+         table.width=width2.toString()
+         table.border="2"
+         var tr=document.createElement("tr")
+         table.appendChild(tr)
+         for(let n=0;n<variableNames.length;n++)
+         {
+         
+           var th=document.createElement("th")
+           th.innerHTML=variableNames[n]
+           tr.appendChild(th)
+         }        
+         for(let j=0 ;j<steps[i].length;j++)
+         {
+           var tr=document.createElement("tr")
+           for(let k=0;k<steps[i][j].length;k++)
+           {
+             var td= document.createElement("td")
+             td.innerHTML=steps[i][j][k].toString()
+            
+             tr.appendChild(td)
+           }
+           table.appendChild(tr)
+         }
+         div.appendChild(table)
+         document.getElementById("soln")?.appendChild(div)
+       }       
+    }
+  }
   parseSystem(){
     var validFlag : boolean = true;
     var input = this.systemInput;
@@ -123,9 +258,15 @@ export class homecomponent {
     
     var check=false; 
     for(let i = 0; i < input.length; i++){
-      if(Number(input.charAt(i)) || input.charAt(i) == "0" && !(input.charAt(i) == "\n") || input.charAt(i) == "." || input.charAt(i) == "-" || input.charAt(i) == "+" && !foundEqu ){
+      if(Number(input.charAt(i)) 
+      || input.charAt(i) == "0" 
+      && !(input.charAt(i) == "\n") 
+      || input.charAt(i) == "." 
+      || input.charAt(i) == "-" 
+      || input.charAt(i) == "+" 
+      || (foundEqu && (input.charAt(i) == "*" || input.charAt(i) == "/"))){
         console.log("Inside if");     
-        if(input.charAt(i) == "+" || input.charAt(i) == "-"  ){
+        if(input.charAt(i) == "+" || input.charAt(i) == "-"){
           numberEntered = false;
           foundNumber = false;
           if(coffsName != ""){
@@ -193,7 +334,8 @@ export class homecomponent {
           
           coffNum = coffNum.concat(input.charAt(i)); 
         }
-        else if(foundEqu){
+        if(foundEqu){
+          console.log(input)
           constNum = constNum.concat(input.charAt(i)); 
           console.log(constNum)
 
@@ -203,10 +345,11 @@ export class homecomponent {
         if(Number(input.charAt(i)) || input.charAt(i) == "0")
         { 
           console.log("shpow")
-          if(Number(constNum)){
+          var tempEqnNum : number = eval(constNum);
+          if(Number(tempEqnNum)){
             console.log(constNum)
-            arrofConstNums.pop()
-            arrofConstNums.push(Number(constNum));
+            arrofConstNums.pop();
+            arrofConstNums.push(tempEqnNum);
           }
           else{
             validFlag = false;
@@ -373,7 +516,7 @@ export class homecomponent {
         inputdown.style.border="1px solid black"
         inputdown.style.background="transparent"
         inputdown.style.border = "3px solid rgb(206, 56, 76)"
-        inputdown.style.borderRadius = "10px"
+        inputdown.style.borderRadius = "5px"
         var p4 = document.createElement("p")
         var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())  
         p4.appendChild(text4)
@@ -407,9 +550,8 @@ export class homecomponent {
       var input2 =document.createElement("div")
       input2.style.height="30px"
       
-      
       input2.style.border="2px solid black"
-      input2.style.borderRadius = "10px"
+      input2.style.borderRadius = "5px"
       input2.style.backgroundColor="transparent"
       input2.style.border = "3px solid rgb(206, 56, 76)"
       input2.className = "matrixIn";
@@ -430,7 +572,6 @@ export class homecomponent {
     console.log("Vector of Coffs = ", arrofCoffsNames);
     console.log("Vector of Coffs2 = ", arrofCoffsNames2);
     console.log("Mapped Values = ", arrofMappedValues);
-    this.numberofUnkowns = arrofCoffsNames.length;
     this.coeff_matrix = arrofCoffsNums;
     this.constants_matrix = arrofConstNums;
     this.numberofUnkowns = arrofCoffsNames.length;
@@ -589,9 +730,7 @@ export class homecomponent {
   solve()
   {
     this.validateSymmetric()
-    if(!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)){ 
-      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType));
-      console.log(JSON.stringify(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)));
+    if(!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)){
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : any)=>(console.log(response)),(error:any)=>console.log("lol"));
 
 
