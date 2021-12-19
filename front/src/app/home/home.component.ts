@@ -29,16 +29,22 @@ export interface properties {
 //-------------------------------------------------------------------------------//
 
 class problem implements properties{
+  errorValue : number = 0;
+  numofIterations: number = 0;
+  arrofInitList:number[] = [];
   numberofUnkown : number = 0;
   coeff_matrix :number[][] = [];
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
-  constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[] ,precision :number,method :string){
+  constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[], precision :number, numofIterations : number, arrofInitList : number[], errorValue:number,method :string){
+    this.errorValue = errorValue;
     this.numberofUnkown = numberofUnkown;
     this.coeff_matrix = coeff_matrix;
     this.constants_matrix = constants_matrix;
     this.precision = precision;
+    this.numofIterations = numofIterations;
+    this.arrofInitList = arrofInitList;
     this.method = method
   }
 }
@@ -93,6 +99,12 @@ export class homecomponent {
   systemInput : string;
   solution :number[][][] = [];
   steps :number[][][] = [];
+  arrofInitList : number[] = [];
+  numofIterations : number = 0;
+  inputNumofIter : HTMLInputElement = null;
+  errorValue : number = 0;
+  inputErrorValue : HTMLInputElement = null;
+  arrofInputInitList : HTMLInputElement[] = [];
 //-------------------------------------------------------------------------------//
 
   displaySolution()
@@ -226,6 +238,10 @@ export class homecomponent {
 //-------------------------------------------------------------------------------//
 
   parseSystem(){
+    document.getElementById("iter")?.remove();
+    document.getElementById("iter2")?.remove();
+    document.getElementById("iterList")?.remove();
+    
     var validFlag : boolean = true;
     var input = this.systemInput;
     input = input.replace(/ /g,'');
@@ -243,7 +259,7 @@ export class homecomponent {
     var arrofCoffsNames2 : string[] = [];
     var sumofNumber : number = 0;
 
-
+  
     var rows : number = 0;
     arrofCoffsNums.push([]);
 
@@ -599,32 +615,50 @@ export class homecomponent {
     this.constants_matrix = arrofConstNums;
     this.unknowns_matrix = arrofCoffsNames;
     this.numberofUnkowns = arrofCoffsNames.length;
+    if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+      if(!this.createdIter){
+        this.createInitList(this.numberofUnkowns);
+        this.createErrorIters();
+      }
+    }
+    this.readInitList();
+    this.readError();
+    this.readNumofIter();
+    
+
   }
 //-------------------------------------------------------------------------------//
 
-  /*solutionTypeList(solType : string)
+  readInitList(){
+    for(let i = 0; i < this.numberofUnkowns; i++){
+      this.arrofInitList[i] = Number(this.arrofInputInitList[i].value);
+    }
+  }
+  readNumofIter(){
+    this.numofIterations = Number(this.inputNumofIter.value)
+  }
+  readError(){
+    this.errorValue = Number(this.inputErrorValue.value)
+  }
+  solutionTypeList(solType : string)
   {
     this.currentSolType = solType;
-    if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
-      if(!this.createdIter){
-        this.createErrorIters();
-        this.createInitList(this.externalnum);
-        this.createdIter = true;
-      }
-    }
-    else{
+    this.parseSystem();
+   
 
-      this.createdIter = false;
+    if(!(this.currentSolType == this.iterativeSolTypes[0].type) && !(this.currentSolType == this.iterativeSolTypes[1].type)){
       document.getElementById("iter")?.remove();
       document.getElementById("iter2")?.remove();
       document.getElementById("iterList")?.remove();
     }
 
-  }*/
+  }
 
-  /*createErrorIters(){
+  createErrorIters(){
     var input = document.createElement("input");
     var input2 = document.createElement("input");
+    this.inputNumofIter = input;
+    this.inputErrorValue = input2;
     input.value = "3";
     input.style.width="60px"
     input.style.height="40px"
@@ -652,9 +686,10 @@ export class homecomponent {
     input2.id = "iter2";
     document.getElementById("main")?.appendChild(input);
     document.getElementById("main")?.appendChild(input2);
-  }*/
+  }
 
-  /*createInitList(num : number){
+
+  createInitList(num : number){
 
     var list = document.createElement("ul");
     list.id = "iterList";
@@ -671,60 +706,15 @@ export class homecomponent {
       input3.style.borderRadius = "10px"
       input3.type = "number";
       input3.className = "matrixIn";
-      input3.placeholder = this.coff[i];
+      input3.placeholder = this.unknowns_matrix[i];
       li.appendChild(input3);
+      this.arrofInputInitList.push(input3);
     }
     list.appendChild(li);
     document.getElementById("main")?.appendChild(list);
 
+  }
 
-
-  }*/
-
-
-  /*validateInput()
-  {
-    console.log(this.significant_figure);
-    console.log(this.currentSolType);
-    for(let i = 0; i < this.matrixInput.length; i++){
-      for(let j = 0; j < this.matrixInput[i].length; j++){
-        var input = <HTMLInputElement>this.matrixInput[i][j];
-        var value = input.value;
-        console.log(value)
-        if(value == ""){
-          input.style.borderColor = "red"
-          this.validFlagInput = false;
-        }
-        else{
-          input.style.borderColor = "black"
-          this.validFlagInput = true;
-        }
-
-      }
-    }
-    if(this.createdIter){
-      var iter = <HTMLInputElement>document.getElementById("iter")
-      var valueIter = iter?.value;
-      if(valueIter == ""){
-        this.validFlagInput = false;
-        iter.style.borderColor = "red";
-      }
-      else{
-        this.validFlagInput = true;
-        iter.style.borderColor = "black";
-      }
-      var iter2 = <HTMLInputElement>document.getElementById("iter2")!
-      var valueIter2 = iter2?.value;
-      if(valueIter2 == ""){
-        this.validFlagInput = false;
-        iter2.style.borderColor = "red";
-      }
-      else{
-        this.validFlagInput = true;
-        iter2.style.borderColor = "black";
-      }
-    }
-  }*/
 
 //-------------------------------------------------------------------------------//
 
@@ -777,8 +767,8 @@ export class homecomponent {
     this.validateSymmetric()
     this.validateSquare()
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
-      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType))
-      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure, this.currentSolType)).subscribe((response : number[][][])=>{
+      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
+      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
         this.solution = response
         this.displaySolution()
 

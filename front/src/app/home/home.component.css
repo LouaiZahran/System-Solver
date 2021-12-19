@@ -125,9 +125,23 @@ button {
     border-radius: 7px;
     position: relative;
     transition-duration: 2ms;
+    border: none;
     background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     animation: gradient 5s ease infinite;
 
+}
+button:hover{
+    transition-duration: 0.1s;
+
+    background-color: (#e73c7e);
+    box-shadow: 70px;
+
+}
+button:active{
+    transition-duration: 0.1s;
+
+    background-color: (#e73c7e);
+    box-shadow: 70px;
 }
 h1{
     text-align: center;
@@ -136,12 +150,7 @@ h1{
     
 }
 
-button:hover{
-    background-color: rgb(35, 75, 75);
 
-    transition-duration: 2ms;
-
-}
 
 #iter {
     left: 0px;
