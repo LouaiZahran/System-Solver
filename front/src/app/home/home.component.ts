@@ -357,7 +357,7 @@ export class homecomponent {
         {
           console.log("shpow")
           var tempEqnNum : number = eval(constNum);
-          if(Number(tempEqnNum)){
+          if(Number(tempEqnNum) || tempEqnNum == 0){
             console.log(constNum)
             arrofConstNums.pop();
             arrofConstNums.push(tempEqnNum);
@@ -535,6 +535,7 @@ export class homecomponent {
         inputdown.style.background="transparent"
         inputdown.style.border = "3px solid rgb(206, 56, 76)"
         inputdown.style.borderRadius = "5px"
+
         var p4 = document.createElement("p")
         var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())
         p4.appendChild(text4)

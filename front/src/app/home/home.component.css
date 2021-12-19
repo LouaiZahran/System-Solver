@@ -1,21 +1,4 @@
 
-body {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
 #input00, #input01,
 #input10, #input11
 {
@@ -67,6 +50,22 @@ p{
     position: relative;
     height: 200px;
     width: 700px;
+    border-radius: 20px;
+    border:none;
+    background: linear-gradient(-130deg, #d8a799, #d17a9b, #79c6e2, #5ad3b6);
+    animation: gradient 10s ease infinite;
+
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 #labelsol{
     font-family: consolas;
@@ -115,7 +114,6 @@ p{
 
 }
 button {
-    background-color: rgb(148, 6, 6);
     color: rgb(255, 255, 255);
     font-family: consolas;
     font-weight: bold;
@@ -127,6 +125,8 @@ button {
     border-radius: 7px;
     position: relative;
     transition-duration: 2ms;
+    background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    animation: gradient 5s ease infinite;
 
 }
 h1{
