@@ -8,15 +8,21 @@ public class Solver {
     private Matrix coeff;
     private Matrix constant;
     private Matrix result;
+    private MathContext mc;
 
-    public Solver(Matrix coeff, Matrix constant) throws IllegalArgumentException{
+    public Solver(Matrix coeff, Matrix constant,MathContext mc) throws IllegalArgumentException{
         if(coeff.getDimension().getRow() != constant.getDimension().getRow()
                 || constant.getDimension().getCol() != 1)
             throw new IllegalArgumentException("System's dimensions are not correct");
         this.setCoeff(coeff);
         this.setConstant(constant);
+        this.setMc(mc);
     }
+    public MathContext getMc(){return mc;}
 
+    public void setMc(MathContext mc){
+        this.mc=mc;
+    }
     public Matrix getCoeff() {
         return coeff;
     }
@@ -66,7 +72,7 @@ public class Solver {
                 }
             }
 
-            BigDecimal newXi = numerator.divide(denominator, MathContext.UNLIMITED);
+            BigDecimal newXi = numerator.divide(denominator, mc);
             ret.setCell(curVariablePosition, newXi);
             if(immediateUpdate)
                 guessCopy.setCell(curVariablePosition, newXi);
@@ -93,7 +99,7 @@ public class Solver {
             BigDecimal denominator = current.getCell(curPosition);
             if(denominator.doubleValue() == 0)
                 return Double.POSITIVE_INFINITY;
-            error = Math.max(error, numerator.divide(denominator, MathContext.UNLIMITED).doubleValue());
+            error = Math.max(error, numerator.divide(denominator, mc).doubleValue());
         }
 
         return error;
@@ -136,7 +142,7 @@ public class Solver {
                 BigDecimal newBi = bi.subtract(aij.multiply(xj));
                 ret.setCell(curVariablePosition, newBi);
             }
-            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), MathContext.UNLIMITED));
+            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), mc));
         }
 
         return ret;
@@ -166,7 +172,7 @@ public class Solver {
                 BigDecimal newBi = bi.subtract(aij.multiply(xj));
                 ret.setCell(curVariablePosition, newBi);
             }
-            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), MathContext.UNLIMITED));
+            ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), mc));
         }
 
         return ret;
