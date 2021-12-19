@@ -11,7 +11,7 @@
 #input02, #input12 {
     width: 50px;
     height: 30px;
-    border: 3px solid rgb(206, 56, 76);
+    border: 3px solid rgb(146, 31, 46);
     margin-top: 4px;
     margin-left: 5px;
 
@@ -61,8 +61,8 @@ input::-webkit-inner-spin-button {
     left: 40px;
 }
 
-button {
-    background-color: darkslategrey;
+#validate {
+    background-color: rgb(16, 34, 63);
     color: rgb(255, 255, 255);
     font-family: Fira code;
     font-size: 18px;
@@ -114,4 +114,3 @@ select
     margin-top: 15px;
     margin-left: 20px;
 }
-
