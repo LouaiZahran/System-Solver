@@ -496,7 +496,7 @@ export class homecomponent {
       }
       else if(input.charAt(i) == "\n"){
 
-
+        sumofNumber = 0;
         rows++;
         arrofCoffsNums.push([]);
         numberEntered = false;
@@ -519,7 +519,7 @@ export class homecomponent {
         arrofMappedValues.push(new Map<string, number>());
 
 
-
+        
         pushedCoff = false;
         enter=true
 
