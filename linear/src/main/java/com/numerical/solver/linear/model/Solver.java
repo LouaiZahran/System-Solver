@@ -112,6 +112,10 @@ public class Solver {
             return guess;
         Matrix curResult = iterate(guess, gaussSeidel);
         curResult.print();
+        System.out.println(iterations);
+        System.out.println(getError(guess,curResult));
+        guess.print();
+        curResult.print();
         System.out.println("");
         if(getError(guess, curResult) <= tolerance)
             return curResult;

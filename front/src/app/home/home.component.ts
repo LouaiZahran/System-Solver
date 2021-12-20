@@ -351,6 +351,8 @@ generate()
     this.constants_matrix = [];
     this.unknowns_matrix = [];
     this.numberofUnkowns = 1;
+    this.arrofInputInitList= [];
+    this.arrofInitList = [];
     
     var validFlag : boolean = true;
     var input = this.systemInput;
