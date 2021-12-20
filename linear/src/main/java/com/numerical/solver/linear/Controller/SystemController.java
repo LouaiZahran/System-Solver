@@ -39,7 +39,6 @@ public class SystemController {
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
         for(int i=0;i<arrayData.length;i++){
-            System.out.println(arrayData[i]);
             ArrayList<BigDecimal> retRow=new ArrayList<>();
             retRow.add(arrayData[i].round(mc));
             ret.add(retRow);

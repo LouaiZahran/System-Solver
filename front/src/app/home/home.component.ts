@@ -959,10 +959,11 @@ delete()
 
   solve()
   {
-   
-    this.readInitList();
-    this.readNumofIter();
-    this.readError();
+    if(this.currentSolType==this.iterativeSolTypes[0].type || this.currentSolType==this.iterativeSolTypes[1].type){
+      this.readInitList();
+      this.readNumofIter();
+      this.readError();
+    }
     this.validateSymmetric()
     this.validateSquare()
     this.validateDiagonallyDominant()
