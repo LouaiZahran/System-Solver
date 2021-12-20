@@ -31,6 +31,7 @@ public class ApiProblem {
 
         this.precision=precision;
         this.errorValue=errorValue;
+        this.numofIterations=numofIterations;
         this.numberofUnknown=numberofUnknown;
         this.method=method;
     }
