@@ -85,6 +85,7 @@ export class homecomponent {
   createdIter : boolean = false;
   validFlagInput : boolean = false;
   symmFalg : boolean = false;
+  diagonallyDomminantFlag:boolean =false;
   squareFlag : boolean =false;
   currentSolType : string = this.DirectSolTypes[0].type;
   variableNames : string[] = [];
@@ -763,19 +764,19 @@ generate()
   }
 //-------------------------------------------------------------------------------//
 
-/*  readInitList(){
+ readInitList(){
     for(let i = 0; i < this.numberofUnkowns; i++){
       this.arrofInitList[i] = Number(this.arrofInputInitList[i].value);
     }
   }
-  */
- /* readNumofIter(){
+  
+  readNumofIter(){
     this.numofIterations = Number(this.inputNumofIter.value)
   }
   readError(){
     this.errorValue = Number(this.inputErrorValue.value)
   }
-  */
+  
   solutionTypeList(solType : string)
   {
     if(this.coeff_matrix.length!=0)
@@ -907,6 +908,34 @@ delete()
 
     }
   }
+  //-------------------------------------------------------------------------------//
+
+  validateDiagonallyDominant()
+  {
+    var diagonallyDomminant : boolean = true;
+    for(let i = 0; i < Math.min(this.coeff_matrix.length,this.coeff_matrix[0].length); i++){
+      var sum:number=0
+      var diagonal:number=0
+      for(let j = 0; j < Math.min(this.coeff_matrix.length,this.coeff_matrix[0].length); j++){
+        if(i==j)
+          diagonal=this.coeff_matrix[i][j];
+        else
+          sum =sum+ this.coeff_matrix[i][j];
+        }
+        if(sum > diagonal){
+          diagonallyDomminant = false;
+          break;
+        
+      }
+    }
+
+    this.diagonallyDomminantFlag = diagonallyDomminant;
+    if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)
+      && !this.diagonallyDomminantFlag){
+      alert("Matrix Must be Diagonally Dominant");
+
+    }
+  }
 //-------------------------------------------------------------------------------//
 
   validateSquare()
@@ -931,12 +960,15 @@ delete()
   solve()
   {
    
-    //this.readInitList();
-    //this.readNumofIter();
-    //this.readError();
+    this.readInitList();
+    this.readNumofIter();
+    this.readError();
     this.validateSymmetric()
     this.validateSquare()
-    if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
+    this.validateDiagonallyDominant()
+    if(((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
+      &&(!((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)&& !this.diagonallyDomminantFlag)))
+      && this.squareFlag)){
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
         this.solution = response

@@ -95,8 +95,8 @@ public class Solver {
 
         for(int i=1; i<=rows; i++) {
             Dimension curPosition = new Dimension(i, 1);
-            BigDecimal numerator = current.getCell(curPosition).subtract(previous.getCell(curPosition),mc);
-            BigDecimal denominator = current.getCell(curPosition);
+            BigDecimal numerator = current.getCell(curPosition).subtract(previous.getCell(curPosition),mc).abs();
+            BigDecimal denominator = current.getCell(curPosition).abs();
             if(denominator.doubleValue() == 0)
                 return Double.POSITIVE_INFINITY;
             error = Math.max(error, numerator.divide(denominator, mc).doubleValue());
