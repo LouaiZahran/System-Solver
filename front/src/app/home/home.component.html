@@ -6,7 +6,7 @@
       <textarea [(ngModel)] = "systemInput" id = "textinput"  cols = "70" row = "10"  spellcheck = "false" (input) = parseSystem()>
       </textarea>
         <label id ="labelsol">Enter the desired precision: </label>
-        <select [(ngModel)] = "significant_figure" id="significance">
+        <select (change)="delete()" [(ngModel)] = "significant_figure" id="significance">
           <option value="1" >1</option>
           <option value="2" >2</option>
           <option value="3" >3</option>
@@ -28,9 +28,9 @@
           <option value="19" >19</option>
           <option value="20" >20</option>
         </select>
-        <select [(ngModel)] = "currentSolType" id = "selectSolver" (change)=solutionTypeList(currentSolType)>
+        <select (change)="delete()" [(ngModel)] = "currentSolType" id = "selectSolver" (change)=solutionTypeList(currentSolType)>
           <optgroup label="Direct Methods">
-            <option *ngFor = "let sol of DirectSolTypes">
+            <option   *ngFor = "let sol of DirectSolTypes">
               {{sol.type}}
             </option>
           </optgroup>
@@ -56,6 +56,9 @@
     </div>
   </div> -->
   <div id="0">
+    <div id=0.25>
+
+    </div>
       <div id="0.5">
 
       </div>

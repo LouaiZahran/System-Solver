@@ -278,11 +278,16 @@ generate()
   console.log(this.constants_matrix)
   console.log(this.unknowns_matrix)
   var set2 = document.createElement("div")
-    set2.id = "0.5"
-    set2.style.marginLeft="290px"
-    set2.style.marginTop="30px"
-    for(let i=0;i<this.coeff_matrix.length;i++)
-    {
+  set2.id = "0.5"
+  set2.style.marginLeft="290px"
+  set2.style.marginTop="30px"
+  var h2=document.createElement("h5")
+  var textnode=document.createTextNode("The Final Equations")
+  h2.appendChild(textnode)
+  set2.appendChild(h2)
+
+  for(let i=0;i<this.coeff_matrix.length;i++)
+  {
       var set = document.createElement("div")
       set.style.display="flex"
       for(let j =0 ;j<this.coeff_matrix[i].length;j++)
@@ -344,9 +349,14 @@ generate()
 //-------------------------------------------------------------------------------//
 
   parseSystem(){
-    document.getElementById("iter")?.remove();
-    document.getElementById("iter2")?.remove();
-    document.getElementById("iterList")?.remove();
+    document.getElementById("50")?.remove()
+    document.getElementById("51")?.remove();
+    console.log(document.getElementById("iter"))
+    if(this.numberofUnkowns==0)
+      
+    {
+      this.delete()
+    }
     this.coeff_matrix = [];
     this.constants_matrix = [];
     this.unknowns_matrix = [];
@@ -391,7 +401,9 @@ generate()
     arrofMappedValues.push(new Map<string, number>());
 
     var check=false;
+    
     for(let i = 0; i < input.length; i++){
+     
       if(Number(input.charAt(i)) 
       || input.charAt(i) == "0" 
       && !(input.charAt(i) == "\n") 
@@ -725,32 +737,50 @@ generate()
     this.numberofUnkowns = arrofCoffsNames.length;
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
-        this.createInitList(this.numberofUnkowns);
-        this.createErrorIters();
+        if(this.numberofUnkowns==0)
+      
+        {
+          var div =document.getElementById("50")
+          div?.parentNode?.removeChild(div)
+    
+          var div2 =document.getElementById("51")
+          div2?.parentNode?.removeChild(div2)
+        }
+        else
+        {
+          this.createInitList(this.numberofUnkowns);
+          this.createErrorIters();
+        }
+       
       }
+      
     }
-    this.readInitList();
-    this.readError();
-    this.readNumofIter();
+    //this.readInitList();
+   // this.readError();
+   // this.readNumofIter();
     
 
   }
 //-------------------------------------------------------------------------------//
 
-  readInitList(){
+/*  readInitList(){
     for(let i = 0; i < this.numberofUnkowns; i++){
       this.arrofInitList[i] = Number(this.arrofInputInitList[i].value);
     }
   }
-  readNumofIter(){
+  */
+ /* readNumofIter(){
     this.numofIterations = Number(this.inputNumofIter.value)
   }
   readError(){
     this.errorValue = Number(this.inputErrorValue.value)
   }
+  */
   solutionTypeList(solType : string)
   {
-    this.currentSolType = solType;
+    if(this.coeff_matrix.length!=0)
+    {
+      this.currentSolType = solType;
     this.parseSystem();
    
 
@@ -759,15 +789,30 @@ generate()
       document.getElementById("iter2")?.remove();
       document.getElementById("iterList")?.remove();
     }
+  }
+  else
+  {
+    window.alert("please Enter Equations in text box")
+  }
+    
 
   }
 
   createErrorIters(){
+    
+    var div=document.createElement("div")
+    div.style.display="flex"
+    div.style.marginTop="20px"
+    div.id="50"
+    var p =document.createElement("h4")
+    var text =document.createTextNode("No of itetrations:")
+    p.appendChild(text)
+    p.style.marginTop="5px"
+    div.appendChild(p)
     var input = document.createElement("input");
     var input2 = document.createElement("input");
     this.inputNumofIter = input;
     this.inputErrorValue = input2;
-    input.value = "3";
     input.style.width="60px"
     input.style.height="40px"
     input.style.marginTop="4px"
@@ -778,8 +823,13 @@ generate()
     input.min = "1";
     input.step = "1";
     input.className = "matrixIn";
-    input.placeholder="3";
-    input.id = "iter"
+    div.appendChild(input)
+    var p2 =document.createElement("h4")
+    var text2 =document.createTextNode("Error torlance:")
+    p2.appendChild(text2)
+    p2.style.marginTop="5px"
+    p2.style.marginLeft="5px"
+    div.appendChild(p2)
     input2.style.width="60px"
     input2.style.height="40px"
     input2.style.marginTop="4px"
@@ -787,23 +837,26 @@ generate()
     input2.style.border="3px solid black"
     input2.style.borderRadius = "10px"
     input2.type = "number";
-    input2.min = "1";
-    input2.step = "1";
+    input2.min = "0";
     input2.className = "matrixIn";
-    input2.placeholder="3";
     input2.id = "iter2";
-    document.getElementById("main")?.appendChild(input);
-    document.getElementById("main")?.appendChild(input2);
+    div.appendChild(input2)
+    document.getElementById("0")?.appendChild(div);
+    
   }
 
 
   createInitList(num : number){
 
-    var list = document.createElement("ul");
-    list.id = "iterList";
-
-    var li = document.createElement("li");
-
+    var div = document.createElement("div");
+    div.id = "51";
+     div.style.display="flex"
+     div.style.marginTop="5px"
+     var p =document.createElement("h2")
+     var text =document.createTextNode("intial values :")
+     p.style.marginTop="5px"
+     p.appendChild(text)
+     div.appendChild(p)
     for(let i = 0; i < num; i++){
       var input3 = document.createElement("input");
       input3.style.width="60px"
@@ -815,17 +868,23 @@ generate()
       input3.type = "number";
       input3.className = "matrixIn";
       input3.placeholder = this.unknowns_matrix[i];
-      li.appendChild(input3);
+      div.appendChild(input3);
       this.arrofInputInitList.push(input3);
     }
-    list.appendChild(li);
-    document.getElementById("main")?.appendChild(list);
+    
+    document.getElementById("0")?.appendChild(div);
 
   }
 
 
 //-------------------------------------------------------------------------------//
-
+delete()
+{
+  var del2 =document.getElementById("0.5")
+    del2?.parentNode?.removeChild(del2) 
+    var del =document.getElementById("soln")
+    del?.parentNode?.removeChild(del)
+}
 //-------------------------------------------------------------------------------//
 
   validateSymmetric()
@@ -872,9 +931,9 @@ generate()
   solve()
   {
    
-    this.readInitList();
-    this.readNumofIter();
-    this.readError();
+    //this.readInitList();
+    //this.readNumofIter();
+    //this.readError();
     this.validateSymmetric()
     this.validateSquare()
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
