@@ -115,7 +115,7 @@ export class homecomponent {
   {
     var indiv=document.getElementById("5000")
     var del2 =document.getElementById("soln")
-    del2?.parentNode?.removeChild(del2) 
+    del2?.parentNode?.removeChild(del2)
     var set2 = document.createElement("div")
     set2.id = "soln"
     var div2=document.createElement("div")
@@ -150,7 +150,7 @@ export class homecomponent {
     }
     else
     {
-      
+
       var div=document.createElement("div")
       div.style.display="flex"
       div.style.marginTop="20px"
@@ -267,14 +267,14 @@ export class homecomponent {
         set2?.appendChild(div)
         indiv?.appendChild(set2)
       }
-      
+
     }
   }
 //--------------------------------------------------------------------------------//
 generate()
 {
   var del =document.getElementById("0.5")
-  del?.parentNode?.removeChild(del) 
+  del?.parentNode?.removeChild(del)
   console.log(this.coeff_matrix)
   console.log(this.constants_matrix)
   console.log(this.unknowns_matrix)
@@ -354,7 +354,7 @@ generate()
     document.getElementById("51")?.remove();
     console.log(document.getElementById("iter"))
     if(this.numberofUnkowns==0)
-      
+
     {
       this.delete()
     }
@@ -364,7 +364,7 @@ generate()
     this.numberofUnkowns = 1;
     this.arrofInputInitList= [];
     this.arrofInitList = [];
-    
+
     var validFlag : boolean = true;
     var input = this.systemInput;
     input = input.replace(/ /g,'');
@@ -382,7 +382,7 @@ generate()
     var arrofCoffsNames2 : string[] = [];
     var sumofNumber : number = 0;
 
-  
+
     var rows : number = 0;
     arrofCoffsNums.push([]);
 
@@ -402,18 +402,18 @@ generate()
     arrofMappedValues.push(new Map<string, number>());
 
     var check=false;
-    
+
     for(let i = 0; i < input.length; i++){
-     
-      if(Number(input.charAt(i)) 
-      || input.charAt(i) == "0" 
-      && !(input.charAt(i) == "\n") 
-      || input.charAt(i) == "." 
-      || input.charAt(i) == "-" 
-      || input.charAt(i) == "+" 
-      || input.charAt(i) == "*" 
+
+      if(Number(input.charAt(i))
+      || input.charAt(i) == "0"
+      && !(input.charAt(i) == "\n")
+      || input.charAt(i) == "."
+      || input.charAt(i) == "-"
+      || input.charAt(i) == "+"
+      || input.charAt(i) == "*"
       || input.charAt(i) == "/"){
-        console.log("Inside if");     
+        console.log("Inside if");
         if(input.charAt(i) == "+" || input.charAt(i) == "-"){
           if(!checkletter && !foundEqu){
             if(coffNum != "" && Number(coffNum)){
@@ -421,7 +421,7 @@ generate()
               coffNum = "";
             }
           }
-         
+
           numberEntered = false;
           foundNumber = false;
           if(coffsName != ""){
@@ -652,7 +652,7 @@ generate()
       console.log(arrofCoffsNums.length)
       console.log(arrofCoffsNums[0].length)
 
-    /*  
+    /*
     var del =document.getElementById("0.5")
     del?.parentNode?.removeChild(del)
     var set2 = document.createElement("div")
@@ -739,11 +739,11 @@ generate()
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
         if(this.numberofUnkowns==0)
-      
+
         {
           var div =document.getElementById("50")
           div?.parentNode?.removeChild(div)
-    
+
           var div2 =document.getElementById("51")
           div2?.parentNode?.removeChild(div2)
         }
@@ -752,38 +752,40 @@ generate()
           this.createInitList(this.numberofUnkowns);
           this.createErrorIters();
         }
-       
+
       }
-      
+
     }
     //this.readInitList();
    // this.readError();
    // this.readNumofIter();
-    
+
 
   }
 //-------------------------------------------------------------------------------//
 
- readInitList(){
+  readInitList(){
     for(let i = 0; i < this.numberofUnkowns; i++){
       this.arrofInitList[i] = Number(this.arrofInputInitList[i].value);
     }
   }
-  
+//-------------------------------------------------------------------------------//
   readNumofIter(){
     this.numofIterations = Number(this.inputNumofIter.value)
   }
+//-------------------------------------------------------------------------------//
+
   readError(){
     this.errorValue = Number(this.inputErrorValue.value)
   }
-  
+//-------------------------------------------------------------------------------//
+
   solutionTypeList(solType : string)
   {
     if(this.coeff_matrix.length!=0)
     {
       this.currentSolType = solType;
     this.parseSystem();
-   
 
     if(!(this.currentSolType == this.iterativeSolTypes[0].type) && !(this.currentSolType == this.iterativeSolTypes[1].type)){
       document.getElementById("iter")?.remove();
@@ -795,12 +797,13 @@ generate()
   {
     window.alert("please Enter Equations in text box")
   }
-    
+
 
   }
+//-------------------------------------------------------------------------------//
 
   createErrorIters(){
-    
+
     var div=document.createElement("div")
     div.style.display="flex"
     div.style.marginTop="20px"
@@ -843,21 +846,22 @@ generate()
     input2.id = "iter2";
     div.appendChild(input2)
     document.getElementById("0")?.appendChild(div);
-    
+
   }
 
+//-------------------------------------------------------------------------------//
 
   createInitList(num : number){
 
     var div = document.createElement("div");
     div.id = "51";
-     div.style.display="flex"
-     div.style.marginTop="5px"
-     var p =document.createElement("h2")
-     var text =document.createTextNode("intial values :")
-     p.style.marginTop="5px"
-     p.appendChild(text)
-     div.appendChild(p)
+    div.style.display="flex"
+    div.style.marginTop="5px"
+    var p =document.createElement("h2")
+    var text =document.createTextNode("intial values :")
+    p.style.marginTop="5px"
+    p.appendChild(text)
+    div.appendChild(p)
     for(let i = 0; i < num; i++){
       var input3 = document.createElement("input");
       input3.style.width="60px"
@@ -872,7 +876,7 @@ generate()
       div.appendChild(input3);
       this.arrofInputInitList.push(input3);
     }
-    
+
     document.getElementById("0")?.appendChild(div);
 
   }
@@ -882,7 +886,7 @@ generate()
 delete()
 {
   var del2 =document.getElementById("0.5")
-    del2?.parentNode?.removeChild(del2) 
+    del2?.parentNode?.removeChild(del2)
     var del =document.getElementById("soln")
     del?.parentNode?.removeChild(del)
 }
@@ -925,14 +929,14 @@ delete()
         if(sum > diagonal){
           diagonallyDomminant = false;
           break;
-        
+
       }
     }
 
     this.diagonallyDomminantFlag = diagonallyDomminant;
     if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)
       && !this.diagonallyDomminantFlag){
-      alert("Matrix Must be Diagonally Dominant");
+      alert("Solution may diverge");
 
     }
   }
@@ -966,9 +970,11 @@ delete()
     }
     this.validateSymmetric()
     this.validateSquare()
-    this.validateDiagonallyDominant()
-    if(((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
-      &&(!((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)&& !this.diagonallyDomminantFlag)))
+    if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)){
+      this.validateDiagonallyDominant()
+
+    }
+    if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
       && this.squareFlag)){
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
@@ -980,9 +986,8 @@ delete()
 
 
     }
-    
 
-}
+  }
 
 }
 
