@@ -3,7 +3,7 @@
 <div class="container" id = "main">
   <div style="display: flex;">
     <div class="dropdown" id = "main">
-      <textarea [(ngModel)] = "systemInput" id = "textinput" cols = "70" row = "10"  spellcheck = "false" (input) = parseSystem()>
+      <textarea [(ngModel)] = "systemInput" id = "textinput"  cols = "70" row = "10"  spellcheck = "false" (input) = parseSystem()>
       </textarea>
         <label id ="labelsol">Enter the desired precision: </label>
         <select [(ngModel)] = "significant_figure" id="significance">
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <button style="margin-left: 200px; margin-top: 40px;" id = "solve"  (click)="solve()">Solve</button>
+ 
   <!-- <div id="1000">
     <button (click)="create()">Change the name of the varaibles in the system</button>
     <div id="1">
@@ -60,7 +60,11 @@
 
       </div>
   </div>
-  <div id="soln">
+  <button style="margin-left: 200px; margin-top: 40px;" id = "solve"(click)="generate()" (click)="readInitList();readNumofIter();readError();solve()">Solve</button>
+  <div id="5000">
+    <div id="soln">
 
+    </div>
   </div>
+
 </div>

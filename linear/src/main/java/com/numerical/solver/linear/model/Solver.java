@@ -82,7 +82,7 @@ public class Solver {
     }
 
     public Matrix Jacobi(Matrix initialGuess, int iterations, double tolerance){
-        return solveIterative(initialGuess, iterations, tolerance, false);
+        return solveIterative(initialGuess, iterations, tolerance,false);
     }
 
     public Matrix GaussSeidel(Matrix initialGuess, int iterations, double tolerance){

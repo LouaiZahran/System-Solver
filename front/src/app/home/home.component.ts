@@ -23,8 +23,10 @@ export interface properties {
   coeff_matrix :number[][];
   constants_matrix :number[];
   precision :number;
+  errorValue : number;
+  numofIterations: number;
+  arrofInitList:number[];
   method :string;
-
 }
 //-------------------------------------------------------------------------------//
 
@@ -37,6 +39,7 @@ class problem implements properties{
   constants_matrix :number[] = [];
   precision :number = 0;
   method :string = "";
+
   constructor(numberofUnkown : number, coeff_matrix:number[][],constants_matrix :number[], precision :number, numofIterations : number, arrofInitList : number[], errorValue:number,method :string){
     this.errorValue = errorValue;
     this.numberofUnkown = numberofUnkown;
@@ -109,12 +112,17 @@ export class homecomponent {
 
   displaySolution()
   {
-
+    var indiv=document.getElementById("5000")
+    var del2 =document.getElementById("soln")
+    del2?.parentNode?.removeChild(del2) 
+    var set2 = document.createElement("div")
+    set2.id = "soln"
     var div2=document.createElement("div")
     var p =document.createElement("h1")
     var text =document.createTextNode("Solution")
+    indiv?.appendChild(set2)
     p.appendChild(text)
-    p.style.marginLeft="180px"
+    p.style.marginLeft="280px"
     p.style.marginTop="20px"
     div2.appendChild(p)
     document.getElementById("soln")?.appendChild(div2)
@@ -133,17 +141,23 @@ export class homecomponent {
             p.appendChild(text)
             p.style.marginLeft="100px"
             div2.appendChild(p)
-            document.getElementById("soln")?.appendChild(div2)
+            set2?.appendChild(div2)
+            indiv?.appendChild(set2)
           }
         }
       }
     }
     else
     {
+      
       var div=document.createElement("div")
       div.style.display="flex"
+      div.style.marginTop="20px"
+      div.style.marginLeft="150PX"
       for(let i=0 ;i<arrofCoffsNums.length;i++)
       {
+        if(i!=arrofCoffsNums.length-1)
+        {
         if(i==0)
         {
           var p =document.createElement("h3")
@@ -165,12 +179,8 @@ export class homecomponent {
         table2.style.marginLeft="20px"
         table2.width=width2.toString()
         table2.border="2"
-
-
         for(let j=0;j<arrofCoffsNums[i].length;j++)
         {
-
-
           var tr=document.createElement("tr")
           for(let k=0;k<arrofCoffsNums[i][j].length;k++)
           {
@@ -185,15 +195,37 @@ export class homecomponent {
         }
         div.appendChild(table2)
         div2.appendChild(div)
-        document.getElementById("soln")?.appendChild(div2)
+        set2?.appendChild(div2)
+        indiv?.appendChild(set2)
+      }
+      else
+      {
+        var div2=document.createElement("div")
+        div2.style.display="flex"
+        div2.style.marginTop="20px"
+        div2.style.marginLeft="60px"
+        for(let j=0;j<arrofCoffsNums[i].length;j++)
+        {
+          for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+          {
+            var p =document.createElement("h3")
+            var text =document.createTextNode(variableNames[j] + "=" + arrofCoffsNums[i][j][k].toString())
+            p.appendChild(text)
+            p.style.marginLeft="100px"
+            div2.appendChild(p)
+            set2?.appendChild(div2)
+            indiv?.appendChild(set2)
+          }
+        }
       }
     }
+  }
     var button =document.createElement("button")
     var text=document.createTextNode("show steps")
     button.style.width="90px"
     button.style.backgroundColor="black"
     button.style.color="white"
-    button.style.marginTop="30px"
+    button.style.marginLeft="30px"
     button.appendChild(text)
     div2.appendChild(button)
     var steps: number[][][] = this.steps;
@@ -231,16 +263,94 @@ export class homecomponent {
           table.appendChild(tr)
         }
         div.appendChild(table)
-        document.getElementById("soln")?.appendChild(div)
+        set2?.appendChild(div)
+        indiv?.appendChild(set2)
       }
+      
     }
   }
+//--------------------------------------------------------------------------------//
+generate()
+{
+  var del =document.getElementById("0.5")
+  del?.parentNode?.removeChild(del) 
+  console.log(this.coeff_matrix)
+  console.log(this.constants_matrix)
+  console.log(this.unknowns_matrix)
+  var set2 = document.createElement("div")
+    set2.id = "0.5"
+    set2.style.marginLeft="290px"
+    set2.style.marginTop="30px"
+    for(let i=0;i<this.coeff_matrix.length;i++)
+    {
+      var set = document.createElement("div")
+      set.style.display="flex"
+      for(let j =0 ;j<this.coeff_matrix[i].length;j++)
+      {
+        var inputdown = document.createElement("div")
+        inputdown.style.height="30px"
+        inputdown.style.border="1px solid black"
+        inputdown.style.background="transparent"
+        inputdown.style.border = "3px solid rgb(206, 56, 76)"
+        inputdown.style.borderRadius = "5px"
+
+        var p4 = document.createElement("p")
+        var text4 = document.createTextNode(this.coeff_matrix[i][j].toString())
+        p4.appendChild(text4)
+        p4.style.textAlign="center"
+        inputdown.appendChild(p4)
+        set.appendChild(inputdown)
+        var p = document.createElement("p")
+        var text = document.createTextNode(this.unknowns_matrix[j])
+        p.style.marginLeft="8px"
+        p.appendChild(text)
+        set.appendChild(p);
+        set2.appendChild(set);
+        if(j!=this.coeff_matrix[0].length-1)
+        {
+          var p2=document.createElement("p")
+          var text2=document.createTextNode("+")
+          p2.style.marginLeft="8px"
+          p2.appendChild(text2)
+          set.appendChild(p2)
+          set2.appendChild(set)
+          document.getElementById("0")?.appendChild(set2)
+        }
+      }
+      var p3=document.createElement("p")
+      var text3=document.createTextNode("= ")
+      p3.style.marginLeft="8px"
+      p3.appendChild(text3)
+      set.appendChild(p3)
+      var input2 =document.createElement("div")
+      input2.style.height="30px"
+      input2.style.border="2px solid black"
+      input2.style.borderRadius = "5px"
+      input2.style.backgroundColor="transparent"
+      input2.style.border = "3px solid rgb(206, 56, 76)"
+      input2.className = "matrixIn";
+      var p5= document.createElement("p")
+
+    var text5=document.createTextNode(this.constants_matrix[i].toString())
+    p5.appendChild(text5)
+    p5.style.textAlign="center"
+      input2.appendChild(p5)
+      set.appendChild(input2)
+      set2.appendChild(set)
+      document.getElementById("0")?.appendChild(set2)
+    }
+}
+
 //-------------------------------------------------------------------------------//
 
   parseSystem(){
     document.getElementById("iter")?.remove();
     document.getElementById("iter2")?.remove();
     document.getElementById("iterList")?.remove();
+    this.coeff_matrix = [];
+    this.constants_matrix = [];
+    this.unknowns_matrix = [];
+    this.numberofUnkowns = 1;
     
     var validFlag : boolean = true;
     var input = this.systemInput;
@@ -496,7 +606,7 @@ export class homecomponent {
       }
       else if(input.charAt(i) == "\n"){
 
-
+        sumofNumber = 0;
         rows++;
         arrofCoffsNums.push([]);
         numberEntered = false;
@@ -517,12 +627,8 @@ export class homecomponent {
 
         }
         arrofMappedValues.push(new Map<string, number>());
-
-
-
         pushedCoff = false;
         enter=true
-
         arrofConstNums.push(0)
         constNum = ""
         coffNum = ""
@@ -530,14 +636,13 @@ export class homecomponent {
         foundEqu = false;
       console.log(arrofCoffsNums.length)
       console.log(arrofCoffsNums[0].length)
-      var find=0
-      var copy
 
+    /*  
     var del =document.getElementById("0.5")
     del?.parentNode?.removeChild(del)
     var set2 = document.createElement("div")
     set2.id = "0.5"
-    set2.style.marginLeft="150px"
+    set2.style.marginLeft="290px"
     set2.style.marginTop="30px"
     for(let i = 0; i<arrofCoffsNums.length-1; i++)
     {
@@ -599,6 +704,7 @@ export class homecomponent {
       set2.appendChild(set)
       document.getElementById("0")?.appendChild(set2)
     }
+    */
       }
     }
     while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0 && arrofCoffsNums.length > 0 && arrofCoffsNums[0].length > 1){

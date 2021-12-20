@@ -6,11 +6,14 @@ public class ApiProblem {
     private int numberofUnknown;
     private BigDecimal[][] coeff_matrix;
     private BigDecimal[] constants_matrix;
+    private BigDecimal[] arrofInitList;
     private int precision;
     private String method;
+    private int errorValue;
+    private int numofIterations;
     public ApiProblem(){}
     public ApiProblem(int numberofUnknown, BigDecimal[][] coeff_matrix, BigDecimal[] constant_matrix,
-               int precision, String method){
+               int precision,int errorValue,int numofIterations,BigDecimal[] arrofInitList,String method){
         this.numberofUnknown=numberofUnknown;
         this.coeff_matrix=new BigDecimal[numberofUnknown][numberofUnknown];
         this.constants_matrix=new BigDecimal[numberofUnknown];
@@ -22,7 +25,13 @@ public class ApiProblem {
         for(int i=0;i<constant_matrix.length;i++){
             this.constants_matrix[i]=constant_matrix[i];
         }
+        for(int i=0;i<arrofInitList.length;i++){
+            this.arrofInitList[i] = arrofInitList[i];
+        }
+
         this.precision=precision;
+        this.errorValue=errorValue;
+        this.numberofUnknown=numberofUnknown;
         this.method=method;
     }
     public int getNumberofUnknown(){
@@ -40,6 +49,15 @@ public class ApiProblem {
     }
     public String getMethod(){
         return this.method;
+    }
+    public int getErrorValue(){
+        return this.errorValue;
+    }
+    public int getNumofIterations(){
+        return this.numofIterations;
+    }
+    public BigDecimal[] getArrofInitList(){
+        return this.arrofInitList;
     }
 
     public void setCoeff_matrix(BigDecimal[][] coeff_matrix) {
@@ -60,5 +78,17 @@ public class ApiProblem {
 
     public void setPrecision(int precision) {
         this.precision = precision;
+    }
+
+    public void setArrofInitList(BigDecimal[] arrofInitList) {
+        this.arrofInitList = arrofInitList;
+    }
+
+    public void setErrorValue(int errorValue) {
+        this.errorValue = errorValue;
+    }
+
+    public void setNumofIterations(int numofIterations) {
+        this.numofIterations = numofIterations;
     }
 }
