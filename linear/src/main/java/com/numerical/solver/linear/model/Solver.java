@@ -68,7 +68,7 @@ public class Solver {
                     denominator = aij;
                 else{
                     BigDecimal Xi = guessCopy.getCell(new Dimension(j, 1));
-                    numerator = numerator.subtract(aij.multiply(Xi));
+                    numerator = numerator.subtract(aij.multiply(Xi,mc),mc);
                 }
             }
 
@@ -95,7 +95,7 @@ public class Solver {
 
         for(int i=1; i<=rows; i++) {
             Dimension curPosition = new Dimension(i, 1);
-            BigDecimal numerator = current.getCell(curPosition).subtract(previous.getCell(curPosition));
+            BigDecimal numerator = current.getCell(curPosition).subtract(previous.getCell(curPosition),mc);
             BigDecimal denominator = current.getCell(curPosition);
             if(denominator.doubleValue() == 0)
                 return Double.POSITIVE_INFINITY;
@@ -139,7 +139,7 @@ public class Solver {
                 BigDecimal aij = coeff.getCell(curPosition);
                 BigDecimal bi = ret.getCell(curVariablePosition);
                 BigDecimal xj = ret.getCell(otherVariablesPosition);
-                BigDecimal newBi = bi.subtract(aij.multiply(xj));
+                BigDecimal newBi = bi.subtract(aij.multiply(xj,mc),mc);
                 ret.setCell(curVariablePosition, newBi);
             }
             ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), mc));
@@ -169,7 +169,7 @@ public class Solver {
                 BigDecimal aij = coeff.getCell(curPosition);
                 BigDecimal bi = ret.getCell(curVariablePosition);
                 BigDecimal xj = ret.getCell(otherVariablesPosition);
-                BigDecimal newBi = bi.subtract(aij.multiply(xj));
+                BigDecimal newBi = bi.subtract(aij.multiply(xj,mc),mc);
                 ret.setCell(curVariablePosition, newBi);
             }
             ret.setCell(curVariablePosition, ret.getCell(curVariablePosition).divide(coeff.getCell(new Dimension(i, i)), mc));

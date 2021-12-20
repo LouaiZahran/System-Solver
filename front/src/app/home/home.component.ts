@@ -870,7 +870,9 @@ generate()
   solve()
   {
    
-
+    this.readInitList();
+    this.readNumofIter();
+    this.readError();
     this.validateSymmetric()
     this.validateSquare()
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg) && this.squareFlag)){
@@ -878,12 +880,13 @@ generate()
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
         this.solution = response
         this.displaySolution()
-
+        this.arrofInitList = [];
 
       },(error:any)=>console.log("error in server"));
 
 
     }
+    
 
 }
 
