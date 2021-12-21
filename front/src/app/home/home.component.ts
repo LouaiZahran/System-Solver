@@ -138,7 +138,7 @@ export class homecomponent {
           for(let k=0;k<arrofCoffsNums[i][j].length;k++)
           {
             var p =document.createElement("h3")
-            var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
+            var text =document.createTextNode(variableNames[j] + "=" + arrofCoffsNums[i][j][k].toString())
             p.appendChild(text)
             p.style.marginLeft="100px"
             div2.appendChild(p)
@@ -788,7 +788,7 @@ delete()
     }
   }
 //-------------------------------------------------------------------------------//
-
+ 
   validateSquare()
   {
     var square : boolean = true;
