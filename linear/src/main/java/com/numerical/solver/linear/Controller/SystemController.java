@@ -63,9 +63,10 @@ public class SystemController {
         String methodName = apiProblem.getMethod();
         if(methodName.equalsIgnoreCase("Cholesky Decompostion")){
             ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,constantMatrix,mc);
-            if(decomposed.size()==0) {
+
+            if(decomposed.size()==0)
                 return result;
-            }
+
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
             //LUx=B   LY=B   Ux=B
@@ -91,9 +92,10 @@ public class SystemController {
             return result;
         }else if(methodName.equalsIgnoreCase("Doo Little Decompostion")) {
             ArrayList<Matrix> decomposed = decomposer.dooLittleDecomposition(coeffMatrix,constantMatrix, mc);
-            if(decomposed.size()==0) {
+
+            if(decomposed.size()==0)
                 return result;
-            }
+
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
             //LUx=B   LY=B   Ux=B
@@ -121,6 +123,9 @@ public class SystemController {
                 methodName.equalsIgnoreCase("Gauss-Jordan")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
             Matrix x=solver.GaussElimination(methodName.equalsIgnoreCase("Gauss-Jordan"), true,true);
+            if(x.getData().size()==0)
+                return result;
+
             result.add(x.getData());
             x.print();
             return result;

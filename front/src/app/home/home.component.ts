@@ -823,11 +823,11 @@ delete()
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
         this.solution = response
-        if(this.currentSolType == this.decompostions[2].type && this.solution == []){
-          alert("Matrix must be positive symmetric")
-        }else if(this.currentSolType == this.decompostions[0].type && this.solution == []){
+        if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
+          alert("Matrix must be positive definite symmetric")
+        }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
           alert("There 's no LU decomposition for this system")
-        }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution == []){
+        }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
           alert("There 's no unique solution for this system")
         }else{
           this.displaySolution()
