@@ -35,10 +35,21 @@ public class Decomposer {
         this.result = result;
     }
 
-    public ArrayList<Matrix> cholskeyDecomposition(Matrix matrix,MathContext mc)
+    public ArrayList<Matrix> cholskeyDecomposition(Matrix matrix,Matrix constant,MathContext mc)
     {
         int rows=matrix.getDimension().getRow();
         Matrix lower= new Matrix(matrix.getDimension());
+        ArrayList<Matrix> ret=new ArrayList<Matrix>();
+
+        Solver solver=new Solver(matrix,constant,mc);
+        solver.GaussElimination(false,true,false);
+        for(int i=1;i<rows;i++)
+        {
+            if(solver.getCoeff().getCell(new Dimension(i,i)).compareTo(BigDecimal.ZERO)==-1)
+                return ret;
+        }
+
+
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= i; j++) {
                 BigDecimal sum = new BigDecimal(0);
@@ -63,7 +74,6 @@ public class Decomposer {
                 }
             }
         }
-        ArrayList<Matrix> ret=new ArrayList<Matrix>();
         Matrix upper= lower.transpose();
         ret.add(lower);
         ret.add(upper);
@@ -103,6 +113,22 @@ public class Decomposer {
             }
         }
         ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        ret.add(lower);
+        ret.add(upper);
+        return ret;
+    }
+
+    public ArrayList<Matrix> dooLittleDecomposition(Matrix matrix,Matrix constant,MathContext mc){
+        int rows=matrix.getDimension().getRow();
+        Solver solver=new Solver(matrix,constant,mc);
+        ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        if(solver.GaussElimination(false,false,false).getData().size()==0)
+            return ret;
+        Matrix lower = solver.getScale();
+        for(int i=1;i<=rows;i++)
+            lower.setCell(new Dimension(i,i),new BigDecimal(1));
+
+        Matrix upper = solver.getCoeff();
         ret.add(lower);
         ret.add(upper);
         return ret;

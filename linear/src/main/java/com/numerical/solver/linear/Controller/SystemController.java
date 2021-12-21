@@ -59,8 +59,13 @@ public class SystemController {
         matrixGuess.setData(generate1D(apiProblem.getArrofInitList(), mc));
         coeffMatrix.setData(generate2D(apiProblem.getCoeff_matrix(),mc));
         ArrayList<ArrayList<ArrayList<BigDecimal>>> result=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
-        if(apiProblem.getMethod().equalsIgnoreCase("Cholesky Decompostion")){
-            ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,mc);
+
+        String methodName = apiProblem.getMethod();
+        if(methodName.equalsIgnoreCase("Cholesky Decompostion")){
+            ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,constantMatrix,mc);
+            if(decomposed.size()==0) {
+                return result;
+            }
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
             //LUx=B   LY=B   Ux=B
@@ -72,12 +77,11 @@ public class SystemController {
             x.print();
             return result;
         }
-        else if(apiProblem.getMethod().equalsIgnoreCase("Crout Decompostion")){
+        else if(methodName.equalsIgnoreCase("Crout Decompostion")){
             ArrayList<Matrix>decomposed = decomposer.croutDecomposition(coeffMatrix,mc);
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
             //LUx=B   LY=B   Ux=B
-
             Solver ySolver=new Solver(decomposed.get(0),constantMatrix,mc);
             Matrix Y=ySolver.forwardSub();
             Solver xSolver=new Solver(decomposed.get(1),Y,mc);
@@ -85,16 +89,38 @@ public class SystemController {
             result.add(x.getData());
             x.print();
             return result;
-        }
-        else if(apiProblem.getMethod().equalsIgnoreCase("Gauss-Seidil")){
+        }else if(methodName.equalsIgnoreCase("Doo Little Decompostion")) {
+            ArrayList<Matrix> decomposed = decomposer.dooLittleDecomposition(coeffMatrix,constantMatrix, mc);
+            if(decomposed.size()==0) {
+                return result;
+            }
+            result.add(decomposed.get(0).getData());
+            result.add(decomposed.get(1).getData());
+            //LUx=B   LY=B   Ux=B
+
+            Solver ySolver = new Solver(decomposed.get(0), constantMatrix, mc);
+            Matrix Y = ySolver.forwardSub();
+            Solver xSolver = new Solver(decomposed.get(1), Y, mc);
+            Matrix x = xSolver.backwardSub();
+            result.add(x.getData());
+            x.print();
+            return result;
+        } else if(methodName.equalsIgnoreCase("Gauss-Seidil")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
             Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,true);
             result.add(x.getData());
             x.print();
             return result;
-        }else if(apiProblem.getMethod().equalsIgnoreCase("Jacobi-Iteration")){
+        }else if(methodName.equalsIgnoreCase("Jacobi-Iteration")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
             Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,false);
+            result.add(x.getData());
+            x.print();
+            return result;
+        }else if(methodName.equalsIgnoreCase("Gauss Elmination") ||
+                methodName.equalsIgnoreCase("Gauss-Jordan")){
+            Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
+            Matrix x=solver.GaussElimination(methodName.equalsIgnoreCase("Gauss-Jordan"), true,true);
             result.add(x.getData());
             x.print();
             return result;
