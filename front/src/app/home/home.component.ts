@@ -83,7 +83,7 @@ export class homecomponent {
 
 //-------------------------------------------------------------------------------//
   createdIter : boolean = false;
-  validFlagInput : boolean = false;
+  validFlagInput : boolean = true;
   symmFalg : boolean = false;
   diagonallyDomminantFlag:boolean =false;
   squareFlag : boolean =false;
@@ -756,7 +756,7 @@ delete()
     }
   }
   //-------------------------------------------------------------------------------//
- 
+
   validateDiagonallyDominant()
   {
     var diagonallyDomminant1 : boolean = false;
@@ -788,13 +788,19 @@ delete()
     }
   }
 //-------------------------------------------------------------------------------//
- 
+
   validateSquare()
   {
-    var square : boolean = true;
+    if(this.coeff_matrix[0].length == 0){
+      alert("Invalid Input")
+      this.validFlagInput =false;
+      return;
+    }
 
+    var square : boolean = true;
     var rows = this.coeff_matrix.length;
     var cols = this.coeff_matrix[0].length;
+
     if(rows != cols){
       square = false;
     }
@@ -821,9 +827,10 @@ delete()
       this.validateDiagonallyDominant()
     }
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
-      && this.squareFlag)){
+      && this.squareFlag && this.validFlagInput)){
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
+        this.generate()
         this.solution = response
         if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
           alert("Matrix must be positive definite symmetric")
