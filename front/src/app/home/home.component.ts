@@ -530,6 +530,7 @@ generate()
           }
           if(input.charAt(i) == "\n"){
             foundEqu = false;
+            lastSign = "";
             checkletter = false;
             checkNumber = false;
             tempNum = "";
@@ -577,31 +578,30 @@ generate()
       console.log(arrofMappedValues);
       console.log(this.coeff_matrix);
 
-      if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
-        if(!this.createdIter){
-          if(this.numberofUnkowns==0)
+  }
+  if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+    if(!this.createdIter){
+      if(this.numberofUnkowns==0)
 
-          {
-            var div =document.getElementById("50")
-            div?.parentNode?.removeChild(div)
+      {
+        var div =document.getElementById("50")
+        div?.parentNode?.removeChild(div)
 
-            var div2 =document.getElementById("51")
-            div2?.parentNode?.removeChild(div2)
-          }
-          else
-          {
-            this.createInitList(this.numberofUnkowns);
-            this.createErrorIters();
-          }
-          this.readInitList();
-          this.readError();
-          this.readNumofIter();
-
-        }
+        var div2 =document.getElementById("51")
+        div2?.parentNode?.removeChild(div2)
+      }
+      else
+      {
+        this.createInitList(this.numberofUnkowns);
+        this.createErrorIters();
+      }
+      this.readInitList();
+      this.readError();
+      this.readNumofIter();
 
     }
 
-  }
+}
 }
 //-------------------------------------------------------------------------------//
 
@@ -623,10 +623,12 @@ generate()
 
   solutionTypeList(solType : string)
   {
+
     if(this.coeff_matrix.length!=0)
     {
-      this.currentSolType = solType;
       this.parseSystem();
+
+      this.currentSolType = solType;
 
     if(!(this.currentSolType == this.iterativeSolTypes[0].type) && !(this.currentSolType == this.iterativeSolTypes[1].type)){
       document.getElementById("iter")?.remove();
