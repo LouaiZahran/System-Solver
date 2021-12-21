@@ -748,10 +748,11 @@ delete()
     }
   }
   //-------------------------------------------------------------------------------//
-
+ 
   validateDiagonallyDominant()
   {
-    var diagonallyDomminant : boolean = true;
+    var diagonallyDomminant1 : boolean = false;
+    var diagonallyDomminant2 :boolean =true;
     for(let i = 0; i < Math.min(this.coeff_matrix.length,this.coeff_matrix[0].length); i++){
       var sum:number=0
       var diagonal:number=0
@@ -761,14 +762,17 @@ delete()
         else
           sum =sum+ this.coeff_matrix[i][j];
         }
-        if(sum > diagonal){
-          diagonallyDomminant = false;
-          break;
-
+      if(sum < diagonal && !diagonallyDomminant1)
+      {
+        diagonallyDomminant1=true;
+      }
+      else if(sum > diagonal){
+        diagonallyDomminant2 = false;
+        break;
       }
     }
 
-    this.diagonallyDomminantFlag = diagonallyDomminant;
+    this.diagonallyDomminantFlag = diagonallyDomminant2 && diagonallyDomminant1;
     if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)
       && !this.diagonallyDomminantFlag){
       alert("Solution may diverge");
