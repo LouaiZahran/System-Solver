@@ -201,7 +201,7 @@ public class Solver {
         int col = pivotPosition.getCol();
         int maxIdx = start;
         for(int i = start; i<=rows; i++){
-            BigDecimal curCell = coeff.getCell(new Dimension(i, col));
+            BigDecimal curCell = coeff.getCell(new Dimension(i, col)).abs();
             if(curMax.compareTo(curCell) == -1) { //Current Maximum is smaller than current cell
                 curMax = curCell;
                 maxIdx = i;
