@@ -289,6 +289,7 @@ generate()
 
   for(let i=0;i<this.coeff_matrix.length;i++)
   {
+<<<<<<< HEAD
       var set = document.createElement("div")
       set.style.display="flex"
       for(let j =0 ;j<this.coeff_matrix[i].length;j++)
@@ -661,9 +662,11 @@ generate()
     set2.style.marginTop="30px"
     for(let i = 0; i<arrofCoffsNums.length-1; i++)
     {
+=======
+>>>>>>> 3c9316657860caa19671be1df02eeb502c513e7b
       var set = document.createElement("div")
       set.style.display="flex"
-      for(let j=0;j<arrofCoffsNums[i].length;j++)
+      for(let j =0 ;j<this.coeff_matrix[i].length;j++)
       {
         var inputdown = document.createElement("div")
         inputdown.style.height="30px"
@@ -673,18 +676,18 @@ generate()
         inputdown.style.borderRadius = "5px"
 
         var p4 = document.createElement("p")
-        var text4 = document.createTextNode(arrofCoffsNums[i][j].toString())
+        var text4 = document.createTextNode(this.coeff_matrix[i][j].toString())
         p4.appendChild(text4)
         p4.style.textAlign="center"
         inputdown.appendChild(p4)
         set.appendChild(inputdown)
         var p = document.createElement("p")
-        var text = document.createTextNode(arrofCoffsNames[j])
+        var text = document.createTextNode(this.unknowns_matrix[j])
         p.style.marginLeft="8px"
         p.appendChild(text)
         set.appendChild(p);
         set2.appendChild(set);
-        if(j!=arrofCoffsNums[0].length-1)
+        if(j!=this.coeff_matrix[0].length-1)
         {
           var p2=document.createElement("p")
           var text2=document.createTextNode("+")
@@ -694,9 +697,7 @@ generate()
           set2.appendChild(set)
           document.getElementById("0")?.appendChild(set2)
         }
-
       }
-
       var p3=document.createElement("p")
       var text3=document.createTextNode("= ")
       p3.style.marginLeft="8px"
@@ -711,7 +712,7 @@ generate()
       input2.className = "matrixIn";
       var p5= document.createElement("p")
 
-    var text5=document.createTextNode(arrofConstNums[i].toString())
+    var text5=document.createTextNode(this.constants_matrix[i].toString())
     p5.appendChild(text5)
     p5.style.textAlign="center"
       input2.appendChild(p5)
@@ -719,13 +720,85 @@ generate()
       set2.appendChild(set)
       document.getElementById("0")?.appendChild(set2)
     }
+<<<<<<< HEAD
     */
+=======
+}
+
+//-------------------------------------------------------------------------------//
+
+
+  parseSystem(){
+    document.getElementById("50")?.remove()
+    document.getElementById("51")?.remove();
+    console.log(document.getElementById("iter"))
+    if(this.numberofUnkowns==0)
+
+    {
+      this.delete()
+    }
+    this.coeff_matrix = [];
+    this.constants_matrix = [];
+    this.unknowns_matrix = [];
+    this.numberofUnkowns = 1;
+    this.arrofInputInitList= [];
+    this.arrofInitList = [];
+
+    var input = this.systemInput;
+    input = input.replace(/ /g,'');
+  
+    input = input.toLowerCase();
+    var inputSplit = input.split("");
+    console.log(inputSplit);
+    var stckEql : string[] = [];
+    var stckSign : string[] = [];
+    var foundSign : boolean = false;
+    var signPos : number = 0;
+
+    for(let i = 0; i < inputSplit.length; i++){
+
+      if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+        stckSign.push(input.charAt(i));
+        if(!foundSign){
+          signPos = i;
+        }
+        if(stckSign.length > 1){
+          inputSplit[i] = "";
+        }
+        foundSign = true;
+
+      }
+      else{
+        if(foundSign){
+          var signArr : string[] = [];
+          signArr = stckSign.filter(value => value == "-");
+          if(signArr.length % 2 == 0){
+            inputSplit[signPos] = "+";
+          }
+          else{
+            inputSplit[signPos] = "-";
+          }
+        }
+        stckSign = [];
+        foundSign = false;
+>>>>>>> 3c9316657860caa19671be1df02eeb502c513e7b
       }
     }
-    while(arrofCoffsNums[arrofCoffsNums.length-1].length ==0 && arrofCoffsNums.length > 0 && arrofCoffsNums[0].length > 1){
-      arrofCoffsNums.pop()
-      arrofConstNums.pop()
+
+
+    for(let i = 0; i < inputSplit.length; i++){
+      if(inputSplit[i] == "\n"){
+        console.log("INSIDE IF");
+        stckEql.push(inputSplit[i]);
+        if(stckEql.length > 1){
+          inputSplit[i] = "";
+        }
+      }
+      else{
+        stckEql.pop();
+      }
     }
+<<<<<<< HEAD
     console.log("Matrix of Coeffs = ", arrofCoffsNums);
     console.log("Vector of Constants = ", arrofConstNums);
     console.log("Vector of Coffs = ", arrofCoffsNames);
@@ -760,8 +833,186 @@ generate()
    // this.readError();
    // this.readNumofIter();
 
+=======
+    console.log(inputSplit);
+
+    input = inputSplit.join("");
+
+    console.log("Input = ", input);
+
+    var arrofCoffsNums : number[][] = [];
+    var arrofCoffsNames : string[] = [];
+    var arrofConstNums : number[] = [];
+
+    var rows : number = 0;
+
+    var foundEqu : boolean = false;
+    var checkletter = false
+  
+
+    console.log(this.systemInput);
+
+    var arrofMappedValues : Map<string, number>[] = []
+    arrofMappedValues.push(new Map<string, number>());
+
+    var tempNum : string = "";
+    var tempStr : string = "";
+    var checkNumber : boolean = false;
+    var lastSign : string = "";
+
+    for(let i = 0; i < input.length; i++){
+      if((Number(input.charAt(i)) || input.charAt(i) == "0" || input.charAt(i) == "*" || input.charAt(i) == "/") && !checkletter){
+        checkNumber = true;
+        if(input.charAt(i - 1) == "+"){
+          tempNum = "+".concat(tempNum)
+        }
+        if(input.charAt(i - 1) == "-"){
+          tempNum = "-".concat(tempNum);
+        }
+        tempNum = tempNum.concat(input.charAt(i));
+
+        var tempEval : number;
+        tempEval = eval(tempNum); 
+        tempNum = tempEval.toString();
+      }
+      else{
+        console.log("FOUND EQUAL ===>", foundEqu);
+        if(input.charAt(i) == "+" || input.charAt(i) == "-" || input.charAt(i) == "=" || input.charAt(i) == "\n"){
+          if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+            lastSign = input.charAt(i);
+          }
+          if(checkletter){
+            if(arrofCoffsNames.length > 0){
+              if(arrofCoffsNames.indexOf(tempStr) == -1){
+                arrofCoffsNames.push(tempStr);
+              }
+            }
+            else{
+              arrofCoffsNames.push(tempStr);
+            }
+            if(!foundEqu){
+              if(arrofMappedValues[rows].get(tempStr)){
+                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
+              }
+              else{
+                arrofMappedValues[rows].set(tempStr, 0);
+                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
+              }
+            }
+            else{
+              if(arrofMappedValues[rows].get(tempStr)){
+                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
+              }
+              else{
+                arrofMappedValues[rows].set(tempStr, 0);
+                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
+              }
+            }
+            checkletter = false;
+          }
+          else{
+            if(!foundEqu){
+              if(arrofMappedValues[rows].get("const")){
+                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
+              }
+              else{
+                arrofMappedValues[rows].set("const", 0);
+                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
+              }
+            }
+            else{
+              if(arrofMappedValues[rows].get("const")){
+                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
+              }
+              else{
+                arrofMappedValues[rows].set("const", 0);
+                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
+              }
+            }
+            checkletter = false;
+          }
+          tempNum = "";
+          tempStr = "";
+          checkNumber = false;
+          if(input.charAt(i) == "="){
+            foundEqu = true;
+          }
+          if(input.charAt(i) == "\n"){
+            foundEqu = false;
+            checkletter = false;
+            checkNumber = false;
+            tempNum = "";
+            tempStr = "";
+            rows++;
+            if(i != input.length - 1){
+              arrofMappedValues.push(new Map<string, number>());
+            }
+            arrofCoffsNums = [];
+            arrofConstNums = [];
+            for(let j = 0; j < rows; j++){
+              for(var value of arrofCoffsNames){
+                if(!arrofMappedValues[j].get(value)){
+                  arrofMappedValues[j].set(value, 0);
+                }
+                if(!arrofMappedValues[j].get("const")){
+                  arrofMappedValues[j].set("const", 0);
+                }
+              }
+            }
+            for(let j = 0; j < rows; j++){
+              arrofCoffsNums.push([]);
+              for(let k = 0; k < arrofCoffsNames.length; k++){
+                arrofCoffsNums[j].push(arrofMappedValues[j].get(arrofCoffsNames[k]));
+              }
+            }
+            for(let j = 0; j < rows; j++){
+              arrofConstNums.push(arrofMappedValues[j].get("const"));
+            }
+          }
+        }
+        else{
+          if(!checkNumber && !checkletter){
+            tempNum = lastSign.concat("1").concat(tempNum);
+          }
+          tempStr = tempStr.concat(input.charAt(i));
+          checkletter = true;
+        }
+      }
+      
+      this.unknowns_matrix = arrofCoffsNames;
+      this.numberofUnkowns = arrofCoffsNames.length;
+      this.coeff_matrix = arrofCoffsNums;
+      this.constants_matrix = arrofConstNums;
+      console.log(arrofMappedValues);
+      console.log(this.coeff_matrix);
+
+      if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+        if(!this.createdIter){
+          if(this.numberofUnkowns==0)
+  
+          {
+            var div =document.getElementById("50")
+            div?.parentNode?.removeChild(div)
+  
+            var div2 =document.getElementById("51")
+            div2?.parentNode?.removeChild(div2)
+          }
+          else
+          {
+            this.createInitList(this.numberofUnkowns);
+            this.createErrorIters();
+          }
+          this.readInitList();
+          this.readError();
+          this.readNumofIter();
+  
+        }
+
+    }
+>>>>>>> 3c9316657860caa19671be1df02eeb502c513e7b
 
   }
+}
 //-------------------------------------------------------------------------------//
 
   readInitList(){
@@ -785,7 +1036,11 @@ generate()
     if(this.coeff_matrix.length!=0)
     {
       this.currentSolType = solType;
+<<<<<<< HEAD
     this.parseSystem();
+=======
+      this.parseSystem();
+>>>>>>> 3c9316657860caa19671be1df02eeb502c513e7b
 
     if(!(this.currentSolType == this.iterativeSolTypes[0].type) && !(this.currentSolType == this.iterativeSolTypes[1].type)){
       document.getElementById("iter")?.remove();
@@ -990,5 +1245,4 @@ delete()
   }
 
 }
-
 
