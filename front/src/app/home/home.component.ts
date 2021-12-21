@@ -368,7 +368,7 @@ generate()
 
     var input = this.systemInput;
     input = input.replace(/ /g,'');
-  
+
     input = input.toLowerCase();
     var inputSplit = input.split("");
     console.log(inputSplit);
@@ -433,7 +433,7 @@ generate()
 
     var foundEqu : boolean = false;
     var checkletter = false
-  
+
 
     console.log(this.systemInput);
 
@@ -457,7 +457,7 @@ generate()
         tempNum = tempNum.concat(input.charAt(i));
 
         var tempEval : number;
-        tempEval = eval(tempNum); 
+        tempEval = eval(tempNum);
         tempNum = tempEval.toString();
       }
       else{
@@ -563,7 +563,7 @@ generate()
           checkletter = true;
         }
       }
-      
+
       this.unknowns_matrix = arrofCoffsNames;
       this.numberofUnkowns = arrofCoffsNames.length;
       this.coeff_matrix = arrofCoffsNums;
@@ -574,11 +574,11 @@ generate()
       if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
         if(!this.createdIter){
           if(this.numberofUnkowns==0)
-  
+
           {
             var div =document.getElementById("50")
             div?.parentNode?.removeChild(div)
-  
+
             var div2 =document.getElementById("51")
             div2?.parentNode?.removeChild(div2)
           }
@@ -590,7 +590,7 @@ generate()
           this.readInitList();
           this.readError();
           this.readNumofIter();
-  
+
         }
 
     }
@@ -809,7 +809,7 @@ delete()
     }
     this.validateSymmetric()
     this.validateSquare()
-    if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)){
+    if((this.currentSolType == this.iterativeSolTypes[0].type)){
       this.validateDiagonallyDominant()
 
     }
@@ -818,6 +818,13 @@ delete()
       console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
       this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
         this.solution = response
+        if(this.currentSolType == this.decompostions[2].type && this.solution == []){
+          alert("Matrix must be positive symmetric")
+        }else if(this.currentSolType == this.decompostions[0].type && this.solution == []){
+          alert("There 's no LU decomposition for this system")
+        }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution == []){
+          alert("There 's no unique solution for this system")
+        }
         this.displaySolution()
         this.arrofInitList = [];
 
