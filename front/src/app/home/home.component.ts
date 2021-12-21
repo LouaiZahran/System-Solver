@@ -828,7 +828,7 @@ delete()
           this.displaySolution()
           this.arrofInitList = [];
         }
-      },(error:any)=>console.log("error in server"));
+      },(error:any)=>alert("Invalid Input"));
 
 
     }
