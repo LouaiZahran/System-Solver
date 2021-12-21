@@ -824,10 +824,10 @@ delete()
           alert("There 's no LU decomposition for this system")
         }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution == []){
           alert("There 's no unique solution for this system")
+        }else{
+          this.displaySolution()
+          this.arrofInitList = [];
         }
-        this.displaySolution()
-        this.arrofInitList = [];
-
       },(error:any)=>console.log("error in server"));
 
 
