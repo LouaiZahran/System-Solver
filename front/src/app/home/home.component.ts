@@ -421,7 +421,12 @@ generate()
     }
     console.log(inputSplit);
 
+    if (inputSplit[inputSplit.length - 1] != "\n"){
+      inputSplit.push("\n");
+    }
     input = inputSplit.join("");
+
+
 
     console.log("Input = ", input);
 
@@ -520,6 +525,7 @@ generate()
           tempStr = "";
           checkNumber = false;
           if(input.charAt(i) == "="){
+            lastSign = "";
             foundEqu = true;
           }
           if(input.charAt(i) == "\n"){
@@ -807,7 +813,6 @@ delete()
     this.validateSquare()
     if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)){
       this.validateDiagonallyDominant()
-
     }
     if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
       && this.squareFlag)){

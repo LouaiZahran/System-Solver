@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @CrossOrigin("http://localhost:4200")
 public class SystemController {
 
-    ArrayList<ArrayList<BigDecimal>> generateData(BigDecimal[][] arrayData,MathContext mc){
+    ArrayList<ArrayList<BigDecimal>> generate2D(BigDecimal[][] arrayData,MathContext mc){
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
         for(int i=0;i<arrayData.length;i++){
@@ -35,7 +35,7 @@ public class SystemController {
         return ret;
 
     }
-    ArrayList<ArrayList<BigDecimal>> generateConst(BigDecimal[] arrayData,MathContext mc){
+    ArrayList<ArrayList<BigDecimal>> generate1D(BigDecimal[] arrayData,MathContext mc){
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
         for(int i=0;i<arrayData.length;i++){
@@ -52,9 +52,12 @@ public class SystemController {
         Matrix coeffMatrix =new Matrix();
         MathContext mc=new MathContext(apiProblem.getPrecision(), RoundingMode.HALF_UP);
         Matrix constantMatrix=new Matrix();
-        constantMatrix.setData(generateConst(apiProblem.getConstants_matrix(),mc));
-
-        coeffMatrix.setData(generateData(apiProblem.getCoeff_matrix(),mc));
+        Matrix matrixGuess=new Matrix();
+        int iteration=apiProblem.getNumofIterations();
+        double tolerance=apiProblem.getErrorValue();
+        constantMatrix.setData(generate1D(apiProblem.getConstants_matrix(),mc));
+        matrixGuess.setData(generate1D(apiProblem.getArrofInitList(), mc));
+        coeffMatrix.setData(generate2D(apiProblem.getCoeff_matrix(),mc));
         ArrayList<ArrayList<ArrayList<BigDecimal>>> result=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
         if(apiProblem.getMethod().equalsIgnoreCase("Cholesky Decompostion")){
             ArrayList<Matrix>decomposed = decomposer.cholskeyDecomposition(coeffMatrix,mc);
@@ -83,6 +86,20 @@ public class SystemController {
             x.print();
             return result;
         }
+        else if(apiProblem.getMethod().equalsIgnoreCase("Gauss-Seidil")){
+            Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
+            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,true);
+            result.add(x.getData());
+            x.print();
+            return result;
+        }else if(apiProblem.getMethod().equalsIgnoreCase("Jacobi-Iteration")){
+            Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
+            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,false);
+            result.add(x.getData());
+            x.print();
+            return result;
+        }
+
         return result;
     }
 }
