@@ -374,7 +374,7 @@ generate()
     var inputSplit = input.split("");
     console.log(inputSplit);
 
-    
+
 
     var arrofCoffsNums : number[][] = [];
     var arrofCoffsNames : string[] = [];
@@ -475,7 +475,7 @@ generate()
       inputValid = true;
 
     }
-    
+
 
     input = inputSplit.join("");
 
@@ -484,7 +484,7 @@ generate()
     }
 
     console.log("VALID ==> ", inputValid);
-    
+
       for(let i = 0; i < input.length; i++){
         if((Number(input.charAt(i)) || input.charAt(i) == "0" || input.charAt(i) == ".") && !checkletter){
           checkNumber = true;
@@ -495,7 +495,7 @@ generate()
             tempNum = "-".concat(tempNum);
           }
           tempNum = tempNum.concat(input.charAt(i));
-  
+
         }
         else{
           console.log("FOUND EQUAL ===>", foundEqu);
@@ -562,7 +562,7 @@ generate()
 
               break;
             }
-            
+
             tempNum = "";
             tempStr = "";
             checkNumber = false;
@@ -571,7 +571,7 @@ generate()
                 inputValid = false;
                 console.log("NOT VALID EQUAL");
                 break;
-              }  
+              }
               lastSign = "";
               foundEqu = true;
             }
@@ -618,23 +618,23 @@ generate()
             checkletter = true;
           }
         }
-  
+
         this.unknowns_matrix = arrofCoffsNames;
         this.numberofUnkowns = arrofCoffsNames.length;
         this.coeff_matrix = arrofCoffsNums;
         this.constants_matrix = arrofConstNums;
         console.log(arrofMappedValues);
         console.log(this.coeff_matrix);
-  
+
     }
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
         if(this.numberofUnkowns==0)
-  
+
         {
           var div =document.getElementById("50")
           div?.parentNode?.removeChild(div)
-  
+
           var div2 =document.getElementById("51")
           div2?.parentNode?.removeChild(div2)
         }
@@ -646,11 +646,11 @@ generate()
         this.readInitList();
         this.readError();
         this.readNumofIter();
-  
+
       }
 
     }
-    
+
     console.log("VALID AFTER FOR", inputValid);
 
     if(inputSplit.filter(value =>  value == "=").length != this.coeff_matrix.length){
@@ -827,7 +827,7 @@ delete()
     }
   }
   //-------------------------------------------------------------------------------//
- 
+
   validateDiagonallyDominant()
   {
     var diagonallyDomminant1 : boolean = false;
@@ -882,9 +882,8 @@ delete()
   solve()
   {
     console.log("INVALID IN SOLVE", this.validInput);
-    
-     
-    
+
+
     if(this.validInput){
       console.log("INSIDE IF SOLVER")
       if(this.currentSolType==this.iterativeSolTypes[0].type || this.currentSolType==this.iterativeSolTypes[1].type){
@@ -912,18 +911,23 @@ delete()
           }else{
             this.displaySolution()
             this.arrofInitList = [];
+            this.server.getRuntime().subscribe((data:string)=>{
+              console.log(data)
+            })
           }
         },(error:any)=>alert("Invalid Input"));
-  
-  
+
+
       }
-  
+
+    }else{
+      alert("Invalid Input")
     }
     }
-      
-      
-    
-  
+
+
+
+
 
 }
 
