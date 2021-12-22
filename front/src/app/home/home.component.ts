@@ -109,6 +109,7 @@ export class homecomponent {
   numofIterations : number = 0;
   inputNumofIter : HTMLInputElement = null;
   errorValue : number = 0;
+  runTime :number = 0;
   inputErrorValue : HTMLInputElement = null;
   arrofInputInitList : HTMLInputElement[] = [];
 //-------------------------------------------------------------------------------//
@@ -881,6 +882,7 @@ delete()
 
   solve()
   {
+    var start :number;
     console.log("INVALID IN SOLVE", this.validInput);
 
 
@@ -900,6 +902,7 @@ delete()
         && this.squareFlag)){
         this.generate();
         console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
+        start = new Date().getTime();
         this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
           this.solution = response;
           if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
@@ -909,11 +912,11 @@ delete()
           }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
             alert("There 's no unique solution for this system")
           }else{
+            this.runTime = new Date().getTime() - start;
             this.displaySolution()
             this.arrofInitList = [];
-            this.server.getRuntime().subscribe((data:string)=>{
-              console.log(data)
-            })
+
+
           }
         },(error:any)=>alert("Invalid Input"));
 

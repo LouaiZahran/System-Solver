@@ -11,7 +11,5 @@ export class HomeService {
   postProblem(problem : properties) : Observable<any>{
     return this.http.post<any>("http://localhost:8080/postProblem", problem);
   }
-  getRuntime():Observable<any>{
-    return this.http.post("http://localhost:8080/getRuntime", {responseType :"text"});
-  }
+ 
 }
