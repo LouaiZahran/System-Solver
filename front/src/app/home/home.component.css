@@ -51,9 +51,8 @@ p{
     height: 200px;
     width: 700px;
     border-radius: 20px;
-    border:none;
-    background: linear-gradient(-130deg, #d8a799, #9b369e, #79c6e2, #5ad3b6);
-    animation: gradient 10s ease infinite;
+    background: linear-gradient(-45deg, #93d3a3, #b74abb, #5bbde0, #59ceb2);
+    animation: gradient 15s ease infinite;
 
 }
 @keyframes gradient {
@@ -67,6 +66,7 @@ p{
 		background-position: 0% 50%;
 	}
 }
+
 #labelsol{
     font-family: consolas;
     font-weight:bold;

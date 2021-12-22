@@ -83,10 +83,12 @@ export class homecomponent {
 
 //-------------------------------------------------------------------------------//
   createdIter : boolean = false;
-  validFlagInput : boolean = true;
+  validInput : boolean = true;
   symmFalg : boolean = false;
   diagonallyDomminantFlag:boolean =false;
   squareFlag : boolean =false;
+  InsideValid : boolean = false;
+  InsideInvalid : boolean = false;
   currentSolType : string = this.DirectSolTypes[0].type;
   variableNames : string[] = [];
   externalnum:number=2
@@ -138,7 +140,7 @@ export class homecomponent {
           for(let k=0;k<arrofCoffsNums[i][j].length;k++)
           {
             var p =document.createElement("h3")
-            var text =document.createTextNode(variableNames[j] + "=" + arrofCoffsNums[i][j][k].toString())
+            var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
             p.appendChild(text)
             p.style.marginLeft="100px"
             div2.appendChild(p)
@@ -355,7 +357,6 @@ generate()
     document.getElementById("51")?.remove();
     console.log(document.getElementById("iter"))
     if(this.numberofUnkowns==0)
-
     {
       this.delete()
     }
@@ -372,19 +373,41 @@ generate()
     input = input.toLowerCase();
     var inputSplit = input.split("");
     console.log(inputSplit);
-    var stckEql : string[] = [];
-    var stckSign : string[] = [];
+
+    
+
+    var arrofCoffsNums : number[][] = [];
+    var arrofCoffsNames : string[] = [];
+    var arrofConstNums : number[] = [];
+
+    var rows : number = 0;
+
+
+    var arrofMappedValues : Map<string, number>[] = []
+    arrofMappedValues.push(new Map<string, number>());
+
+    var tempNum : string = "";
+    var tempStr : string = "";
+    var lastSign : string = "";
+
+    var checkletter :boolean = false
+    var checkNumber : boolean = false;
+    var foundEqu : boolean = false;
+    var inputValid : boolean = true;
+
+
+    var tempStck : string[] = [];
     var foundSign : boolean = false;
     var signPos : number = 0;
 
     for(let i = 0; i < inputSplit.length; i++){
 
       if(input.charAt(i) == "+" || input.charAt(i) == "-"){
-        stckSign.push(input.charAt(i));
+        tempStck.push(input.charAt(i));
         if(!foundSign){
           signPos = i;
         }
-        if(stckSign.length > 1){
+        if(tempStck.length > 1){
           inputSplit[i] = "";
         }
         foundSign = true;
@@ -393,7 +416,7 @@ generate()
       else{
         if(foundSign){
           var signArr : string[] = [];
-          signArr = stckSign.filter(value => value == "-");
+          signArr = tempStck.filter(value => value == "-");
           if(signArr.length % 2 == 0){
             inputSplit[signPos] = "+";
           }
@@ -401,22 +424,37 @@ generate()
             inputSplit[signPos] = "-";
           }
         }
-        stckSign = [];
+        tempStck = [];
         foundSign = false;
       }
     }
 
+    tempStck = [];
 
     for(let i = 0; i < inputSplit.length; i++){
       if(inputSplit[i] == "\n"){
         console.log("INSIDE IF");
-        stckEql.push(inputSplit[i]);
-        if(stckEql.length > 1){
+        tempStck.push(inputSplit[i]);
+        if(tempStck.length > 1){
           inputSplit[i] = "";
         }
       }
       else{
-        stckEql.pop();
+        tempStck.pop();
+      }
+    }
+
+    tempStck = [];
+    for(let i = 0; i < inputSplit.length; i++){
+      if(inputSplit[i] == "."){
+        console.log("INSIDE IF");
+        tempStck.push(inputSplit[i]);
+        if(tempStck.length > 1){
+          inputSplit[i] = "";
+        }
+      }
+      else{
+        tempStck = [];
       }
     }
     console.log(inputSplit);
@@ -424,184 +462,217 @@ generate()
     if (inputSplit[inputSplit.length - 1] != "\n"){
       inputSplit.push("\n");
     }
-    input = inputSplit.join("");
-
-
-
-    console.log("Input = ", input);
-
-    var arrofCoffsNums : number[][] = [];
-    var arrofCoffsNames : string[] = [];
-    var arrofConstNums : number[] = [];
-
-    var rows : number = 0;
-
-    var foundEqu : boolean = false;
-    var checkletter = false
-
-
-    console.log(this.systemInput);
-
-    var arrofMappedValues : Map<string, number>[] = []
-    arrofMappedValues.push(new Map<string, number>());
-
-    var tempNum : string = "";
-    var tempStr : string = "";
-    var checkNumber : boolean = false;
-    var lastSign : string = "";
-
-    for(let i = 0; i < input.length; i++){
-      if((Number(input.charAt(i)) || input.charAt(i) == "0" || input.charAt(i) == "*" || input.charAt(i) == "/") && !checkletter){
-        checkNumber = true;
-        if(input.charAt(i - 1) == "+"){
-          tempNum = "+".concat(tempNum)
-        }
-        if(input.charAt(i - 1) == "-"){
-          tempNum = "-".concat(tempNum);
-        }
-        tempNum = tempNum.concat(input.charAt(i));
-
-        var tempEval : number;
-        tempEval = eval(tempNum);
-        tempNum = tempEval.toString();
-      }
-      else{
-        console.log("FOUND EQUAL ===>", foundEqu);
-        if(input.charAt(i) == "+" || input.charAt(i) == "-" || input.charAt(i) == "=" || input.charAt(i) == "\n"){
-          if(input.charAt(i) == "+" || input.charAt(i) == "-"){
-            lastSign = input.charAt(i);
-          }
-          if(checkletter){
-            if(arrofCoffsNames.length > 0){
-              if(arrofCoffsNames.indexOf(tempStr) == -1){
-                arrofCoffsNames.push(tempStr);
-              }
-            }
-            else{
-              arrofCoffsNames.push(tempStr);
-            }
-            if(!foundEqu){
-              if(arrofMappedValues[rows].get(tempStr)){
-                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
-              }
-              else{
-                arrofMappedValues[rows].set(tempStr, 0);
-                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
-              }
-            }
-            else{
-              if(arrofMappedValues[rows].get(tempStr)){
-                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
-              }
-              else{
-                arrofMappedValues[rows].set(tempStr, 0);
-                arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
-              }
-            }
-            checkletter = false;
-          }
-          else{
-            if(!foundEqu){
-              if(arrofMappedValues[rows].get("const")){
-                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
-              }
-              else{
-                arrofMappedValues[rows].set("const", 0);
-                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
-              }
-            }
-            else{
-              if(arrofMappedValues[rows].get("const")){
-                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
-              }
-              else{
-                arrofMappedValues[rows].set("const", 0);
-                arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
-              }
-            }
-            checkletter = false;
-          }
-          tempNum = "";
-          tempStr = "";
-          checkNumber = false;
-          if(input.charAt(i) == "="){
-            lastSign = "";
-            foundEqu = true;
-          }
-          if(input.charAt(i) == "\n"){
-            foundEqu = false;
-            lastSign = "";
-            checkletter = false;
-            checkNumber = false;
-            tempNum = "";
-            tempStr = "";
-            rows++;
-            if(i != input.length - 1){
-              arrofMappedValues.push(new Map<string, number>());
-            }
-            arrofCoffsNums = [];
-            arrofConstNums = [];
-            for(let j = 0; j < rows; j++){
-              for(var value of arrofCoffsNames){
-                if(!arrofMappedValues[j].get(value)){
-                  arrofMappedValues[j].set(value, 0);
-                }
-                if(!arrofMappedValues[j].get("const")){
-                  arrofMappedValues[j].set("const", 0);
-                }
-              }
-            }
-            for(let j = 0; j < rows; j++){
-              arrofCoffsNums.push([]);
-              for(let k = 0; k < arrofCoffsNames.length; k++){
-                arrofCoffsNums[j].push(arrofMappedValues[j].get(arrofCoffsNames[k]));
-              }
-            }
-            for(let j = 0; j < rows; j++){
-              arrofConstNums.push(arrofMappedValues[j].get("const"));
-            }
-          }
-        }
-        else{
-          if(!checkNumber && !checkletter){
-            tempNum = lastSign.concat("1").concat(tempNum);
-          }
-          tempStr = tempStr.concat(input.charAt(i));
-          checkletter = true;
-        }
-      }
-
-      this.unknowns_matrix = arrofCoffsNames;
-      this.numberofUnkowns = arrofCoffsNames.length;
-      this.coeff_matrix = arrofCoffsNums;
-      this.constants_matrix = arrofConstNums;
-      console.log(arrofMappedValues);
-      console.log(this.coeff_matrix);
-
-  }
-  if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
-    if(!this.createdIter){
-      if(this.numberofUnkowns==0)
-
-      {
-        var div =document.getElementById("50")
-        div?.parentNode?.removeChild(div)
-
-        var div2 =document.getElementById("51")
-        div2?.parentNode?.removeChild(div2)
-      }
-      else
-      {
-        this.createInitList(this.numberofUnkowns);
-        this.createErrorIters();
-      }
-      this.readInitList();
-      this.readError();
-      this.readNumofIter();
-
+    if(inputSplit[0] == "\n"){
+      inputSplit[0] = "";
     }
 
-}
+    console.log(inputSplit);
+
+    if(inputSplit.filter(value => value == "=").length == 0){
+      inputValid = false;
+    }
+    else{
+      inputValid = true;
+
+    }
+    
+
+    input = inputSplit.join("");
+
+    if(input.length == 0){
+      inputValid = true;
+    }
+
+    console.log("VALID ==> ", inputValid);
+    
+      for(let i = 0; i < input.length; i++){
+        if((Number(input.charAt(i)) || input.charAt(i) == "0" || input.charAt(i) == ".") && !checkletter){
+          checkNumber = true;
+          if(input.charAt(i - 1) == "+"){
+            tempNum = "+".concat(tempNum)
+          }
+          if(input.charAt(i - 1) == "-"){
+            tempNum = "-".concat(tempNum);
+          }
+          tempNum = tempNum.concat(input.charAt(i));
+  
+        }
+        else{
+          console.log("FOUND EQUAL ===>", foundEqu);
+          if(input.charAt(i) == "+" || input.charAt(i) == "-" || input.charAt(i) == "=" || input.charAt(i) == "\n"){
+            if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+              lastSign = input.charAt(i);
+            }
+            if(Number(tempNum) || tempNum == "0"){
+              if(checkletter){
+                if(arrofCoffsNames.length > 0){
+                  if(arrofCoffsNames.indexOf(tempStr) == -1){
+                    arrofCoffsNames.push(tempStr);
+                  }
+                }
+                else{
+                  arrofCoffsNames.push(tempStr);
+                }
+                if(!foundEqu){
+                  if(arrofMappedValues[rows].get(tempStr)){
+                    arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
+                  }
+                  else{
+                    arrofMappedValues[rows].set(tempStr, 0);
+                    arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) + Number(tempNum));
+                  }
+                }
+                else{
+                  if(arrofMappedValues[rows].get(tempStr)){
+                    arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
+                  }
+                  else{
+                    arrofMappedValues[rows].set(tempStr, 0);
+                    arrofMappedValues[rows].set(tempStr, arrofMappedValues[rows].get(tempStr) - Number(tempNum));
+                  }
+                }
+                checkletter = false;
+              }
+              else{
+                if(!foundEqu){
+                  if(arrofMappedValues[rows].get("const")){
+                    arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
+                  }
+                  else{
+                    arrofMappedValues[rows].set("const", 0);
+                    arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") - Number(tempNum));
+                  }
+                }
+                else{
+                  if(arrofMappedValues[rows].get("const")){
+                    arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
+                  }
+                  else{
+                    arrofMappedValues[rows].set("const", 0);
+                    arrofMappedValues[rows].set("const", arrofMappedValues[rows].get("const") + Number(tempNum));
+                  }
+                }
+                checkletter = false;
+              }
+            }
+            else{
+              inputValid = false;
+              console.log("NOT VALID NUMBER");
+
+              break;
+            }
+            
+            tempNum = "";
+            tempStr = "";
+            checkNumber = false;
+            if(input.charAt(i) == "="){
+              if((input.charAt(i + 1) == " " )|| (i == input.length - 1) || (input.charAt(i + 1) == "\n")){
+                inputValid = false;
+                console.log("NOT VALID EQUAL");
+                break;
+              }  
+              lastSign = "";
+              foundEqu = true;
+            }
+            if(input.charAt(i) == "\n"){
+              foundEqu = false;
+              lastSign = "";
+              checkletter = false;
+              checkNumber = false;
+              tempNum = "";
+              tempStr = "";
+              rows++;
+              if(i != input.length - 1){
+                arrofMappedValues.push(new Map<string, number>());
+              }
+              arrofCoffsNums = [];
+              arrofConstNums = [];
+              for(let j = 0; j < rows; j++){
+                for(var value of arrofCoffsNames){
+                  if(!arrofMappedValues[j].get(value)){
+                    arrofMappedValues[j].set(value, 0);
+                  }
+                  if(!arrofMappedValues[j].get("const")){
+                    arrofMappedValues[j].set("const", 0);
+                  }
+                }
+              }
+              for(let j = 0; j < rows; j++){
+                arrofCoffsNums.push([]);
+                for(let k = 0; k < arrofCoffsNames.length; k++){
+                  arrofCoffsNums[j].push(arrofMappedValues[j].get(arrofCoffsNames[k]));
+                }
+              }
+              for(let j = 0; j < rows; j++){
+                arrofConstNums.push(arrofMappedValues[j].get("const"));
+              }
+            }
+          }
+          else{
+            if(!checkNumber && !checkletter){
+              tempNum = lastSign.concat("1").concat(tempNum);
+            }
+            if(!checkletter){
+            }
+            tempStr = tempStr.concat(input.charAt(i));
+            checkletter = true;
+          }
+        }
+  
+        this.unknowns_matrix = arrofCoffsNames;
+        this.numberofUnkowns = arrofCoffsNames.length;
+        this.coeff_matrix = arrofCoffsNums;
+        this.constants_matrix = arrofConstNums;
+        console.log(arrofMappedValues);
+        console.log(this.coeff_matrix);
+  
+    }
+    if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
+      if(!this.createdIter){
+        if(this.numberofUnkowns==0)
+  
+        {
+          var div =document.getElementById("50")
+          div?.parentNode?.removeChild(div)
+  
+          var div2 =document.getElementById("51")
+          div2?.parentNode?.removeChild(div2)
+        }
+        else
+        {
+          this.createInitList(this.numberofUnkowns);
+          this.createErrorIters();
+        }
+        this.readInitList();
+        this.readError();
+        this.readNumofIter();
+  
+      }
+
+    }
+    
+    console.log("VALID AFTER FOR", inputValid);
+
+    if(inputSplit.filter(value =>  value == "=").length != this.coeff_matrix.length){
+      inputValid = false;
+    }
+    if(this.coeff_matrix.length > 0){
+      if(this.coeff_matrix[0].length != this.coeff_matrix.length){
+        inputValid = false;
+      }
+    }
+
+    if(inputValid == false){
+      console.log("INSIDE FALSE");
+      document!.getElementById("textinput").style.borderRadius = "15px";
+      document!.getElementById("textinput").style.borderColor = "red";
+      document!.getElementById("textinput").style.borderWidth = "6px";
+    }
+    else{
+      console.log("INSIDE TRUE");
+      document!.getElementById("textinput").style.borderWidth = "0px"
+    }
+    this.validInput = inputValid;
 }
 //-------------------------------------------------------------------------------//
 
@@ -756,7 +827,7 @@ delete()
     }
   }
   //-------------------------------------------------------------------------------//
-
+ 
   validateDiagonallyDominant()
   {
     var diagonallyDomminant1 : boolean = false;
@@ -791,16 +862,10 @@ delete()
 
   validateSquare()
   {
-    if(this.coeff_matrix[0].length == 0){
-      alert("Invalid Input")
-      this.validFlagInput =false;
-      return;
-    }
-
     var square : boolean = true;
+
     var rows = this.coeff_matrix.length;
     var cols = this.coeff_matrix[0].length;
-
     if(rows != cols){
       square = false;
     }
@@ -816,38 +881,49 @@ delete()
 
   solve()
   {
-    if(this.currentSolType==this.iterativeSolTypes[0].type || this.currentSolType==this.iterativeSolTypes[1].type){
-      this.readInitList();
-      this.readNumofIter();
-      this.readError();
+    console.log("INVALID IN SOLVE", this.validInput);
+    
+     
+    
+    if(this.validInput){
+      console.log("INSIDE IF SOLVER")
+      if(this.currentSolType==this.iterativeSolTypes[0].type || this.currentSolType==this.iterativeSolTypes[1].type){
+        this.readInitList();
+        this.readNumofIter();
+        this.readError();
+      }
+      this.validateSymmetric()
+      this.validateSquare()
+      if((this.currentSolType == this.iterativeSolTypes[0].type)){
+        this.validateDiagonallyDominant()
+      }
+      if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
+        && this.squareFlag)){
+        this.generate();
+        console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
+        this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
+          this.solution = response;
+          if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
+            alert("Matrix must be positive definite symmetric")
+          }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
+            alert("There 's no LU decomposition for this system")
+          }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
+            alert("There 's no unique solution for this system")
+          }else{
+            this.displaySolution()
+            this.arrofInitList = [];
+          }
+        },(error:any)=>alert("Invalid Input"));
+  
+  
+      }
     }
-    this.validateSymmetric()
-    this.validateSquare()
-    if((this.currentSolType == this.iterativeSolTypes[0].type)){
-      this.validateDiagonallyDominant()
+      
+      
+  
     }
-    if((!(this.currentSolType == this.decompostions[2].type && !this.symmFalg)
-      && this.squareFlag && this.validFlagInput)){
-      console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
-      this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
-        this.generate()
-        this.solution = response
-        if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
-          alert("Matrix must be positive definite symmetric")
-        }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
-          alert("There 's no LU decomposition for this system")
-        }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
-          alert("There 's no unique solution for this system")
-        }else{
-          this.displaySolution()
-          this.arrofInitList = [];
-        }
-      },(error:any)=>alert("Invalid Input"));
-
-
-    }
-
-  }
+    
+  
 
 }
 
