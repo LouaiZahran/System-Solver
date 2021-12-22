@@ -503,7 +503,8 @@ generate()
             if(input.charAt(i) == "+" || input.charAt(i) == "-"){
               lastSign = input.charAt(i);
             }
-            if(Number(tempNum) || tempNum == "0"){
+            console.log(tempNum)
+            if(Number(tempNum) || tempNum == "0" || input.charAt(i) == "+" || input.charAt(i) == "-"){
               if(checkletter){
                 if(arrofCoffsNames.length > 0){
                   if(arrofCoffsNames.indexOf(tempStr) == -1){
@@ -611,8 +612,7 @@ generate()
           else{
             if(!checkNumber && !checkletter){
               tempNum = lastSign.concat("1").concat(tempNum);
-            }
-            if(!checkletter){
+              console.log(tempNum)
             }
             tempStr = tempStr.concat(input.charAt(i));
             checkletter = true;
@@ -917,11 +917,11 @@ delete()
   
   
       }
-    }
-      
-      
   
     }
+    }
+      
+      
     
   
 
