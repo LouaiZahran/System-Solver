@@ -151,8 +151,7 @@ h1{
 
 #runtime{
   position: absolute;
-  width: 130px;
-  height: 30px;
+  display: flex;
   top: 150px;
   left: 100px;
   background-color: rgb(251, 197, 161);
