@@ -10,6 +10,7 @@ public class Solver {
     private Matrix constant;
     private Matrix result;
     private MathContext mc;
+    private ArrayList<ArrayList<ArrayList<BigDecimal>>> steps;
     private double eps = 1e-6;
 
     public Solver(Matrix coeff, Matrix constant,MathContext mc) throws IllegalArgumentException{
@@ -20,6 +21,11 @@ public class Solver {
         this.setConstant(constant);
         this.setMc(mc);
         this.setScale(new Matrix(coeff.getDimension()));
+        steps=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
+    }
+
+    public ArrayList<ArrayList<ArrayList<BigDecimal>>> getSteps() {
+        return steps;
     }
 
     public MathContext getMc(){return mc;}
@@ -263,7 +269,8 @@ public class Solver {
                 BigDecimal otherConstant = constant.getCell(otherConstantPosition);
                 constant.setCell(otherConstantPosition, otherConstant.subtract(curConstant.multiply(scale,mc),mc));
             }
-
+            steps.add(this.coeff.getData());
+            steps.add(this.constant.getData());
         }
 
         coeff.print();
@@ -275,10 +282,10 @@ public class Solver {
                 BigDecimal curConstant = constant.getCell(curConstantPosition);
                 Dimension curPivotPosition = new Dimension(i, i);
                 BigDecimal curPivot = coeff.getCell(curPivotPosition);
-
                 constant.setCell(curConstantPosition, curConstant.divide(curPivot, mc));
+                steps.add(this.coeff.getData());
+                steps.add(this.constant.getData());
             }
-
             return constant;
         }
         setScale(scaleMatrix);

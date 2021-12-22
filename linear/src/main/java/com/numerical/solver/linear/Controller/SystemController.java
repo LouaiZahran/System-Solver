@@ -22,6 +22,8 @@ import java.util.ArrayList;
 @CrossOrigin("http://localhost:4200")
 public class SystemController {
 
+    long duration;
+
     ArrayList<ArrayList<BigDecimal>> generate2D(BigDecimal[][] arrayData,MathContext mc){
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
@@ -76,6 +78,7 @@ public class SystemController {
             Matrix x=xSolver.backwardSub();
             result.add(x.getData());
             x.print();
+            this.duration=decomposer.getDuration();
             return result;
         }
         else if(methodName.equalsIgnoreCase("Crout Decompostion")){
@@ -88,6 +91,7 @@ public class SystemController {
             Solver xSolver=new Solver(decomposed.get(1),Y,mc);
             Matrix x=xSolver.backwardSub();
             result.add(x.getData());
+            this.duration=decomposer.getDuration();
             x.print();
             return result;
         }else if(methodName.equalsIgnoreCase("Doo Little Decompostion")) {
@@ -105,28 +109,35 @@ public class SystemController {
             Solver xSolver = new Solver(decomposed.get(1), Y, mc);
             Matrix x = xSolver.backwardSub();
             result.add(x.getData());
+            this.duration=decomposer.getDuration();
             x.print();
             return result;
         } else if(methodName.equalsIgnoreCase("Gauss-Seidil")){
+            this.duration=System.nanoTime();
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
-            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,true);
+            Matrix x=solver.GaussSeidel(matrixGuess,iteration,tolerance);
+            this.duration=System.nanoTime()-this.duration;
             result.add(x.getData());
             x.print();
             return result;
         }else if(methodName.equalsIgnoreCase("Jacobi-Iteration")){
+            this.duration=System.nanoTime();
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
-            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,false);
+            Matrix x=solver.Jacobi(matrixGuess,iteration,tolerance);
+            this.duration=System.nanoTime()-this.duration;
             result.add(x.getData());
             x.print();
             return result;
         }else if(methodName.equalsIgnoreCase("Gauss Elmination") ||
                 methodName.equalsIgnoreCase("Gauss-Jordan")){
+            this.duration=System.nanoTime();
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
             Matrix x=solver.GaussElimination(methodName.equalsIgnoreCase("Gauss-Jordan"), true,true);
+            this.duration=System.nanoTime()-this.duration;
             if(x.getData().size()==0)
                 return result;
-
             result.add(x.getData());
+            result.addAll(solver.getSteps());
             x.print();
             return result;
         }

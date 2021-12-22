@@ -8,11 +8,16 @@ public class Decomposer {
     private Matrix coeff;
     private Matrix constant;
     private Matrix result;
+    private long duration;
 
 
 
     public Matrix getCoeff() {
         return coeff;
+    }
+
+    public long getDuration() {
+        return duration;
     }
 
     public void setCoeff(Matrix coeff) {
@@ -49,7 +54,7 @@ public class Decomposer {
                 return ret;
         }
 
-
+        this.duration=System.nanoTime();
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= i; j++) {
                 BigDecimal sum = new BigDecimal(0);
@@ -75,6 +80,7 @@ public class Decomposer {
             }
         }
         Matrix upper= lower.transpose();
+        this.duration=System.nanoTime()-this.duration;
         ret.add(lower);
         ret.add(upper);
         return ret;
@@ -83,6 +89,13 @@ public class Decomposer {
         int rows=matrix.getDimension().getRow();
         Matrix lower = new Matrix(matrix.getDimension());
         Matrix upper = new Matrix(matrix.getDimension());
+        ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        Solver solver=new Solver(matrix,constant,mc);
+        if(solver.GaussElimination(false,true,false).getData().size()==0){
+            return ret;
+        }
+
+        this.duration=System.nanoTime();
         for (int i = 1; i <= rows; i++) {
             upper.setCell(new Dimension(i,i),new BigDecimal(1));
         }
@@ -112,7 +125,7 @@ public class Decomposer {
                                 .divide(lower.getCell(new Dimension(j,j)),mc).round(mc));
             }
         }
-        ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        this.duration=System.nanoTime()-this.duration;
         ret.add(lower);
         ret.add(upper);
         return ret;
@@ -122,13 +135,14 @@ public class Decomposer {
         int rows=matrix.getDimension().getRow();
         Solver solver=new Solver(matrix,constant,mc);
         ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        this.duration=System.nanoTime();
         if(solver.GaussElimination(false,false,false).getData().size()==0)
             return ret;
         Matrix lower = solver.getScale();
         for(int i=1;i<=rows;i++)
             lower.setCell(new Dimension(i,i),new BigDecimal(1));
-
         Matrix upper = solver.getCoeff();
+        this.duration=System.nanoTime()-this.duration;
         ret.add(lower);
         ret.add(upper);
         return ret;

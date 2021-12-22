@@ -263,6 +263,19 @@ export class homecomponent {
             td.innerHTML=steps[i][j][k].toString()
             tr.appendChild(td)
           }
+          //added by Bahaa 
+          i++;
+          if(i<steps.length){
+            for(let k=0;k<steps[i][j].length;k++)
+            {
+              var td= document.createElement("td")
+              td.innerHTML=steps[i][j][k].toString()
+              tr.appendChild(td)
+            }
+          }
+          else
+            break;
+          //end
           table.appendChild(tr)
         }
         div.appendChild(table)
@@ -903,12 +916,15 @@ delete()
         console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
         this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
           this.solution = response;
+          this.steps=this.solution; //bahaa
           if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
             alert("Matrix must be positive definite symmetric")
+          }else if(this.currentSolType == this.decompostions[1].type && this.solution.length==0){
+            alert("There 's no unique or infinite number of solution for this system")
           }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
-            alert("There 's no LU decomposition for this system")
+            alert("There 's no Doo Little decomposition for this system")
           }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
-            alert("There 's no unique solution for this system")
+            alert("There 's no unique or infinite number of solution for this system")
           }else{
             this.displaySolution()
             this.arrofInitList = [];
