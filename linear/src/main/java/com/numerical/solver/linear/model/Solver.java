@@ -10,7 +10,6 @@ public class Solver {
     private Matrix constant;
     private Matrix result;
     private MathContext mc;
-    private ArrayList<ArrayList<ArrayList<BigDecimal>>> steps;
     private double eps = 1e-6;
 
     public Solver(Matrix coeff, Matrix constant,MathContext mc) throws IllegalArgumentException{
@@ -21,12 +20,9 @@ public class Solver {
         this.setConstant(constant);
         this.setMc(mc);
         this.setScale(new Matrix(coeff.getDimension()));
-        steps=new ArrayList<ArrayList<ArrayList<BigDecimal>>>();
+        eps=Math.pow(10,-mc.getPrecision());
     }
 
-    public ArrayList<ArrayList<ArrayList<BigDecimal>>> getSteps() {
-        return steps;
-    }
 
     public MathContext getMc(){return mc;}
 
@@ -196,7 +192,6 @@ public class Solver {
         return ret;
     }
 
-    //Under Progress
     public void applyPivoting(Dimension pivotPosition){
         Dimension dim = coeff.getDimension();
         int rows = dim.getRow();
@@ -227,7 +222,6 @@ public class Solver {
         constant.getData().remove(start);
     }
 
-    //Under Progress
     public Matrix GaussElimination(boolean Jordan, boolean shouldPivot,boolean shouldSolve){
         Dimension dim = coeff.getDimension();
         Matrix scaleMatrix = new Matrix(dim);
@@ -269,9 +263,8 @@ public class Solver {
                 BigDecimal otherConstant = constant.getCell(otherConstantPosition);
                 constant.setCell(otherConstantPosition, otherConstant.subtract(curConstant.multiply(scale,mc),mc));
             }
-            steps.add(this.coeff.getData());
-            steps.add(this.constant.getData());
         }
+
 
         coeff.print();
         System.out.println("");
@@ -283,8 +276,6 @@ public class Solver {
                 Dimension curPivotPosition = new Dimension(i, i);
                 BigDecimal curPivot = coeff.getCell(curPivotPosition);
                 constant.setCell(curConstantPosition, curConstant.divide(curPivot, mc));
-                steps.add(this.coeff.getData());
-                steps.add(this.constant.getData());
             }
             return constant;
         }

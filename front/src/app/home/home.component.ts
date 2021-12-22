@@ -70,7 +70,7 @@ export class homecomponent {
   ]
 
   iterativeSolTypes : solverType[] = [
-    {type : "Gauss-Seidil", value : 1},
+    {type : "Gauss-Seidel", value : 1},
     {type : "Jacobi-Iteration", value : 2}
   ]
 
@@ -104,7 +104,6 @@ export class homecomponent {
   numberofUnkowns : number = 1;
   systemInput : string;
   solution :number[][][] = [];
-  steps :number[][][] = [];
   arrofInitList : number[] = [];
   numofIterations : number = 0;
   inputNumofIter : HTMLInputElement = null;
@@ -131,16 +130,14 @@ export class homecomponent {
     document.getElementById("soln")?.appendChild(div2)
     var arrofCoffsNums : number[][][] = this.solution;
     var variableNames : string[] = this.unknowns_matrix;
-    if(this.currentSolType=="Gauss Elmination" || this.currentSolType=="Gauss-Jordan" || this.currentSolType=="Gauss-Seidil" || this.currentSolType=="Jacobi-Iteration")
+    if(this.currentSolType=="Gauss Elmination" || this.currentSolType=="Gauss-Jordan" || this.currentSolType=="Gauss-Seidel" || this.currentSolType=="Jacobi-Iteration")
     {
-      for(let i=0 ;i<arrofCoffsNums.length;i++)
-      {
-        for(let j=0;j<arrofCoffsNums[i].length;j++)
+        for(let j=0;j<arrofCoffsNums[0].length;j++)
         {
-          for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+          for(let k=0;k<arrofCoffsNums[0][j].length;k++)
           {
             var p =document.createElement("h3")
-            var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
+            var text =document.createTextNode(variableNames[j] + "=" + arrofCoffsNums[0][j][k].toString())
             p.appendChild(text)
             p.style.marginLeft="100px"
             div2.appendChild(p)
@@ -148,7 +145,6 @@ export class homecomponent {
             indiv?.appendChild(set2)
           }
         }
-      }
     }
     else
     {
@@ -223,67 +219,7 @@ export class homecomponent {
       }
     }
   }
-    var button =document.createElement("button")
-    var text=document.createTextNode("show steps")
-    button.style.width="90px"
-    button.style.backgroundColor="black"
-    button.style.color="white"
-    button.style.marginLeft="30px"
-    button.appendChild(text)
-    div2.appendChild(button)
-    var steps: number[][][] = this.steps;
-    button.onclick=function()
-    {
-      var width2 = variableNames.length*40;
-      for(let i=0 ;i<steps.length;i++)
-      {
-        var div =document.createElement("div")
-        div.style.display="flex"
-
-        var table =document.createElement("table")
-        table.style.marginTop="50px"
-        table.style.marginLeft="20px"
-        table.width=width2.toString()
-        table.border="2"
-        var tr=document.createElement("tr")
-        table.appendChild(tr)
-        for(let n=0;n<variableNames.length;n++)
-        {
-
-          var th=document.createElement("th")
-          th.innerHTML=variableNames[n]
-          tr.appendChild(th)
-        }
-        for(let j=0 ;j<steps[i].length;j++)
-        {
-          var tr=document.createElement("tr")
-          for(let k=0;k<steps[i][j].length;k++)
-          {
-            var td= document.createElement("td")
-            td.innerHTML=steps[i][j][k].toString()
-            tr.appendChild(td)
-          }
-          //added by Bahaa 
-          i++;
-          if(i<steps.length){
-            for(let k=0;k<steps[i][j].length;k++)
-            {
-              var td= document.createElement("td")
-              td.innerHTML=steps[i][j][k].toString()
-              tr.appendChild(td)
-            }
-          }
-          else
-            break;
-          //end
-          table.appendChild(tr)
-        }
-        div.appendChild(table)
-        set2?.appendChild(div)
-        indiv?.appendChild(set2)
-      }
-
-    }
+    
   }
 //--------------------------------------------------------------------------------//
 generate()
@@ -736,7 +672,7 @@ generate()
     div.style.marginTop="20px"
     div.id="50"
     var p =document.createElement("h4")
-    var text =document.createTextNode("No of itetrations:")
+    var text =document.createTextNode("No of iterations:")
     p.appendChild(text)
     p.style.marginTop="5px"
     div.appendChild(p)
@@ -756,7 +692,7 @@ generate()
     input.className = "matrixIn";
     div.appendChild(input)
     var p2 =document.createElement("h4")
-    var text2 =document.createTextNode("Error torlance:")
+    var text2 =document.createTextNode("Error tolerance:")
     p2.appendChild(text2)
     p2.style.marginTop="5px"
     p2.style.marginLeft="5px"
@@ -785,7 +721,7 @@ generate()
     div.style.display="flex"
     div.style.marginTop="5px"
     var p =document.createElement("h2")
-    var text =document.createTextNode("intial values :")
+    var text =document.createTextNode("initial values :")
     p.style.marginTop="5px"
     p.appendChild(text)
     div.appendChild(p)
@@ -865,10 +801,10 @@ delete()
     }
 
     this.diagonallyDomminantFlag = diagonallyDomminant2 && diagonallyDomminant1;
+    
     if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)
       && !this.diagonallyDomminantFlag){
       alert("Solution may diverge");
-
     }
   }
 //-------------------------------------------------------------------------------//
@@ -916,15 +852,14 @@ delete()
         console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
         this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
           this.solution = response;
-          this.steps=this.solution; //bahaa
           if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
-            alert("Matrix must be positive definite symmetric")
+            alert("Matrix is not decomposable")
           }else if(this.currentSolType == this.decompostions[1].type && this.solution.length==0){
-            alert("There 's no unique or infinite number of solution for this system")
+            alert("There's no unique or infinite number of solution for this system")
           }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
-            alert("There 's no Doo Little decomposition for this system")
+            alert("There's no Doo Little decomposition for this system")
           }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
-            alert("There 's no unique or infinite number of solution for this system")
+            alert("There's no unique or infinite number of solution for this system")
           }else{
             this.displaySolution()
             this.arrofInitList = [];
