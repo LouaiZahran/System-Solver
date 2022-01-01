@@ -11,4 +11,5 @@ export class HomeService {
   postProblem(problem : properties) : Observable<any>{
     return this.http.post<any>("http://localhost:8080/postProblem", problem);
   }
+ 
 }

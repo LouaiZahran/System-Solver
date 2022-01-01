@@ -15,6 +15,7 @@ public class Decomposer {
         return coeff;
     }
 
+
     public void setCoeff(Matrix coeff) {
         this.coeff = new Matrix(coeff);
     }
@@ -40,16 +41,15 @@ public class Decomposer {
         int rows=matrix.getDimension().getRow();
         Matrix lower= new Matrix(matrix.getDimension());
         ArrayList<Matrix> ret=new ArrayList<Matrix>();
-
         Solver solver=new Solver(matrix,constant,mc);
-        solver.GaussElimination(false,true,false);
-        for(int i=1;i<rows;i++)
+
+        if(solver.GaussElimination(false,false,false).getData().size()==0)
+            return ret;
+        for(int i=1;i<=rows;i++)
         {
-            if(solver.getCoeff().getCell(new Dimension(i,i)).compareTo(BigDecimal.ZERO)==-1)
+            if(solver.getCoeff().getCell(new Dimension(i,i)).compareTo(BigDecimal.ZERO)!=1)
                 return ret;
         }
-
-
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= i; j++) {
                 BigDecimal sum = new BigDecimal(0);
@@ -79,10 +79,16 @@ public class Decomposer {
         ret.add(upper);
         return ret;
     }
-    public ArrayList<Matrix> croutDecomposition(Matrix matrix,MathContext mc) {
+    public ArrayList<Matrix> croutDecomposition(Matrix matrix,Matrix constant,MathContext mc) {
         int rows=matrix.getDimension().getRow();
         Matrix lower = new Matrix(matrix.getDimension());
         Matrix upper = new Matrix(matrix.getDimension());
+        ArrayList<Matrix> ret=new ArrayList<Matrix>();
+        Solver solver=new Solver(matrix,constant,mc);
+        if(solver.GaussElimination(false,true,false).getData().size()==0){
+            return ret;
+        }
+
         for (int i = 1; i <= rows; i++) {
             upper.setCell(new Dimension(i,i),new BigDecimal(1));
         }
@@ -112,7 +118,6 @@ public class Decomposer {
                                 .divide(lower.getCell(new Dimension(j,j)),mc).round(mc));
             }
         }
-        ArrayList<Matrix> ret=new ArrayList<Matrix>();
         ret.add(lower);
         ret.add(upper);
         return ret;
@@ -127,7 +132,6 @@ public class Decomposer {
         Matrix lower = solver.getScale();
         for(int i=1;i<=rows;i++)
             lower.setCell(new Dimension(i,i),new BigDecimal(1));
-
         Matrix upper = solver.getCoeff();
         ret.add(lower);
         ret.add(upper);

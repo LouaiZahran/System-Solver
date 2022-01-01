@@ -20,7 +20,9 @@ public class Solver {
         this.setConstant(constant);
         this.setMc(mc);
         this.setScale(new Matrix(coeff.getDimension()));
+        eps=Math.pow(10,-mc.getPrecision());
     }
+
 
     public MathContext getMc(){return mc;}
 
@@ -190,7 +192,6 @@ public class Solver {
         return ret;
     }
 
-    //Under Progress
     public void applyPivoting(Dimension pivotPosition){
         Dimension dim = coeff.getDimension();
         int rows = dim.getRow();
@@ -221,7 +222,6 @@ public class Solver {
         constant.getData().remove(start);
     }
 
-    //Under Progress
     public Matrix GaussElimination(boolean Jordan, boolean shouldPivot,boolean shouldSolve){
         Dimension dim = coeff.getDimension();
         Matrix scaleMatrix = new Matrix(dim);
@@ -263,8 +263,8 @@ public class Solver {
                 BigDecimal otherConstant = constant.getCell(otherConstantPosition);
                 constant.setCell(otherConstantPosition, otherConstant.subtract(curConstant.multiply(scale,mc),mc));
             }
-
         }
+
 
         coeff.print();
         System.out.println("");
@@ -275,10 +275,8 @@ public class Solver {
                 BigDecimal curConstant = constant.getCell(curConstantPosition);
                 Dimension curPivotPosition = new Dimension(i, i);
                 BigDecimal curPivot = coeff.getCell(curPivotPosition);
-
                 constant.setCell(curConstantPosition, curConstant.divide(curPivot, mc));
             }
-
             return constant;
         }
         setScale(scaleMatrix);

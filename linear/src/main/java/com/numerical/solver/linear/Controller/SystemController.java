@@ -22,6 +22,7 @@ import java.util.ArrayList;
 @CrossOrigin("http://localhost:4200")
 public class SystemController {
 
+
     ArrayList<ArrayList<BigDecimal>> generate2D(BigDecimal[][] arrayData,MathContext mc){
         ArrayList<ArrayList<BigDecimal>> ret=new ArrayList<>();
 
@@ -79,7 +80,7 @@ public class SystemController {
             return result;
         }
         else if(methodName.equalsIgnoreCase("Crout Decompostion")){
-            ArrayList<Matrix>decomposed = decomposer.croutDecomposition(coeffMatrix,mc);
+            ArrayList<Matrix>decomposed = decomposer.croutDecomposition(coeffMatrix,constantMatrix,mc);
             result.add(decomposed.get(0).getData());
             result.add(decomposed.get(1).getData());
             //LUx=B   LY=B   Ux=B
@@ -107,15 +108,15 @@ public class SystemController {
             result.add(x.getData());
             x.print();
             return result;
-        } else if(methodName.equalsIgnoreCase("Gauss-Seidil")){
+        } else if(methodName.equalsIgnoreCase("Gauss-Seidel")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
-            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,true);
+            Matrix x=solver.GaussSeidel(matrixGuess,iteration,tolerance);
             result.add(x.getData());
             x.print();
             return result;
         }else if(methodName.equalsIgnoreCase("Jacobi-Iteration")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
-            Matrix x=solver.solveIterative(matrixGuess,iteration,tolerance,false);
+            Matrix x=solver.Jacobi(matrixGuess,iteration,tolerance);
             result.add(x.getData());
             x.print();
             return result;
@@ -123,9 +124,8 @@ public class SystemController {
                 methodName.equalsIgnoreCase("Gauss-Jordan")){
             Solver solver=new Solver(coeffMatrix,constantMatrix,mc);
             Matrix x=solver.GaussElimination(methodName.equalsIgnoreCase("Gauss-Jordan"), true,true);
-            if(x.getData().size()==0)
+           if(x.getData().size()==0)
                 return result;
-
             result.add(x.getData());
             x.print();
             return result;
