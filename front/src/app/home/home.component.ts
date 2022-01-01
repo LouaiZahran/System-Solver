@@ -70,7 +70,7 @@ export class homecomponent {
   ]
 
   iterativeSolTypes : solverType[] = [
-    {type : "Gauss-Seidil", value : 1},
+    {type : "Gauss-Seidel", value : 1},
     {type : "Jacobi-Iteration", value : 2}
   ]
 
@@ -103,12 +103,13 @@ export class homecomponent {
   unknowns_matrix :string[] = [];
   numberofUnkowns : number = 1;
   systemInput : string;
+  funcInput : string;
   solution :number[][][] = [];
-  steps :number[][][] = [];
   arrofInitList : number[] = [];
   numofIterations : number = 0;
   inputNumofIter : HTMLInputElement = null;
   errorValue : number = 0;
+  runTime :number = 0;
   inputErrorValue : HTMLInputElement = null;
   arrofInputInitList : HTMLInputElement[] = [];
 //-------------------------------------------------------------------------------//
@@ -131,16 +132,14 @@ export class homecomponent {
     document.getElementById("soln")?.appendChild(div2)
     var arrofCoffsNums : number[][][] = this.solution;
     var variableNames : string[] = this.unknowns_matrix;
-    if(this.currentSolType=="Gauss Elmination" || this.currentSolType=="Gauss-Jordan" || this.currentSolType=="Gauss-Seidil" || this.currentSolType=="Jacobi-Iteration")
+    if(this.currentSolType=="Gauss Elmination" || this.currentSolType=="Gauss-Jordan" || this.currentSolType=="Gauss-Seidel" || this.currentSolType=="Jacobi-Iteration")
     {
-      for(let i=0 ;i<arrofCoffsNums.length;i++)
-      {
-        for(let j=0;j<arrofCoffsNums[i].length;j++)
+        for(let j=0;j<arrofCoffsNums[0].length;j++)
         {
-          for(let k=0;k<arrofCoffsNums[i][j].length;k++)
+          for(let k=0;k<arrofCoffsNums[0][j].length;k++)
           {
             var p =document.createElement("h3")
-            var text =document.createTextNode(variableNames[k] + "=" + arrofCoffsNums[i][j][k].toString())
+            var text =document.createTextNode(variableNames[j] + "=" + arrofCoffsNums[0][j][k].toString())
             p.appendChild(text)
             p.style.marginLeft="100px"
             div2.appendChild(p)
@@ -148,7 +147,6 @@ export class homecomponent {
             indiv?.appendChild(set2)
           }
         }
-      }
     }
     else
     {
@@ -223,54 +221,7 @@ export class homecomponent {
       }
     }
   }
-    var button =document.createElement("button")
-    var text=document.createTextNode("show steps")
-    button.style.width="90px"
-    button.style.backgroundColor="black"
-    button.style.color="white"
-    button.style.marginLeft="30px"
-    button.appendChild(text)
-    div2.appendChild(button)
-    var steps: number[][][] = this.steps;
-    button.onclick=function()
-    {
-      var width2 = variableNames.length*40;
-      for(let i=0 ;i<steps.length;i++)
-      {
-        var div =document.createElement("div")
-        div.style.display="flex"
-
-        var table =document.createElement("table")
-        table.style.marginTop="50px"
-        table.style.marginLeft="20px"
-        table.width=width2.toString()
-        table.border="2"
-        var tr=document.createElement("tr")
-        table.appendChild(tr)
-        for(let n=0;n<variableNames.length;n++)
-        {
-
-          var th=document.createElement("th")
-          th.innerHTML=variableNames[n]
-          tr.appendChild(th)
-        }
-        for(let j=0 ;j<steps[i].length;j++)
-        {
-          var tr=document.createElement("tr")
-          for(let k=0;k<steps[i][j].length;k++)
-          {
-            var td= document.createElement("td")
-            td.innerHTML=steps[i][j][k].toString()
-            tr.appendChild(td)
-          }
-          table.appendChild(tr)
-        }
-        div.appendChild(table)
-        set2?.appendChild(div)
-        indiv?.appendChild(set2)
-      }
-
-    }
+    
   }
 //--------------------------------------------------------------------------------//
 generate()
@@ -351,6 +302,178 @@ generate()
 
 //-------------------------------------------------------------------------------//
 
+  parseFunc(){
+    var input  = this.funcInput
+    input.replace(/ /g, "");
+    input = input.toLowerCase();
+    var inputSplit = input.split("");
+
+
+
+
+    var checkletter : boolean = false;
+    var checkNumber : boolean = false;
+    var tempNum : string = "";
+
+    var tempStck : string[] = [];
+    var foundSign : boolean = false;
+    var signPos : number = 0;
+
+    for(let i = 0; i < inputSplit.length; i++){
+
+      if(input.charAt(i) == "+" || input.charAt(i) == "-"){
+        tempStck.push(input.charAt(i));
+        if(!foundSign){
+          signPos = i;
+        }
+        if(tempStck.length > 1){
+          inputSplit[i] = "";
+        }
+        foundSign = true;
+
+      }
+      else{
+        if(foundSign){
+          var signArr : string[] = [];
+          signArr = tempStck.filter(value => value == "-");
+          if(signArr.length % 2 == 0){
+            inputSplit[signPos] = "+";
+          }
+          else{
+            inputSplit[signPos] = "-";
+          }
+        }
+        tempStck = [];
+        foundSign = false;
+      }
+    }
+    tempStck = [];
+
+    for(let i = 0; i < inputSplit.length; i++){
+      if(inputSplit[i] == "."){
+        console.log("INSIDE IF");
+        tempStck.push(inputSplit[i]);
+        if(tempStck.length > 1){
+          inputSplit[i] = "";
+        }
+      }
+      else{
+        tempStck = [];
+      }
+    }
+    tempStck = [];
+
+    for(let i = 0; i < inputSplit.length; i++){
+      if(inputSplit[i] == "^"){
+        console.log("INSIDE IF");
+        tempStck.push(inputSplit[i]);
+        if(tempStck.length > 1){
+          inputSplit[i] = "";
+        }
+      }
+      else{
+        tempStck = [];
+      }
+    }
+
+    
+    input = inputSplit.join("");
+
+    if(input.charAt(0) != "-" && input.charAt(0) != "+"){
+      input = "+".concat(input);
+    }
+    console.log(inputSplit.join(""));
+
+    var arrofSigns : number[] = [];
+    for(let i = 0; i < input.length; i++){
+      if(((input.charAt(i) == "+" || input.charAt(i) == "-") && input.charAt(i - 1) != "^" && input.charAt(i - 1) != "(") || i == input.length - 1){
+        arrofSigns.push(i);
+      }
+    }
+
+    var funcMap = new Map<number, number>();
+    
+
+    for(let i = 0; i < arrofSigns.length - 1; i++){
+      var firstIndex : number = arrofSigns[i];
+      var lastIndex : number = arrofSigns[i + 1];
+      var strPiece : string;
+
+      if(i == arrofSigns.length - 2){
+        strPiece = input.substring(firstIndex, lastIndex + 1);
+      }
+      else{
+        strPiece = input.substring(firstIndex, lastIndex);
+      }
+      console.log(strPiece);
+      var powerIndex : number;
+      if(strPiece.indexOf("^") > -1){
+        powerIndex = strPiece.indexOf("^");
+        var coffNumStr : string = strPiece.substring(0, powerIndex - 1);
+        var powerNumStr : string = strPiece.substring(powerIndex + 1);
+
+        var coffNum = Number(coffNumStr);
+        console.log(coffNumStr)
+        if(coffNumStr == "" || coffNumStr == "+"){
+          coffNum = 1;
+        }
+        if(coffNumStr == "-"){
+          coffNum = -1;
+        }
+        var powerNum = Number(powerNumStr);
+
+        if(!funcMap.get(powerNum)){
+          funcMap.set(powerNum, 0);
+        }
+        funcMap.set(powerNum, funcMap.get(powerNum)  + coffNum)
+      }
+      else{
+        if(strPiece.indexOf("x") == -1){
+          var constNumStr : string = strPiece;
+          var constNum : number = Number(strPiece);
+          if(!funcMap.get(0)){
+            funcMap.set(0, 0);
+          }
+          funcMap.set(0, funcMap.get(0) + constNum)
+        }
+        else if(strPiece.indexOf("x") > -1 && strPiece.indexOf("e") == -1){
+          var xIndex : number = strPiece.indexOf("x");
+          var coffNumStr : string = strPiece.substring(0, xIndex);
+
+          var coffNumX : number = Number(coffNumStr);
+
+          if(coffNumStr == "" || coffNumStr == "+"){
+            coffNumX = 1;
+          }
+          if(coffNumStr == "-"){
+            coffNumX = -1;
+          }
+          if(!funcMap.get(1)){
+            funcMap.set(1, 0);
+          }
+          funcMap.set(1, funcMap.get(1) + coffNumX)
+        }
+        else if(strPiece.indexOf("sin") > -1 || strPiece.indexOf("cos") > -1){
+          var sinIndex = strPiece.indexOf("sin")
+        }
+        
+
+      }
+
+    }
+    console.log(arrofSigns);
+    console.log(funcMap);
+
+
+
+
+    
+
+
+    
+
+
+  }
 
   parseSystem(){
     document.getElementById("50")?.remove()
@@ -374,7 +497,7 @@ generate()
     var inputSplit = input.split("");
     console.log(inputSplit);
 
-    
+
 
     var arrofCoffsNums : number[][] = [];
     var arrofCoffsNames : string[] = [];
@@ -475,7 +598,7 @@ generate()
       inputValid = true;
 
     }
-    
+
 
     input = inputSplit.join("");
 
@@ -484,7 +607,7 @@ generate()
     }
 
     console.log("VALID ==> ", inputValid);
-    
+
       for(let i = 0; i < input.length; i++){
         if((Number(input.charAt(i)) || input.charAt(i) == "0" || input.charAt(i) == ".") && !checkletter){
           checkNumber = true;
@@ -495,7 +618,7 @@ generate()
             tempNum = "-".concat(tempNum);
           }
           tempNum = tempNum.concat(input.charAt(i));
-  
+          
         }
         else{
           console.log("FOUND EQUAL ===>", foundEqu);
@@ -562,7 +685,7 @@ generate()
 
               break;
             }
-            
+
             tempNum = "";
             tempStr = "";
             checkNumber = false;
@@ -571,7 +694,7 @@ generate()
                 inputValid = false;
                 console.log("NOT VALID EQUAL");
                 break;
-              }  
+              }
               lastSign = "";
               foundEqu = true;
             }
@@ -618,23 +741,23 @@ generate()
             checkletter = true;
           }
         }
-  
+
         this.unknowns_matrix = arrofCoffsNames;
         this.numberofUnkowns = arrofCoffsNames.length;
         this.coeff_matrix = arrofCoffsNums;
         this.constants_matrix = arrofConstNums;
         console.log(arrofMappedValues);
         console.log(this.coeff_matrix);
-  
+
     }
     if((this.currentSolType == this.iterativeSolTypes[0].type) || (this.currentSolType == this.iterativeSolTypes[1].type)){
       if(!this.createdIter){
         if(this.numberofUnkowns==0)
-  
+
         {
           var div =document.getElementById("50")
           div?.parentNode?.removeChild(div)
-  
+
           var div2 =document.getElementById("51")
           div2?.parentNode?.removeChild(div2)
         }
@@ -646,11 +769,11 @@ generate()
         this.readInitList();
         this.readError();
         this.readNumofIter();
-  
+
       }
 
     }
-    
+
     console.log("VALID AFTER FOR", inputValid);
 
     if(inputSplit.filter(value =>  value == "=").length != this.coeff_matrix.length){
@@ -723,7 +846,7 @@ generate()
     div.style.marginTop="20px"
     div.id="50"
     var p =document.createElement("h4")
-    var text =document.createTextNode("No of itetrations:")
+    var text =document.createTextNode("No of iterations:")
     p.appendChild(text)
     p.style.marginTop="5px"
     div.appendChild(p)
@@ -743,7 +866,7 @@ generate()
     input.className = "matrixIn";
     div.appendChild(input)
     var p2 =document.createElement("h4")
-    var text2 =document.createTextNode("Error torlance:")
+    var text2 =document.createTextNode("Error tolerance:")
     p2.appendChild(text2)
     p2.style.marginTop="5px"
     p2.style.marginLeft="5px"
@@ -772,7 +895,7 @@ generate()
     div.style.display="flex"
     div.style.marginTop="5px"
     var p =document.createElement("h2")
-    var text =document.createTextNode("intial values :")
+    var text =document.createTextNode("initial values :")
     p.style.marginTop="5px"
     p.appendChild(text)
     div.appendChild(p)
@@ -827,7 +950,7 @@ delete()
     }
   }
   //-------------------------------------------------------------------------------//
- 
+
   validateDiagonallyDominant()
   {
     var diagonallyDomminant1 : boolean = false;
@@ -852,10 +975,10 @@ delete()
     }
 
     this.diagonallyDomminantFlag = diagonallyDomminant2 && diagonallyDomminant1;
+    
     if((this.currentSolType == this.iterativeSolTypes[0].type ||this.currentSolType == this.iterativeSolTypes[1].type)
       && !this.diagonallyDomminantFlag){
       alert("Solution may diverge");
-
     }
   }
 //-------------------------------------------------------------------------------//
@@ -881,10 +1004,10 @@ delete()
 
   solve()
   {
+    var start :number;
     console.log("INVALID IN SOLVE", this.validInput);
-    
-     
-    
+
+
     if(this.validInput){
       console.log("INSIDE IF SOLVER")
       if(this.currentSolType==this.iterativeSolTypes[0].type || this.currentSolType==this.iterativeSolTypes[1].type){
@@ -901,29 +1024,36 @@ delete()
         && this.squareFlag)){
         this.generate();
         console.log(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType))
+        start = new Date().getTime();
         this.server.postProblem(new problem(this.numberofUnkowns, this.coeff_matrix, this.constants_matrix, this.significant_figure,this.numofIterations, this.arrofInitList, this.errorValue,this.currentSolType)).subscribe((response : number[][][])=>{
           this.solution = response;
           if(this.currentSolType == this.decompostions[2].type && this.solution.length==0){
-            alert("Matrix must be positive definite symmetric")
+            alert("Matrix is not decomposable")
+          }else if(this.currentSolType == this.decompostions[1].type && this.solution.length==0){
+            alert("There's no unique or infinite number of solution for this system")
           }else if(this.currentSolType == this.decompostions[0].type && this.solution.length==0){
-            alert("There 's no LU decomposition for this system")
+            alert("There's no Doo Little decomposition for this system")
           }else if((this.currentSolType == this.DirectSolTypes[0].type || this.currentSolType == this.DirectSolTypes[1].type) && this.solution.length==0){
-            alert("There 's no unique solution for this system")
+            alert("There's no unique or infinite number of solution for this system")
           }else{
+            this.runTime = new Date().getTime() - start;
             this.displaySolution()
             this.arrofInitList = [];
+
+
           }
         },(error:any)=>alert("Invalid Input"));
-  
-  
+
+
       }
-  
+
+    }else{
+      alert("Invalid Input")
     }
     }
-      
-      
-    
-  
+
+
+
+
 
 }
-
