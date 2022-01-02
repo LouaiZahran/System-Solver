@@ -8,13 +8,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeService } from './home/home.service';
 import { SystemSolverComponent } from './system-solver/system-solver.component';
 import { RootFindingComponent } from './root-finding/root-finding.component';
+import { PlotterComponent } from './plotter/plotter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     homecomponent,
     SystemSolverComponent,
-    RootFindingComponent
+    RootFindingComponent,
+    PlotterComponent
   ],
   imports: [
     BrowserModule,
