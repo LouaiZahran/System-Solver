@@ -3,7 +3,7 @@
 <div class="container" id = "main">
   <div style="display: flex;">
     <div class="dropdown" id = "main">
-      <textarea [(ngModel)] = "funcInput" id = "textinput"  cols = "70" row = "10"  spellcheck = "false" (input) = parseFunc() class = "box">
+      <textarea  id = "textinput"  cols = "70" row = "10"  spellcheck = "false"  class = "box">
       </textarea>
         <label id ="labelsol">Enter the desired precision: </label>
         <select (change)="delete()" [(ngModel)] = "significant_figure" id="significance">

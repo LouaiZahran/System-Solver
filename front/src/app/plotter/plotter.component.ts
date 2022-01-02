@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./plotter.component.css']
 })
 export class PlotterComponent implements OnInit {
-  expression:String="x+2"; //should carry the mathmatical function that should be sent from rootFinding component
+  expression:String="x"; //should carry the mathmatical function that should be sent from rootFinding component
   constructor() { }
 
   ngOnInit(): void {
