@@ -6,11 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./plotter.component.css']
 })
 export class PlotterComponent implements OnInit {
-  expression1:String="2*x+3"; //should carry the mathmatical function that should be sent from rootFinding component
+  static expression1:String="Math.sin(x)"; //should carry the mathmatical function that should be sent from rootFinding component
   expression2:String="";
-  method:String="";
-  xmin:number=-10;
-  xmax:number=10;
+  static method:String="";
+  static xmin:number=-10;
+  static xmax:number=10;
 
   constructor() { }
 
@@ -24,7 +24,7 @@ export class PlotterComponent implements OnInit {
 
   substitute(x:number,noExp:number):number{
     if(noExp==1){
-      var substitution:String = this.expression1;
+      var substitution:String = PlotterComponent.expression1;
 
     }else{
       var substitution:String = this.expression2;
@@ -40,11 +40,11 @@ export class PlotterComponent implements OnInit {
     var ctx=canvas.getContext("2d");
     axes.x0 = .5 + .5*canvas.width;  // x0 pixels from left to x=0
     axes.y0 = .5 + .5*canvas.height; // y0 pixels from top to y=0
-    axes.scale = 1;                 // 40 pixels from x=0 to x=1
+    axes.scale = 10;                 // 40 pixels from x=0 to x=1
     axes.doNegativeX = true;
     this.showAxes(ctx,axes);
     this.setGraph(ctx,axes,"rgb(255,255,255)",1,1);
-    if(this.method.toLowerCase()=="fixedpoint"){
+    if(PlotterComponent.method.toLowerCase()=="fixedpoint"){
       this.setFunction2("x");
       this.setGraph(ctx,axes,"rgb(255,0,0)",1,2);
     }
@@ -52,8 +52,8 @@ export class PlotterComponent implements OnInit {
 
   setGraph (ctx:CanvasRenderingContext2D ,axes:any,color:string,thick:number,noExp:number) {
     var xx, yy, dx=4, x0=axes.x0, y0=axes.y0, scale=axes.scale;
-    var iMax = Math.round((ctx.canvas.width-x0)/dx);
-    var iMin = axes.doNegativeX ? Math.round(-x0/dx) : 0;
+    var iMax =  PlotterComponent.xmax;
+    var iMin = PlotterComponent.xmin;
     ctx.beginPath();
     ctx.lineWidth = thick;
     ctx.strokeStyle = color;
