@@ -463,16 +463,6 @@ generate()
     }
     console.log(arrofSigns);
     console.log(funcMap);
-
-
-
-
-    
-
-
-    
-
-
   }
 
   parseSystem(){
