@@ -2,17 +2,17 @@
   width: 100%;
   height: 100%;
   position: absolute;
-  background: #1D4350;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #A43931, #1D4350);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #A43931, #1D4350); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: #000000;
+  background: -webkit-linear-gradient(to right, #434343, #000000);
+  background: linear-gradient(to right, #434343, #000000);
 }
 .container{
   position: absolute;
   display:flex;
   flex-direction: row;
+  align-items: baseline;
   justify-content: space-between;
-  width: 200px;
+  width: 210px;
   height: 100px;
   top: 40%;
   left: 43%;
@@ -21,6 +21,19 @@ button{
   width: 100px;
   height: 100px;
   border-radius: 15px;
-  background-color:darkgrey
+  background-color:rgb(238, 232, 232);
+  border-style: hidden;
 
+}
+button:hover{
+  background-color:rgb(151, 148, 148);
+
+}
+#or{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  font-family: cursive;
+  background-color:transparent;
+  color: rgb(226, 219, 219);
 }
