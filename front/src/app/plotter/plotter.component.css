@@ -1,8 +1,16 @@
-
+.body{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #000000;
+  background: -webkit-linear-gradient(to right, #434343, #000000);
+  background: linear-gradient(to right, #434343, #000000);
+}
 h1{
   position: absolute;
-  font-family:fantasy;
+  font-family:'Franklin Gothic Medium';
   left: 44%;
+  color: rgb(238, 227, 227);
 }
 canvas{
   position: absolute;

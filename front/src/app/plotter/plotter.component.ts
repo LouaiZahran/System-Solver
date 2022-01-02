@@ -43,10 +43,10 @@ export class PlotterComponent implements OnInit {
     axes.scale = 10;                 // 40 pixels from x=0 to x=1
     axes.doNegativeX = true;
     this.showAxes(ctx,axes);
-    this.setGraph(ctx,axes,"rgb(255,255,255)",1,1);
+    this.setGraph(ctx,axes,"rgb(255,0,0)",1,1);
     if(PlotterComponent.method.toLowerCase()=="fixedpoint"){
       this.setFunction2("x");
-      this.setGraph(ctx,axes,"rgb(255,0,0)",1,2);
+      this.setGraph(ctx,axes,"rgb(255,255,255)",1,2);
     }
   }
 
