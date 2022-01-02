@@ -1,0 +1,190 @@
+
+#input00, #input01,
+#input10, #input11
+{
+    width: 50px;
+    height: 30px;
+    border: 3px solid rgb(141, 180, 43);
+    margin-top: 4px;
+    margin-left: 5px;
+}
+#input02, #input12 {
+    width: 50px;
+    height: 30px;
+    border: 3px solid rgb(146, 31, 46);
+    font-family: consolas;
+    margin-top: 4px;
+    margin-left: 5px;
+
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.container{
+    display: flexbox;
+    -ms-flex-align: start;
+    top: 700px;
+    left: 500px;
+    width: 700px;
+    height: 900px;
+}
+
+.matrixIn {
+    border-radius: 10px;
+
+}
+
+p{
+    font-family: consolas;
+    font-size: 20px;
+}
+
+#textinput {
+    left: -12px;
+    text-align: center;
+    font-family: consolas;
+    font-weight:bold;
+    font-size: 30px;
+    position: relative;
+    height: 200px;
+    width: 700px;
+    border-radius: 20px;
+    background: linear-gradient(-45deg, #93d3a3, #b74abb, #5bbde0, #59ceb2);
+    animation: gradient 15s ease infinite;
+
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+#labelsol{
+    font-family: consolas;
+    font-weight:bold;
+    font-size: 18px;
+}
+
+#selectSolver {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: consolas;
+    font-weight: bold;
+    font-size: 20px;
+    height: 35px;
+    left: 500px;
+}
+
+#significance {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: consolas;
+    font-weight: bold;
+    font-size: 20px;
+    height: 35px;
+    left: 40px;
+}
+#no_equ {
+    border-radius: 8px;
+    background-color: rgb(251, 197, 161);
+    font-family: Fira code;
+    font-size: 20px;
+    height: 35px;
+    left: 40px;
+}
+
+#validate {
+    background-color: rgb(16, 34, 63);
+    color: rgb(255, 255, 255);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    width: 100px;
+    height: 30px;
+    left: 5px;
+    border-radius: 7px;
+    position: relative;
+
+}
+button {
+    color: rgb(255, 255, 255);
+    font-family: consolas;
+    font-weight: bold;
+    font-size: 28px;
+    width: 150px;
+    height: 45px;
+    left: 80px;
+    border-radius: 7px;
+    position: relative;
+    transition-duration: 2ms;
+    border: none;
+    background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    animation: gradient 5s ease infinite;
+
+}
+button:hover{
+    transition-duration: 0.1s;
+
+    background-color: (#e73c7e);
+    box-shadow: 70px;
+
+}
+button:active{
+    transition-duration: 0.1s;
+
+    background-color: (#e73c7e);
+    box-shadow: 70px;
+}
+h1{
+    text-align: center;
+    font-family:consolas;
+    font-weight: bold;
+
+}
+
+#runtime{
+  position: absolute;
+  display: flex;
+  top: 150px;
+  left: 100px;
+  background-color: rgb(251, 197, 161);
+  color:rgb(15, 15, 15);
+  font-size: 14px;
+  font-family:consolas;
+  font-weight:bold;
+  border-radius: 10px;
+  border-color: rgb(15, 15, 15);
+  border-width: 2px;
+}
+
+#iter {
+    left: 0px;
+    position: relative;
+}
+
+#divSelect {
+    left: 500px;
+    position: relative;
+}
+
+p
+{
+    margin-left: 8px;
+
+}
+#placeholder
+{
+    text-align: center;
+}
+select
+{
+    margin-top: 15px;
+    margin-left: 20px;
+}
