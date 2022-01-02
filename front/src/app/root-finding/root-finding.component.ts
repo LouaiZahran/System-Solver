@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 export interface solverType2 {
   type : string;
   value : number;
@@ -16,6 +17,7 @@ export interface decompostion2 {
 export class RootFindingComponent implements OnInit {
   runTime :number = 0;
   funcInput:string;
+  
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
     {type : "False-Position", value : 2},
@@ -25,7 +27,7 @@ export class RootFindingComponent implements OnInit {
     {type : "Newton Raphson Method", value : 2},
     {type : "Secant Method", value : 3}
   ]
-  constructor() {
+  constructor(private router:Router) {
   }
   ngOnInit(): void {
   }
@@ -172,6 +174,7 @@ export class RootFindingComponent implements OnInit {
   }
   displaySolution()
   {
+    
     var indiv=document.getElementById("5000")
     var del2 =document.getElementById("soln")
     del2?.parentNode?.removeChild(del2)
@@ -210,6 +213,11 @@ export class RootFindingComponent implements OnInit {
         var button=document.createElement("button")
         var text4=document.createTextNode("plot graphically")
         button.appendChild(text4)
+        var router3=this.router
+        button.addEventListener("click",function():any{
+         
+         router3.navigate(["/plotter"])
+        })
         button.style.marginLeft="400px"
         button.style.width="110px"
         button.style.height="70px"
