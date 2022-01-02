@@ -6,19 +6,16 @@ import { from } from 'rxjs';
 import { SystemSolverService } from './system-solver.service';
 
 //-------------------------------------------------------------------------------//
-
 export interface solverType {
   type : string;
   value : number;
 }
 //-------------------------------------------------------------------------------//
-
 export interface decompostion {
   type : string;
   value : number;
 }
 //-------------------------------------------------------------------------------//
-
 export interface properties {
   coeff_matrix :number[][];
   constants_matrix :number[];
@@ -29,7 +26,6 @@ export interface properties {
   method :string;
 }
 //-------------------------------------------------------------------------------//
-
 class problem implements properties{
   errorValue : number = 0;
   numofIterations: number = 0;
@@ -52,7 +48,6 @@ class problem implements properties{
   }
 }
 //-------------------------------------------------------------------------------//
-
 @Component({
     selector: 'app-system-solver',
     templateUrl: './system-solver.component.html',
@@ -73,14 +68,11 @@ export class SystemSolverComponent {
     {type : "Gauss-Seidel", value : 1},
     {type : "Jacobi-Iteration", value : 2}
   ]
-
-
   decompostions : decompostion[] = [
     {type : "Doo Little Decompostion", value : 1},
     {type : "Crout Decompostion", value : 2},
     {type : "Cholesky Decompostion", value : 3}
   ]
-
 //-------------------------------------------------------------------------------//
   createdIter : boolean = false;
   validInput : boolean = true;
@@ -103,7 +95,7 @@ export class SystemSolverComponent {
   unknowns_matrix :string[] = [];
   numberofUnkowns : number = 1;
   systemInput : string;
-  funcInput : string;
+ 
   solution :number[][][] = [];
   arrofInitList : number[] = [];
   numofIterations : number = 0;
@@ -113,7 +105,6 @@ export class SystemSolverComponent {
   inputErrorValue : HTMLInputElement = null;
   arrofInputInitList : HTMLInputElement[] = [];
 //-------------------------------------------------------------------------------//
-
   displaySolution()
   {
     var indiv=document.getElementById("5000")
@@ -150,7 +141,6 @@ export class SystemSolverComponent {
     }
     else
     {
-
       var div=document.createElement("div")
       div.style.display="flex"
       div.style.marginTop="20px"
@@ -176,7 +166,6 @@ export class SystemSolverComponent {
         }
         var width2 = variableNames.length*40;
         var table2 =document.createElement("table")
-
         table2.style.marginLeft="20px"
         table2.width=width2.toString()
         table2.border="2"
@@ -190,7 +179,6 @@ export class SystemSolverComponent {
             td.innerHTML=arrofCoffsNums[i][j][k].toString()
 
             tr.appendChild(td)
-
           }
           table2.appendChild(tr)
         }
@@ -221,8 +209,7 @@ export class SystemSolverComponent {
       }
     }
   }
-
-  }
+}
 //--------------------------------------------------------------------------------//
 generate()
 {
@@ -301,179 +288,6 @@ generate()
 }
 
 //-------------------------------------------------------------------------------//
-
-  parseFunc(){
-    var input  = this.funcInput
-    input.replace(/ /g, "");
-    input = input.toLowerCase();
-    var inputSplit = input.split("");
-
-
-
-
-    var checkletter : boolean = false;
-    var checkNumber : boolean = false;
-    var tempNum : string = "";
-
-    var tempStck : string[] = [];
-    var foundSign : boolean = false;
-    var signPos : number = 0;
-
-    for(let i = 0; i < inputSplit.length; i++){
-
-      if(input.charAt(i) == "+" || input.charAt(i) == "-"){
-        tempStck.push(input.charAt(i));
-        if(!foundSign){
-          signPos = i;
-        }
-        if(tempStck.length > 1){
-          inputSplit[i] = "";
-        }
-        foundSign = true;
-
-      }
-      else{
-        if(foundSign){
-          var signArr : string[] = [];
-          signArr = tempStck.filter(value => value == "-");
-          if(signArr.length % 2 == 0){
-            inputSplit[signPos] = "+";
-          }
-          else{
-            inputSplit[signPos] = "-";
-          }
-        }
-        tempStck = [];
-        foundSign = false;
-      }
-    }
-    tempStck = [];
-
-    for(let i = 0; i < inputSplit.length; i++){
-      if(inputSplit[i] == "."){
-        console.log("INSIDE IF");
-        tempStck.push(inputSplit[i]);
-        if(tempStck.length > 1){
-          inputSplit[i] = "";
-        }
-      }
-      else{
-        tempStck = [];
-      }
-    }
-    tempStck = [];
-
-    for(let i = 0; i < inputSplit.length; i++){
-      if(inputSplit[i] == "^"){
-        console.log("INSIDE IF");
-        tempStck.push(inputSplit[i]);
-        if(tempStck.length > 1){
-          inputSplit[i] = "";
-        }
-      }
-      else{
-        tempStck = [];
-      }
-    }
-
-
-    input = inputSplit.join("");
-
-    if(input.charAt(0) != "-" && input.charAt(0) != "+"){
-      input = "+".concat(input);
-    }
-    console.log(inputSplit.join(""));
-
-    var arrofSigns : number[] = [];
-    for(let i = 0; i < input.length; i++){
-      if(((input.charAt(i) == "+" || input.charAt(i) == "-") && input.charAt(i - 1) != "^" && input.charAt(i - 1) != "(") || i == input.length - 1){
-        arrofSigns.push(i);
-      }
-    }
-
-    var funcMap = new Map<number, number>();
-
-
-    for(let i = 0; i < arrofSigns.length - 1; i++){
-      var firstIndex : number = arrofSigns[i];
-      var lastIndex : number = arrofSigns[i + 1];
-      var strPiece : string;
-
-      if(i == arrofSigns.length - 2){
-        strPiece = input.substring(firstIndex, lastIndex + 1);
-      }
-      else{
-        strPiece = input.substring(firstIndex, lastIndex);
-      }
-      console.log(strPiece);
-      var powerIndex : number;
-      if(strPiece.indexOf("^") > -1){
-        powerIndex = strPiece.indexOf("^");
-        var coffNumStr : string = strPiece.substring(0, powerIndex - 1);
-        var powerNumStr : string = strPiece.substring(powerIndex + 1);
-
-        var coffNum = Number(coffNumStr);
-        console.log(coffNumStr)
-        if(coffNumStr == "" || coffNumStr == "+"){
-          coffNum = 1;
-        }
-        if(coffNumStr == "-"){
-          coffNum = -1;
-        }
-        var powerNum = Number(powerNumStr);
-
-        if(!funcMap.get(powerNum)){
-          funcMap.set(powerNum, 0);
-        }
-        funcMap.set(powerNum, funcMap.get(powerNum)  + coffNum)
-      }
-      else{
-        if(strPiece.indexOf("x") == -1){
-          var constNumStr : string = strPiece;
-          var constNum : number = Number(strPiece);
-          if(!funcMap.get(0)){
-            funcMap.set(0, 0);
-          }
-          funcMap.set(0, funcMap.get(0) + constNum)
-        }
-        else if(strPiece.indexOf("x") > -1 && strPiece.indexOf("e") == -1){
-          var xIndex : number = strPiece.indexOf("x");
-          var coffNumStr : string = strPiece.substring(0, xIndex);
-
-          var coffNumX : number = Number(coffNumStr);
-
-          if(coffNumStr == "" || coffNumStr == "+"){
-            coffNumX = 1;
-          }
-          if(coffNumStr == "-"){
-            coffNumX = -1;
-          }
-          if(!funcMap.get(1)){
-            funcMap.set(1, 0);
-          }
-          funcMap.set(1, funcMap.get(1) + coffNumX)
-        }
-        else if(strPiece.indexOf("sin") > -1 || strPiece.indexOf("cos") > -1){
-          var sinIndex = strPiece.indexOf("sin")
-        }
-
-
-      }
-
-    }
-    console.log(arrofSigns);
-    console.log(funcMap);
-
-
-
-
-
-
-
-
-
-
-  }
 
   parseSystem(){
     document.getElementById("50")?.remove()
