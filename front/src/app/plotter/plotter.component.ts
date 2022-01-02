@@ -1,29 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'app-plotter',
   templateUrl: './plotter.component.html',
   styleUrls: ['./plotter.component.css']
 })
 export class PlotterComponent implements OnInit {
-  expression:String="x"; //should carry the mathmatical function that should be sent from rootFinding component
+  expression1:String="2*x+3"; //should carry the mathmatical function that should be sent from rootFinding component
+  expression2:String="";
+  method:String="";
+  xmin:number=-10;
+  xmax:number=10;
+
   constructor() { }
 
   ngOnInit(): void {
     this.draw();
   }
 
-  setFunction(exp:String):void{
-    this.expression = exp;
+  setFunction2(exp:String):void{
+    this.expression2 = exp;
   }
 
-  getFunction():String{
-    return this.expression;
-  }
+  substitute(x:number,noExp:number):number{
+    if(noExp==1){
+      var substitution:String = this.expression1;
 
-  substitute(x:number):number{
-    var substitution:String = this.expression;
+    }else{
+      var substitution:String = this.expression2;
+
+    }
     return eval(substitution.replace("x",x.toString()));
   }
 
@@ -36,12 +42,15 @@ export class PlotterComponent implements OnInit {
     axes.y0 = .5 + .5*canvas.height; // y0 pixels from top to y=0
     axes.scale = 1;                 // 40 pixels from x=0 to x=1
     axes.doNegativeX = true;
-    this.setFunction(this.expression)
     this.showAxes(ctx,axes);
-    this.setGraph(ctx,axes,"rgb(255,255,255)",1);
+    this.setGraph(ctx,axes,"rgb(255,255,255)",1,1);
+    if(this.method.toLowerCase()=="fixedpoint"){
+      this.setFunction2("x");
+      this.setGraph(ctx,axes,"rgb(255,0,0)",1,2);
+    }
   }
 
-  setGraph (ctx:CanvasRenderingContext2D ,axes:any,color:string,thick:number) {
+  setGraph (ctx:CanvasRenderingContext2D ,axes:any,color:string,thick:number,noExp:number) {
     var xx, yy, dx=4, x0=axes.x0, y0=axes.y0, scale=axes.scale;
     var iMax = Math.round((ctx.canvas.width-x0)/dx);
     var iMin = axes.doNegativeX ? Math.round(-x0/dx) : 0;
@@ -49,7 +58,7 @@ export class PlotterComponent implements OnInit {
     ctx.lineWidth = thick;
     ctx.strokeStyle = color;
     for (var i=iMin;i<=iMax;i++) {
-      xx = dx*i; yy = scale*this.substitute(xx/scale);
+      xx = dx*i; yy = scale*this.substitute(xx/scale,noExp);
       if (i==iMin){
         ctx.moveTo(x0+xx,y0-yy);
       }else{
