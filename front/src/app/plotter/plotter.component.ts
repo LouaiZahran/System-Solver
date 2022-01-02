@@ -9,8 +9,8 @@ export class PlotterComponent implements OnInit {
   static expression1:String="Math.sin(x)"; //should carry the mathmatical function that should be sent from rootFinding component
   expression2:String="";
   static method:String="";
-  static xmin:number=-10;
-  static xmax:number=10;
+  static xmin:number;
+  static xmax:number;
 
   constructor() { }
 
@@ -52,8 +52,13 @@ export class PlotterComponent implements OnInit {
 
   setGraph (ctx:CanvasRenderingContext2D ,axes:any,color:string,thick:number,noExp:number) {
     var xx, yy, dx=4, x0=axes.x0, y0=axes.y0, scale=axes.scale;
-    var iMax =  PlotterComponent.xmax;
-    var iMin = PlotterComponent.xmin;
+    var iMax = Math.round((ctx.canvas.width-x0)/dx);
+    var iMin = axes.doNegativeX ? Math.round(-x0/dx) : 0;
+    if(PlotterComponent.method.toLowerCase()=="falseposition" || PlotterComponent.method.toLowerCase()=="bisection"){
+      iMax =  PlotterComponent.xmax;
+      iMin = PlotterComponent.xmin;
+    }
+
     ctx.beginPath();
     ctx.lineWidth = thick;
     ctx.strokeStyle = color;
