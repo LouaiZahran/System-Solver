@@ -25,6 +25,7 @@ export class RootFindingComponent implements OnInit {
   initalvalue2:string
   presicion:string="0.00001"
   iterations:string="50"
+  solution:string="5"
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
     {type : "False Position", value : 2},
@@ -226,7 +227,7 @@ export class RootFindingComponent implements OnInit {
           for(let k=0;k<1;k++)
           {
             var p =document.createElement("h3")
-            var text =document.createTextNode("x" + "=" + "5")
+            var text =document.createTextNode("x" + "=" + this.solution)
             p.appendChild(text)
             p.style.marginLeft="100px"
             p.style.marginTop="20px"
