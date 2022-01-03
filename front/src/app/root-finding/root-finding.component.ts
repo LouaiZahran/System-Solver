@@ -47,17 +47,16 @@ export class RootFindingComponent implements OnInit {
   }
   verify()
   {
-   var regexp = new RegExp('(?:[0-9-+*/^()x]|abs|e^x|ln|log|a?(?:sin|cos|tan)h?)+')
-   
-   var test1= regexp.test( this.funcInput)
+    var regexp = new RegExp('(?:[0-9-+*/^()x]|abs|e^x|ln|log|a?(?:sin|cos|tan)h?)+')
+    var test1= regexp.test( this.funcInput)
     if(test1==false)
     {
-     alert("input error")
+      alert("input error")
     }
     else
     {
-     this.deravtitve2= derivative(this.funcInput,'x').toString()
-     console.log(this.deravtitve2)
+      this.deravtitve2= derivative(this.funcInput,'x').toString()
+      console.log(this.deravtitve2)
       console.log(this.funcInput)
     }
   }
@@ -222,72 +221,71 @@ export class RootFindingComponent implements OnInit {
     var div3=document.createElement("div")
     div3.style.marginTop="30px"
     div3.style.display="flex"
-        for(let j=0;j<1;j++)
-        {
-          for(let k=0;k<1;k++)
-          {
-            var p =document.createElement("h3")
-            var text =document.createTextNode("x" + "=" + this.solution)
-            p.appendChild(text)
-            p.style.marginLeft="100px"
-            p.style.marginTop="20px"
-            div3.appendChild(p)
-            div2.appendChild(div3)
-            set2?.appendChild(div2)
-            indiv?.appendChild(set2)
-          }
-        }
-        var button=document.createElement("button")
-        var text4=document.createTextNode("plot graphically")
-        button.appendChild(text4)
-        var router3=this.router
-        var sol=this.currentSolType
-        
-        var exp="" 
-        var fn=this.funcInput
-        var exp1=this.initalvalue1
-        var exp2=this.initalvalue2
-        if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
-        {
-           exp=this.funcInput
-        }
-        else if(this.currentSolType=="Fixed Point")
-        {
-                exp=this.funcInput+"+"+"x"
-                exp=math.simplify(exp).toString()
-                console.log(exp)
-        }
-        else
-        {
-          console.log("lol")
-          console.log(this.deravtitve2)
-          exp=derivative(this.funcInput,"x").toString()
-        }
-        button.addEventListener("click",function():any{
-         router3.navigate(["/plotter"])
-         console.log(sol)
-         console.log(exp)
-         PlotterComponent.expression1=exp
-         PlotterComponent.method=sol
-         if(sol=="Bisection Method")
-         {
-           console.log("all")
-          PlotterComponent.xmax=Number(exp1)
-          PlotterComponent.xmin=Number(exp2)
-         }
-        
-        })
-        button.style.marginLeft="400px"
-        button.style.width="110px"
-        button.style.height="70px"
-        button.style.backgroundColor="black"
-        button.style.color="white"
-        button.style.borderRadius="15px"
-        div3.appendChild(button)
+    for(let j=0;j<1;j++)
+    {
+      for(let k=0;k<1;k++)
+      {
+        var p =document.createElement("h3")
+        var text =document.createTextNode("x" + "=" + this.solution)
+        p.appendChild(text)
+        p.style.marginLeft="100px"
+        p.style.marginTop="20px"
+        div3.appendChild(p)
         div2.appendChild(div3)
-        set2.appendChild(div2)
+        set2?.appendChild(div2)
         indiv?.appendChild(set2)
+      }
     }
+    var button=document.createElement("button")
+    var text4=document.createTextNode("plot graphically")
+    button.appendChild(text4)
+    var router3=this.router
+    var sol=this.currentSolType
+
+    var exp=""
+    var fn=this.funcInput
+    var exp1=this.initalvalue1
+    var exp2=this.initalvalue2
+    if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
+    {
+      exp=this.funcInput
+    }
+    else if(this.currentSolType=="Fixed Point")
+    {
+      exp=this.funcInput+"+"+"x"
+      exp=math.simplify(exp).toString()
+      console.log(exp)
+    }
+    else
+    {
+      console.log("lol")
+      console.log(this.deravtitve2)
+      exp=derivative(this.funcInput,"x").toString()
+    }
+    button.addEventListener("click",function():any{
+      router3.navigate(["/plotter"])
+      console.log(sol)
+      console.log(exp)
+      PlotterComponent.expression1=exp
+      PlotterComponent.method=sol
+      if(sol=="Bisection Method")
+      {
+        console.log("all")
+        PlotterComponent.xmax=Number(exp1)
+        PlotterComponent.xmin=Number(exp2)
+      }
+    })
+    button.style.marginLeft="400px"
+    button.style.width="110px"
+    button.style.height="70px"
+    button.style.backgroundColor="black"
+    button.style.color="white"
+    button.style.borderRadius="15px"
+    div3.appendChild(button)
+    div2.appendChild(div3)
+    set2.appendChild(div2)
+    indiv?.appendChild(set2)
+  }
     read()
     {
       var exp
@@ -304,8 +302,7 @@ export class RootFindingComponent implements OnInit {
       {
         this.presicion=text3.value
       }
-     
-      
+
       var text4=<HTMLInputElement>document.getElementById("iterations")
       if(text4.value!="")
       {
