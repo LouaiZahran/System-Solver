@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PlotterComponent } from '../plotter/plotter.component';
+import * as math from 'mathjs';
+import { derivative, number } from 'mathjs';
 export interface solverType2 {
   type : string;
   value : number;
@@ -17,20 +20,47 @@ export interface decompostion2 {
 export class RootFindingComponent implements OnInit {
   runTime :number = 0;
   funcInput:string;
-  
+  deravtitve2:string
+  initalvalue1:string
+  initalvalue2:string
+  presicion:string="0.00001"
+  iterations:string="50"
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
-    {type : "False-Position", value : 2},
+    {type : "False Position", value : 2},
   ]
   decompostions : decompostion2[] = [
     {type : "Fixed Point", value : 1},
     {type : "Newton Raphson Method", value : 2},
     {type : "Secant Method", value : 3}
   ]
+  currentSolType : string = this.DirectSolTypes[0].type;
   constructor(private router:Router) {
   }
   ngOnInit(): void {
   }
+  solutionTypeList(solType : string)
+  {
+      this.currentSolType = solType;
+      console.log(this.currentSolType)
+  }
+  verify()
+  {
+   var regexp = new RegExp('(?:[0-9-+*/^()x]|abs|e^x|ln|log|a?(?:sin|cos|tan)h?)+')
+   
+   var test1= regexp.test( this.funcInput)
+    if(test1==false)
+    {
+     alert("input error")
+    }
+    else
+    {
+     this.deravtitve2= derivative(this.funcInput,'x').toString()
+     console.log(this.deravtitve2)
+      console.log(this.funcInput)
+    }
+  }
+  /*
   parseFunc(){
     var input  = this.funcInput
     input.replace(/ /g, "");
@@ -82,7 +112,6 @@ export class RootFindingComponent implements OnInit {
       }
     }
     tempStck = [];
-
     for(let i = 0; i < inputSplit.length; i++){
       if(inputSplit[i] == "^"){
         console.log("INSIDE IF");
@@ -100,7 +129,6 @@ export class RootFindingComponent implements OnInit {
       input = "+".concat(input);
     }
     console.log(inputSplit.join(""));
-
     var arrofSigns : number[] = [];
     for(let i = 0; i < input.length; i++){
       if(((input.charAt(i) == "+" || input.charAt(i) == "-") && input.charAt(i - 1) != "^" && input.charAt(i - 1) != "(") || i == input.length - 1){
@@ -124,7 +152,6 @@ export class RootFindingComponent implements OnInit {
         powerIndex = strPiece.indexOf("^");
         var coffNumStr : string = strPiece.substring(0, powerIndex - 1);
         var powerNumStr : string = strPiece.substring(powerIndex + 1);
-
         var coffNum = Number(coffNumStr);
         console.log(coffNumStr)
         if(coffNumStr == "" || coffNumStr == "+"){
@@ -172,9 +199,9 @@ export class RootFindingComponent implements OnInit {
     console.log(arrofSigns);
     console.log(funcMap);
   }
+  */
   displaySolution()
   {
-    
     var indiv=document.getElementById("5000")
     var del2 =document.getElementById("soln")
     del2?.parentNode?.removeChild(del2)
@@ -194,7 +221,6 @@ export class RootFindingComponent implements OnInit {
     var div3=document.createElement("div")
     div3.style.marginTop="30px"
     div3.style.display="flex"
-
         for(let j=0;j<1;j++)
         {
           for(let k=0;k<1;k++)
@@ -214,9 +240,41 @@ export class RootFindingComponent implements OnInit {
         var text4=document.createTextNode("plot graphically")
         button.appendChild(text4)
         var router3=this.router
+        var sol=this.currentSolType
+        
+        var exp="" 
+        var fn=this.funcInput
+        var exp1=this.initalvalue1
+        var exp2=this.initalvalue2
+        if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
+        {
+           exp=this.funcInput
+        }
+        else if(this.currentSolType=="Fixed Point")
+        {
+                exp=this.funcInput+"+"+"x"
+                exp=math.simplify(exp).toString()
+                console.log(exp)
+        }
+        else
+        {
+          console.log("lol")
+          console.log(this.deravtitve2)
+          exp=derivative(this.funcInput,"x").toString()
+        }
         button.addEventListener("click",function():any{
-         
          router3.navigate(["/plotter"])
+         console.log(sol)
+         console.log(exp)
+         PlotterComponent.expression1=exp
+         PlotterComponent.method=sol
+         if(sol=="Bisection Method")
+         {
+           console.log("all")
+          PlotterComponent.xmax=Number(exp1)
+          PlotterComponent.xmin=Number(exp2)
+         }
+        
         })
         button.style.marginLeft="400px"
         button.style.width="110px"
@@ -228,6 +286,60 @@ export class RootFindingComponent implements OnInit {
         div2.appendChild(div3)
         set2.appendChild(div2)
         indiv?.appendChild(set2)
+    }
+    read()
+    {
+      var exp
+      var text=<HTMLInputElement>document.getElementById("intial1")
+      this.initalvalue1=text.value
+      var exp2
+      if(this.flag==1)
+      {
+        var text2=<HTMLInputElement>document.getElementById("intial2")
+        this.initalvalue2=text2.value
+      }
+      var text3=<HTMLInputElement>document.getElementById("precision")
+      if(text3.value!="")
+      {
+        this.presicion=text3.value
+      }
+     
+      
+      var text4=<HTMLInputElement>document.getElementById("iterations")
+      if(text4.value!="")
+      {
+        this.iterations=text4.value
+      }
+      console.log(this.initalvalue1)
+      console.log(this.initalvalue2)
+      console.log(this.presicion)
+      console.log(this.iterations)
+    }
+    flag:number=1
+    change()
+    {
+      console.log("a7a")
+      if((this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" ||this.currentSolType=="Secant Method") &&this.flag==0 )
+      {
+          this.flag=1
+          var div=document.getElementById("yes")
+          var input =document.createElement("input")
+          input.id="intial2"
+          input.type="number"
+          input.style.width="50px"
+          input.style.marginTop="20px"
+          input.style.borderRadius="10px"
+          input.required
+          input.style.backgroundColor="rgb(251, 197, 161)"
+          div?.appendChild(input)
+      }
+      else if((this.currentSolType=="Newton Raphson Method" || this.currentSolType=="Fixed Point") &&this.flag==1)
+      {
+        this.flag=0
+        var input2=document.getElementById("main")
+        var input3=document.getElementById("intial2")
+        input3?.remove()
+      }
     }
   }
 
