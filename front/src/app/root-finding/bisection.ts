@@ -54,7 +54,10 @@ export class bisection{
   }
   public substitute(x:number):number{
     var substitution = this.getExpression()
-    return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toFixed(this.getPrecision())
+    return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
+  }
+  public precise(x:number) {
+    return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
   }
   public applyBisection():number{
     var iteration_counter = 0
@@ -62,12 +65,13 @@ export class bisection{
     var xl = this.getXLower()
     var eps = this.getTolerance()
     var maxIterations = this.getMaxIterations()
-    var xr:number;
+    var xr:number=0;
     var fr:number;
     var fl:number;
-
+    if(math.abs(xu -xl) > eps) 
+      return xu;
     while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
-      xr = (xl + xu)/2;
+      xr = this.precise(this.precise(xl + xu)/2);
       fr = this.substitute(xr);
       fl = this.substitute(xl);
       if (fl*fr > 0){
@@ -75,7 +79,6 @@ export class bisection{
       }
       else{
         xu = xr;
-
       }
       iteration_counter = iteration_counter + 1;
     }
