@@ -57,7 +57,7 @@ export class SecantMathod{
     return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
   }
   public precise(x:number) {
-    return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
+    return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
   }
     public applySecantMethod():number{
         var iteration_counter = 0
@@ -91,3 +91,4 @@ export class SecantMathod{
     
       }
     }
+    export default SecantMathod

@@ -57,7 +57,7 @@ export class FalsePosition{
         return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
     }
     public precise(x:number) {
-        return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
+      return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
     }
     public applyFalsePosition():number{
         var iteration_counter = 0
@@ -69,7 +69,7 @@ export class FalsePosition{
         var fr:number;
         var fl:number;
         var fu:number;
-        if(math.abs(xu -xl) > eps) 
+        if(math.abs(xu -xl) < eps) 
           return xu;
         while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
             
@@ -97,3 +97,4 @@ export class FalsePosition{
         return xr;
       }
 }
+export default FalsePosition

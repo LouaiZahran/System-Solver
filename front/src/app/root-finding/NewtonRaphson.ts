@@ -50,7 +50,7 @@ export class NewtonRaphson{
         return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
     }
     public precise(x:number) {
-        return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
+      return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
     }
     
     public applyNewtonRaphson():number{
@@ -78,3 +78,4 @@ export class NewtonRaphson{
     
       }
     }
+    export default NewtonRaphson

@@ -7,7 +7,7 @@ export class bisection{
   private precision:number;
   private expression:string;
   private maxIterations:number;
-
+                                                                                        
   constructor(xLower:number,xUpper:number,tolerance:number,precision:number,expression:string,maxIterations:number){
     this.xLower = xLower
     this.xUpper = xUpper
@@ -57,7 +57,7 @@ export class bisection{
     return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
   }
   public precise(x:number) {
-    return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
+    return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
   }
   public applyBisection():number{
     var iteration_counter = 0
@@ -68,7 +68,10 @@ export class bisection{
     var xr:number=0;
     var fr:number;
     var fl:number;
-    if(math.abs(xu -xl) > eps) 
+    console.log("old "+xr)
+    console.log("old xu" +xu)
+    console.log("old xl" +xl)
+    if(math.abs(xu -xl) < eps) 
       return xu;
     while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
       xr = this.precise(this.precise(xl + xu)/2);
@@ -82,13 +85,11 @@ export class bisection{
       }
       iteration_counter = iteration_counter + 1;
     }
-
+    console.log("new "+xr)
+    console.log("new xu" +xu)
+    console.log("new xl" +xl)
+    console.log("counter"+ iteration_counter)
     return xr;
-
   }
-
-
-
-
-
 }
+export default bisection

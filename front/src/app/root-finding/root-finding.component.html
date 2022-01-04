@@ -5,7 +5,7 @@
         <textarea  id = "textinput" [(ngModel)] = "funcInput" cols = "70" row = "10"  spellcheck = "false"  class = "box">
         </textarea>
         <label id ="labelsol">Enter the desired precision: </label>
-        <select id="significance">
+        <select [(ngModel)] = "significant_figure" id="significance">
           <option value="1" >1</option>
           <option value="2" >2</option>
           <option value="3" >3</option>
@@ -40,9 +40,9 @@
             </optgroup>
           </select>
       <label id ="labelsol" style="margin-top: 20px;">Enter the desired iterations: </label>
-      <input type="number" id="precision" placeholder="50" style="width: 50px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+      <input type="number" id="iterations"  placeholder="50" style="width: 50px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
       <label id ="labelsol"  style="margin-top: 20px; margin-left: 10px;">Enter desired tolerance: </label>
-      <input type="number" id="iterations" placeholder="0.00001" style="width: 70px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+      <input type="number" id="precision"  placeholder="0.00001" style="width: 70px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
       
        <div id="yes">
         <label id ="labelsol" style="margin-top: 20px;">Enter inital values: </label>
@@ -57,7 +57,7 @@
           <div id="0.5">
           </div>
       </div>
-      <button style="margin-left: 200px; margin-top: 40px;" id = "solve" (click)=" displaySolution() " (click)="verify()" (click)="read()">Solve</button>
+      <button style="margin-left: 200px; margin-top: 40px;" id = "solve"  (click)="read()" (click)=" displaySolution() " (click)="verify()">Solve</button>
       <div id="5000">
         <div id="soln">
         </div>

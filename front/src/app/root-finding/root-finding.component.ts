@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PlotterComponent } from '../plotter/plotter.component';
 import * as math from 'mathjs';
-import { derivative, number } from 'mathjs';
+import { and, derivative, im, number } from 'mathjs';
+import bisection from './bisection'
+import FalsePosition from './FalsePosition'
+import  FixedPoint  from './FixedPoint';
+import   NewtonRaphson from './NewtonRaphson'
+import  SecantMathod from './SecantMethod'
 export interface solverType2 {
   type : string;
   value : number;
@@ -19,13 +24,15 @@ export interface decompostion2 {
 })
 export class RootFindingComponent implements OnInit {
   runTime :number = 0;
-  funcInput:string;
+  funcInput:string="";
   deravtitve2:string
-  initalvalue1:string
-  initalvalue2:string
+  initalvalue1:string="0"
+  initalvalue2:string="0"
   precision:string="0.00001"
+  significant_figure:number = 1
   iterations:string="50"
-  solution:string="5"
+  solution:string;
+  
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
     {type : "False Position", value : 2},
@@ -202,6 +209,56 @@ export class RootFindingComponent implements OnInit {
   */
   displaySolution()
   {
+    if(this.currentSolType=="Bisection Method" )
+    {
+
+      console.log("inital value1"+this.initalvalue1)
+      console.log("inital value2"+this.initalvalue2)
+      var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+      var start = new Date().getTime()
+      this.solution=bisect.applyBisection().toString()
+      var end = new Date().getTime()
+      var delta = end-start
+      this.runTime=delta
+    }
+    else if(this.currentSolType=="False Position")
+    {
+      var falsePosition:any = new FalsePosition(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+      var start = new Date().getTime()
+      this.solution= falsePosition.applyFalsePosition().toString()
+      var end = new Date().getTime()
+      var delta = end-start
+      this.runTime=delta
+
+    }
+    else if(this.currentSolType=="Fixed Point")
+    {
+        var fixedpoint = new FixedPoint(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+        var start = new Date().getTime()
+        this.solution=fixedpoint.applyFixedPoint().toString()
+        var end = new Date().getTime()
+        var delta = end-start
+        this.runTime=delta
+    }
+    else if(this.currentSolType=="Newton Raphson Method")
+    {
+     
+       var newtonRaphson = new NewtonRaphson(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+       var start = new Date().getTime()
+       this.solution=newtonRaphson.applyNewtonRaphson().toString()
+       var end = new Date().getTime()
+       var delta = end-start
+       this.runTime=delta
+    }
+    else
+    {
+        var secant = new SecantMathod (Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+        var start = new Date().getTime()
+        this.solution= secant.applySecantMethod().toString()
+        var end = new Date().getTime()
+        var delta = end-start
+        this.runTime=delta
+    }
     var indiv=document.getElementById("5000")
     var del2 =document.getElementById("soln")
     del2?.parentNode?.removeChild(del2)
@@ -216,8 +273,6 @@ export class RootFindingComponent implements OnInit {
     p.style.marginTop="20px"
     div2.appendChild(p)
     document.getElementById("soln")?.appendChild(div2)
-    var arrofCoffsNums : number[][][]
-    var variableNames : string[]
     var div3=document.createElement("div")
     div3.style.marginTop="30px"
     div3.style.display="flex"
@@ -288,14 +343,18 @@ export class RootFindingComponent implements OnInit {
   }
     read()
     {
-      var exp
       var text=<HTMLInputElement>document.getElementById("intial1")
       this.initalvalue1=text.value
-      var exp2
       if(this.flag==1)
       {
         var text2=<HTMLInputElement>document.getElementById("intial2")
         this.initalvalue2=text2.value
+        if(this.initalvalue2<this.initalvalue1)
+        {
+          var temp = this.initalvalue1
+          this.initalvalue1=this.initalvalue2
+          this.initalvalue2=temp
+        }
       }
       var text3=<HTMLInputElement>document.getElementById("precision")
       if(text3.value!="")

@@ -1,6 +1,6 @@
 import * as math from "mathjs"
 
-export class FalsePosition{
+export class FixedPoint{
     private xi:number;
     private tolerance:number;
     private precision:number;
@@ -56,9 +56,8 @@ export class FalsePosition{
         return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
     }
     public precise(x:number) {
-        return parseInt(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
+      return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
     }
-    
     public applyFixedPoint():number{ 
         var iteration_counter = 0
         var xi = this.getXi()
@@ -77,3 +76,4 @@ export class FalsePosition{
     
       }
 }
+export default FixedPoint
