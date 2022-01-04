@@ -35,7 +35,6 @@ export class PlotterComponent implements OnInit {
       var substitution:string = this.expression2;
 
     }
-    console.log (math.simplify(math.parse(substitution).toString()).evaluate({x:x}));
 
     return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
   }

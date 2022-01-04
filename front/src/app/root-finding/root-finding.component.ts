@@ -23,7 +23,7 @@ export class RootFindingComponent implements OnInit {
   deravtitve2:string
   initalvalue1:string
   initalvalue2:string
-  presicion:string="0.00001"
+  precision:string="0.00001"
   iterations:string="50"
   solution:string="5"
   DirectSolTypes : solverType2[] = [
@@ -300,7 +300,7 @@ export class RootFindingComponent implements OnInit {
       var text3=<HTMLInputElement>document.getElementById("precision")
       if(text3.value!="")
       {
-        this.presicion=text3.value
+        this.precision=text3.value
       }
 
       var text4=<HTMLInputElement>document.getElementById("iterations")
@@ -310,7 +310,7 @@ export class RootFindingComponent implements OnInit {
       }
       console.log(this.initalvalue1)
       console.log(this.initalvalue2)
-      console.log(this.presicion)
+      console.log(this.precision)
       console.log(this.iterations)
     }
     flag:number=1
