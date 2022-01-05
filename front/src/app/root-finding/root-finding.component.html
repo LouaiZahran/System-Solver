@@ -2,10 +2,10 @@
 <div class="container" id = "main">
     <div style="display: flex;">
       <div class="dropdown" id = "main">
-        <textarea  id = "textinput"  cols = "70" row = "10" (input) = parseFunc()  spellcheck = "false"  class = "box">
+        <textarea  id = "textinput" [(ngModel)] = "funcInput" cols = "70" row = "10"  spellcheck = "false"  class = "box">
         </textarea>
         <label id ="labelsol">Enter the desired precision: </label>
-        <select id="significance">
+        <select [(ngModel)] = "significant_figure" id="significance">
           <option value="1" >1</option>
           <option value="2" >2</option>
           <option value="3" >3</option>
@@ -27,7 +27,7 @@
           <option value="19" >19</option>
           <option value="20" >20</option>
         </select>
-        <select  id = "selectSolver" >
+        <select   id = "selectSolver" [(ngModel)] = "currentSolType" (change)=solutionTypeList(currentSolType) (change)="change()" >
             <optgroup label="Bracketing Methods">
               <option   *ngFor = "let sol of DirectSolTypes">
                 {{sol.type}}
@@ -39,15 +39,25 @@
               </option>
             </optgroup>
           </select>
+      <label id ="labelsol" style="margin-top: 20px;">Enter the desired iterations: </label>
+      <input type="number" id="iterations"  placeholder="50" style="width: 50px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+      <label id ="labelsol"  style="margin-top: 20px; margin-left: 10px;">Enter desired tolerance: </label>
+      <input type="number" id="precision"  placeholder="0.00001" style="width: 70px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+      
+       <div id="yes">
+        <label id ="labelsol" style="margin-top: 20px;">Enter inital values: </label>
+        <input type="number" id="intial1" required style="width: 50px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+        <input type="number" id="intial2" required style="width: 50px; margin-top: 20px; border-radius: 10px;background-color: rgb(251, 197, 161);">
+       </div>
       </div>
     </div>
     <div id="0">
-        <div id=0.25>
+        <div id="0.25">
         </div>
           <div id="0.5">
           </div>
       </div>
-      <button style="margin-left: 200px; margin-top: 40px;" id = "solve" (click)=" displaySolution()">Solve</button>
+      <button style="margin-left: 200px; margin-top: 40px;" id = "solve"  (click)="read()" (click)=" displaySolution() " (click)="verify()">Solve</button>
       <div id="5000">
         <div id="soln">
         </div>

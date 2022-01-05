@@ -853,21 +853,11 @@ delete()
             this.runTime = new Date().getTime() - start;
             this.displaySolution()
             this.arrofInitList = [];
-
-
           }
         },(error:any)=>alert("Invalid Input"));
-
-
       }
-
     }else{
       alert("Invalid Input")
     }
     }
-
-
-
-
-
 }
