@@ -59,19 +59,18 @@ export class NewtonRaphson{
         var eps = this.getTolerance()
         var maxIterations = this.getMaxIterations()
         var xi1:number=0;
-        if((math.abs(xi -xi1) > eps))
-            xi1=500;
         var fxi:number;
         var dfxi:number;
         var derivativeNode:math.MathNode;
         derivativeNode=derivative(this.getExpression(),'x');
+        xi1=xi;
         while (iteration_counter==0 ||
-            ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
+          ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
             xi=xi1;
             fxi = this.substitute(xi);
             dfxi=derivativeNode.evaluate({x:xi}).toPrecision(this.getPrecision());
             xi1=this.precise(xi-this.precise(fxi/dfxi));
-          iteration_counter = iteration_counter + 1;
+            iteration_counter = iteration_counter + 1;
         }
     
         return xi1;

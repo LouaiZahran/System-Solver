@@ -72,8 +72,8 @@ export class SecantMathod{
         while ((math.abs(xCurr -xPrev) > eps) && (iteration_counter < maxIterations)){
             
             fprev = this.substitute(xPrev);
-          fcurr = this.substitute(xCurr);
-          xTemp = this.precise(xCurr-
+            fcurr = this.substitute(xCurr);
+           xTemp = this.precise(xCurr-
                     this.precise( fcurr* 
                         this.precise(    
                             (this.precise(xCurr-xPrev)

@@ -64,10 +64,11 @@ export class FixedPoint{
         var eps = this.getTolerance()
         var maxIterations = this.getMaxIterations()
         var xi1:number=0;
-        if((math.abs(xi -xi1) > eps))
-            xi1=500;
+        xi1=xi;
         while (iteration_counter==0 ||
             ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
+              console.log("xi "+xi);
+            console.log("eps"+eps);
                 xi=xi1;
                 xi1=this.substituteGX(xi);
                 iteration_counter = iteration_counter + 1;

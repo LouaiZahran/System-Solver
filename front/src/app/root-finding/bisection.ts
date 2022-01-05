@@ -68,9 +68,6 @@ export class bisection{
     var xr:number=0;
     var fr:number;
     var fl:number;
-    console.log("old "+xr)
-    console.log("old xu" +xu)
-    console.log("old xl" +xl)
     if(math.abs(xu -xl) < eps) 
       return xu;
     while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
@@ -85,10 +82,6 @@ export class bisection{
       }
       iteration_counter = iteration_counter + 1;
     }
-    console.log("new "+xr)
-    console.log("new xu" +xu)
-    console.log("new xl" +xl)
-    console.log("counter"+ iteration_counter)
     return xr;
   }
 }

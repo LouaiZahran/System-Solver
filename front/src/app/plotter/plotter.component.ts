@@ -46,7 +46,7 @@ export class PlotterComponent implements OnInit {
     var ctx=canvas.getContext("2d");
     axes.x0 = .5 + .5*canvas.width;  // x0 pixels from left to x=0
     axes.y0 = .5 + .5*canvas.height; // y0 pixels from top to y=0
-    if(PlotterComponent.method.toLowerCase()=="falseposition" || PlotterComponent.method.toLowerCase()=="bisection"){
+    if(PlotterComponent.method=="False Position" || PlotterComponent.method=="Bisection Method"){
       if((PlotterComponent.xmax - PlotterComponent.xmin)*this.scale >320){
         this.scale = canvas.width/(PlotterComponent.xmax - PlotterComponent.xmin)
       }
@@ -55,7 +55,7 @@ export class PlotterComponent implements OnInit {
     axes.doNegativeX = true;
     this.showAxes(ctx,axes);
     this.setGraph(ctx,axes,"rgb(255,0,0)",1,1);
-    if(PlotterComponent.method.toLowerCase()=="fixedpoint"){
+    if(PlotterComponent.method=="Fixed Point"){
       this.setFunction2("x");
       this.setGraph(ctx,axes,"rgb(0,0,255)",1,2);
     }
@@ -65,7 +65,7 @@ export class PlotterComponent implements OnInit {
     var xx, yy, x0=axes.x0, y0=axes.y0, scale=axes.scale;
     var iMax = Math.round((ctx.canvas.width-x0));
     var iMin = axes.doNegativeX ? Math.round(-x0) : 0;
-    if(PlotterComponent.method.toLowerCase()=="falseposition" || PlotterComponent.method.toLowerCase()=="bisection"){
+    if(PlotterComponent.method=="False Position" || PlotterComponent.method=="Bisection Method"){
       iMax =  PlotterComponent.xmax;
       iMin = PlotterComponent.xmin;
     }

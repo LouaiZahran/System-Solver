@@ -27,7 +27,7 @@ export class RootFindingComponent implements OnInit {
   funcInput:string="";
   deravtitve2:string
   initalvalue1:string="0"
-  initalvalue2:string="0"
+  initalvalue2:string="1"
   precision:string="0.00001"
   significant_figure:number = 1
   iterations:string="50"
@@ -180,8 +180,8 @@ export class RootFindingComponent implements OnInit {
       if(this.currentSolType=="Bisection Method" )
       {
   
-        console.log("inital value1"+this.initalvalue1)
-        console.log("inital value2"+this.initalvalue2)
+        console.log("inital value1 "+this.initalvalue1)
+        console.log("inital value2 "+this.initalvalue2)
         var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
         var start = new Date().getTime()
         this.solution=bisect.applyBisection().toString()
@@ -267,36 +267,32 @@ export class RootFindingComponent implements OnInit {
   
       var exp=""
       var fn=this.funcInput
-      var exp1=this.initalvalue1
-      var exp2=this.initalvalue2
+      var x1=this.initalvalue1
+      var x2=this.initalvalue2
       if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
       {
         exp=this.funcInput
       }
       else if(this.currentSolType=="Fixed Point")
       {
-        exp=this.funcInput+"+"+"x"
+        exp=this.funcInput+"+x";
         exp=math.simplify(exp).toString()
         console.log(exp)
       }
       else
       {
-        console.log("lol")
-        console.log(this.deravtitve2)
         exp=derivative(this.funcInput,"x").toString()
+        console.log(exp);
       }
       button.addEventListener("click",function():any{
-        router3.navigate(["/plotter"])
-        console.log(sol)
-        console.log(exp)
         PlotterComponent.expression1=exp
         PlotterComponent.method=sol
-        if(sol=="Bisection Method")
+        if(sol=="Bisection Method" || sol=="False Position")
         {
-          console.log("all")
-          PlotterComponent.xmax=Number(exp1)
-          PlotterComponent.xmin=Number(exp2)
+          PlotterComponent.xmax=Number(x1)
+          PlotterComponent.xmin=Number(x2)
         }
+        router3.navigate(["/plotter"])
       })
       button.style.marginLeft="400px"
       button.style.width="110px"
@@ -315,11 +311,13 @@ export class RootFindingComponent implements OnInit {
     {
       if(this.inputVerify){
         var text=<HTMLInputElement>document.getElementById("intial1")
-        this.initalvalue1=text.value
+        if(text.value!="")
+          this.initalvalue1=text.value
         if(this.flag==1)
         {
           var text2=<HTMLInputElement>document.getElementById("intial2")
-          this.initalvalue2=text2.value
+          if(text2.value!="")
+            this.initalvalue2=text2.value
           if(this.initalvalue2<this.initalvalue1)
           {
             var temp = this.initalvalue1
@@ -348,7 +346,6 @@ export class RootFindingComponent implements OnInit {
     flag:number=1
     change()
     {
-      console.log("a7a")
       if((this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" ||this.currentSolType=="Secant Method") &&this.flag==0 )
       {
           this.flag=1
