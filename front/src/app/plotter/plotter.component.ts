@@ -28,14 +28,14 @@ export class PlotterComponent implements OnInit {
   }
 
   substitute(x:number,noExp:number):number{
+    var substitution:string
     if(noExp == 1){
-      var substitution:string = PlotterComponent.expression1;
+      substitution = PlotterComponent.expression1;
 
     }else{
-      var substitution:string = this.expression2;
+      substitution = this.expression2;
 
     }
-
     return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
   }
 
@@ -46,7 +46,7 @@ export class PlotterComponent implements OnInit {
     var ctx=canvas.getContext("2d");
     axes.x0 = .5 + .5*canvas.width;  // x0 pixels from left to x=0
     axes.y0 = .5 + .5*canvas.height; // y0 pixels from top to y=0
-    if(PlotterComponent.method.toLowerCase()=="falseposition" || PlotterComponent.method.toLowerCase()=="bisection"){
+    if(PlotterComponent.method=="False Position" || PlotterComponent.method=="Bisection Method"){
       if((PlotterComponent.xmax - PlotterComponent.xmin)*this.scale >320){
         this.scale = canvas.width/(PlotterComponent.xmax - PlotterComponent.xmin)
       }
@@ -55,7 +55,9 @@ export class PlotterComponent implements OnInit {
     axes.doNegativeX = true;
     this.showAxes(ctx,axes);
     this.setGraph(ctx,axes,"rgb(255,0,0)",1,1);
-    if(PlotterComponent.method.toLowerCase()=="fixedpoint"){
+    console.log("hi")
+
+    if(PlotterComponent.method=="Fixed Point"){
       this.setFunction2("x");
       this.setGraph(ctx,axes,"rgb(0,0,255)",1,2);
     }
@@ -63,13 +65,12 @@ export class PlotterComponent implements OnInit {
 
   setGraph (ctx:CanvasRenderingContext2D ,axes:any,color:string,thick:number,noExp:number) {
     var xx, yy, x0=axes.x0, y0=axes.y0, scale=axes.scale;
-    var iMax = Math.round((ctx.canvas.width-x0));
-    var iMin = axes.doNegativeX ? Math.round(-x0) : 0;
-    if(PlotterComponent.method.toLowerCase()=="falseposition" || PlotterComponent.method.toLowerCase()=="bisection"){
+    var iMax = 15;
+    var iMin = -15;
+    if(PlotterComponent.method=="False Position" || PlotterComponent.method=="Bisection Method"){
       iMax =  PlotterComponent.xmax;
       iMin = PlotterComponent.xmin;
     }
-
     ctx.beginPath();
     ctx.lineWidth = thick;
     ctx.strokeStyle = color;

@@ -33,7 +33,7 @@ export class RootFindingComponent implements OnInit {
   iterations:string="50"
   solution:string;
   inputVerify : boolean = false;
-  
+
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
     {type : "False Position", value : 2},
@@ -106,38 +106,38 @@ export class RootFindingComponent implements OnInit {
     }
 
     tempStck = [];
-    
-    
-    this.funcInput= inputSplit.join("");
-    
-    var regexp = new RegExp('(?:[0-9-+*/^()x.]|e|a?(?:sin|cos|tan)h?)+')
-    var test1; 
-    test1 = this.funcInput.match(regexp);
-   
 
-  
+
+    this.funcInput= inputSplit.join("");
+
+    var regexp = new RegExp('(?:[0-9-+*/^()x.]|e|a?(?:sin|cos|tan)h?)+')
+    var test1;
+    test1 = this.funcInput.match(regexp);
+
+
+
     if(test1 != null){
       if((test1?.input != test1[0]) || test1 == null)
       {
         //alert("input error")
         console.log("INSIDE FALSE");
         this.inputVerify = false;
-  
+
       }
       else
       {
-  
+
         console.log("INSIDE TRUE");
         this.inputVerify = true;
-  
+
         console.log(this.funcInput)
       }
     }
     else{
-       //alert("input error")
-       console.log("INSIDE FALSE");
-       this.inputVerify = false;
-       
+        //alert("input error")
+        console.log("INSIDE FALSE");
+        this.inputVerify = false;
+
     }
 
     if(this.funcInput.indexOf("x") == -1){
@@ -153,7 +153,7 @@ export class RootFindingComponent implements OnInit {
     catch(e){
       this.inputVerify = false;
     }
-    
+
     for(let i = 0; i < this.funcInput.length; i++){
       if(this.funcInput.charAt(i) == "^" && this.funcInput.charAt(i - 1) == "x" && this.funcInput.charAt(i + 1) == "x"){
         this.inputVerify = false;
@@ -169,17 +169,17 @@ export class RootFindingComponent implements OnInit {
     }
     console.log(test1);
     console.log(math.derivative(this.funcInput, "x").toString());
-   
-    
-    
+
+
+
   }
- 
+
   displaySolution()
   {
     if(this.inputVerify){
       if(this.currentSolType=="Bisection Method" )
       {
-  
+
         console.log("inital value1"+this.initalvalue1)
         console.log("inital value2"+this.initalvalue2)
         var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
@@ -197,7 +197,7 @@ export class RootFindingComponent implements OnInit {
         var end = new Date().getTime()
         var delta = end-start
         this.runTime=delta
-  
+
       }
       else if(this.currentSolType=="Fixed Point")
       {
@@ -210,13 +210,13 @@ export class RootFindingComponent implements OnInit {
       }
       else if(this.currentSolType=="Newton Raphson Method")
       {
-       
-         var newtonRaphson = new NewtonRaphson(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
-         var start = new Date().getTime()
-         this.solution=newtonRaphson.applyNewtonRaphson().toString()
-         var end = new Date().getTime()
-         var delta = end-start
-         this.runTime=delta
+
+          var newtonRaphson = new NewtonRaphson(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+          var start = new Date().getTime()
+          this.solution=newtonRaphson.applyNewtonRaphson().toString()
+          var end = new Date().getTime()
+          var delta = end-start
+          this.runTime=delta
       }
       else
       {
@@ -264,7 +264,7 @@ export class RootFindingComponent implements OnInit {
       button.appendChild(text4)
       var router3=this.router
       var sol=this.currentSolType
-  
+
       var exp=""
       var fn=this.funcInput
       var exp1=this.initalvalue1
@@ -286,17 +286,18 @@ export class RootFindingComponent implements OnInit {
         exp=derivative(this.funcInput,"x").toString()
       }
       button.addEventListener("click",function():any{
+        PlotterComponent.expression1=exp
+        PlotterComponent.method=sol
+        if(sol=="Bisection Method" || sol=="False Position")
+        {
+          console.log("all")
+          PlotterComponent.xmax=Number(exp2)
+          PlotterComponent.xmin=Number(exp1)
+        }
         router3.navigate(["/plotter"])
         console.log(sol)
         console.log(exp)
-        PlotterComponent.expression1=exp
-        PlotterComponent.method=sol
-        if(sol=="Bisection Method")
-        {
-          console.log("all")
-          PlotterComponent.xmax=Number(exp1)
-          PlotterComponent.xmin=Number(exp2)
-        }
+
       })
       button.style.marginLeft="400px"
       button.style.width="110px"
@@ -309,7 +310,7 @@ export class RootFindingComponent implements OnInit {
       set2.appendChild(div2)
       indiv?.appendChild(set2)
     }
-    
+
   }
     read()
     {
@@ -332,7 +333,7 @@ export class RootFindingComponent implements OnInit {
         {
           this.precision=text3.value
         }
-  
+
         var text4=<HTMLInputElement>document.getElementById("iterations")
         if(text4.value!="")
         {
@@ -343,7 +344,7 @@ export class RootFindingComponent implements OnInit {
         console.log(this.precision)
         console.log(this.iterations)
       }
-      
+
     }
     flag:number=1
     change()
