@@ -32,6 +32,7 @@ export class RootFindingComponent implements OnInit {
   significant_figure:number = 1
   iterations:string="50"
   solution:string;
+  inputVerify : boolean = false;
   
   DirectSolTypes : solverType2[] = [
     {type : "Bisection Method", value : 1},
@@ -54,34 +55,31 @@ export class RootFindingComponent implements OnInit {
   }
   verify()
   {
-    var regexp = new RegExp('(?:[0-9-+*/^()x]|abs|e^x|ln|log|a?(?:sin|cos|tan)h?)+')
-    var test1= regexp.test( this.funcInput)
-    if(test1==false)
-    {
-      alert("input error")
-    }
-    else
-    {
-      this.deravtitve2= derivative(this.funcInput,'x').toString()
-      console.log(this.deravtitve2)
-      console.log(this.funcInput)
-    }
-  }
-  /*
-  parseFunc(){
-    var input  = this.funcInput
-    input.replace(/ /g, "");
-    input = input.toLowerCase();
-    var inputSplit = input.split("");
-    var checkletter : boolean = false;
-    var checkNumber : boolean = false;
-    var tempNum : string = "";
+    this.funcInput = this.funcInput.replace(/ /g, "");
     var tempStck : string[] = [];
+
+    var inputSplit = this.funcInput.split("");
+
     var foundSign : boolean = false;
     var signPos : number = 0;
     for(let i = 0; i < inputSplit.length; i++){
-      if(input.charAt(i) == "+" || input.charAt(i) == "-"){
-        tempStck.push(input.charAt(i));
+      if(inputSplit[i] == "."){
+        console.log("INSIDE IF");
+        tempStck.push(inputSplit[i]);
+        if(tempStck.length > 1){
+          inputSplit[i] = "";
+        }
+      }
+      else{
+        tempStck = [];
+      }
+    }
+    tempStck = [];
+
+    for(let i = 0; i < inputSplit.length; i++){
+
+      if(this.funcInput.charAt(i) == "+" || this.funcInput.charAt(i) == "-"){
+        tempStck.push(this.funcInput.charAt(i));
         if(!foundSign){
           signPos = i;
         }
@@ -89,6 +87,7 @@ export class RootFindingComponent implements OnInit {
           inputSplit[i] = "";
         }
         foundSign = true;
+
       }
       else{
         if(foundSign){
@@ -105,272 +104,246 @@ export class RootFindingComponent implements OnInit {
         foundSign = false;
       }
     }
-    tempStck = [];
-    for(let i = 0; i < inputSplit.length; i++){
-      if(inputSplit[i] == "."){
-        console.log("INSIDE IF");
-        tempStck.push(inputSplit[i]);
-        if(tempStck.length > 1){
-          inputSplit[i] = "";
-        }
-      }
-      else{
-        tempStck = [];
-      }
-    }
-    tempStck = [];
-    for(let i = 0; i < inputSplit.length; i++){
-      if(inputSplit[i] == "^"){
-        console.log("INSIDE IF");
-        tempStck.push(inputSplit[i]);
-        if(tempStck.length > 1){
-          inputSplit[i] = "";
-        }
-      }
-      else{
-        tempStck = [];
-      }
-    }
-    input = inputSplit.join("");
-    if(input.charAt(0) != "-" && input.charAt(0) != "+"){
-      input = "+".concat(input);
-    }
-    console.log(inputSplit.join(""));
-    var arrofSigns : number[] = [];
-    for(let i = 0; i < input.length; i++){
-      if(((input.charAt(i) == "+" || input.charAt(i) == "-") && input.charAt(i - 1) != "^" && input.charAt(i - 1) != "(") || i == input.length - 1){
-        arrofSigns.push(i);
-      }
-    }
-    var funcMap = new Map<number, number>();
-    for(let i = 0; i < arrofSigns.length - 1; i++){
-      var firstIndex : number = arrofSigns[i];
-      var lastIndex : number = arrofSigns[i + 1];
-      var strPiece : string;
-      if(i == arrofSigns.length - 2){
-        strPiece = input.substring(firstIndex, lastIndex + 1);
-      }
-      else{
-        strPiece = input.substring(firstIndex, lastIndex);
-      }
-      console.log(strPiece);
-      var powerIndex : number;
-      if(strPiece.indexOf("^") > -1){
-        powerIndex = strPiece.indexOf("^");
-        var coffNumStr : string = strPiece.substring(0, powerIndex - 1);
-        var powerNumStr : string = strPiece.substring(powerIndex + 1);
-        var coffNum = Number(coffNumStr);
-        console.log(coffNumStr)
-        if(coffNumStr == "" || coffNumStr == "+"){
-          coffNum = 1;
-        }
-        if(coffNumStr == "-"){
-          coffNum = -1;
-        }
-        var powerNum = Number(powerNumStr);
 
-        if(!funcMap.get(powerNum)){
-          funcMap.set(powerNum, 0);
-        }
-        funcMap.set(powerNum, funcMap.get(powerNum)  + coffNum)
+    tempStck = [];
+    
+    
+    this.funcInput= inputSplit.join("");
+    
+    var regexp = new RegExp('(?:[0-9-+*/^()x.]|e|a?(?:sin|cos|tan)h?)+')
+    var test1; 
+    test1 = this.funcInput.match(regexp);
+   
+
+  
+    if(test1 != null){
+      if((test1?.input != test1[0]) || test1 == null)
+      {
+        //alert("input error")
+        console.log("INSIDE FALSE");
+        this.inputVerify = false;
+  
       }
-      else{
-        if(strPiece.indexOf("x") == -1){
-          var constNumStr : string = strPiece;
-          var constNum : number = Number(strPiece);
-          if(!funcMap.get(0)){
-            funcMap.set(0, 0);
-          }
-          funcMap.set(0, funcMap.get(0) + constNum)
-        }
-        else if(strPiece.indexOf("x") > -1 && strPiece.indexOf("e") == -1){
-          var xIndex : number = strPiece.indexOf("x");
-          var coffNumStr : string = strPiece.substring(0, xIndex);
-          var coffNumX : number = Number(coffNumStr);
-          if(coffNumStr == "" || coffNumStr == "+"){
-            coffNumX = 1;
-          }
-          if(coffNumStr == "-"){
-            coffNumX = -1;
-          }
-          if(!funcMap.get(1)){
-            funcMap.set(1, 0);
-          }
-          funcMap.set(1, funcMap.get(1) + coffNumX)
-        }
-        else if(strPiece.indexOf("sin") > -1 || strPiece.indexOf("cos") > -1){
-          var sinIndex = strPiece.indexOf("sin")
-        }
+      else
+      {
+  
+        console.log("INSIDE TRUE");
+        this.inputVerify = true;
+  
+        console.log(this.funcInput)
       }
     }
-    console.log(arrofSigns);
-    console.log(funcMap);
+    else{
+       //alert("input error")
+       console.log("INSIDE FALSE");
+       this.inputVerify = false;
+       
+    }
+
+    if(this.funcInput.indexOf("x") == -1){
+      this.inputVerify = false;
+    }
+
+    try{
+      console.log(math.parse(this.funcInput).toString());
+      console.log(math.simplify(this.funcInput).toString());
+      console.log(math.parse(this.funcInput).evaluate({x:1}));
+
+    }
+    catch(e){
+      this.inputVerify = false;
+    }
+    
+    for(let i = 0; i < this.funcInput.length; i++){
+      if(this.funcInput.charAt(i) == "^" && this.funcInput.charAt(i - 1) == "x" && this.funcInput.charAt(i + 1) == "x"){
+        this.inputVerify = false;
+      }
+    }
+    if(this.inputVerify){
+      document!.getElementById("textinput").style.borderWidth = "0px"
+    }
+    else{
+      document!.getElementById("textinput").style.borderRadius = "15px";
+      document!.getElementById("textinput").style.borderColor = "red";
+      document!.getElementById("textinput").style.borderWidth = "6px";
+    }
+    console.log(test1);
+    console.log(math.derivative(this.funcInput, "x").toString());
+   
+    
+    
   }
-  */
+ 
   displaySolution()
   {
-    if(this.currentSolType=="Bisection Method" )
-    {
-
-      console.log("inital value1"+this.initalvalue1)
-      console.log("inital value2"+this.initalvalue2)
-      var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
-      var start = new Date().getTime()
-      this.solution=bisect.applyBisection().toString()
-      var end = new Date().getTime()
-      var delta = end-start
-      this.runTime=delta
-    }
-    else if(this.currentSolType=="False Position")
-    {
-      var falsePosition:any = new FalsePosition(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
-      var start = new Date().getTime()
-      this.solution= falsePosition.applyFalsePosition().toString()
-      var end = new Date().getTime()
-      var delta = end-start
-      this.runTime=delta
-
-    }
-    else if(this.currentSolType=="Fixed Point")
-    {
-        var fixedpoint = new FixedPoint(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+    if(this.inputVerify){
+      if(this.currentSolType=="Bisection Method" )
+      {
+  
+        console.log("inital value1"+this.initalvalue1)
+        console.log("inital value2"+this.initalvalue2)
+        var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
         var start = new Date().getTime()
-        this.solution=fixedpoint.applyFixedPoint().toString()
+        this.solution=bisect.applyBisection().toString()
         var end = new Date().getTime()
         var delta = end-start
         this.runTime=delta
-    }
-    else if(this.currentSolType=="Newton Raphson Method")
-    {
-     
-       var newtonRaphson = new NewtonRaphson(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
-       var start = new Date().getTime()
-       this.solution=newtonRaphson.applyNewtonRaphson().toString()
-       var end = new Date().getTime()
-       var delta = end-start
-       this.runTime=delta
-    }
-    else
-    {
-        var secant = new SecantMathod (Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+      }
+      else if(this.currentSolType=="False Position")
+      {
+        var falsePosition:any = new FalsePosition(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
         var start = new Date().getTime()
-        this.solution= secant.applySecantMethod().toString()
+        this.solution= falsePosition.applyFalsePosition().toString()
         var end = new Date().getTime()
         var delta = end-start
         this.runTime=delta
-    }
-    var indiv=document.getElementById("5000")
-    var del2 =document.getElementById("soln")
-    del2?.parentNode?.removeChild(del2)
-    var set2 = document.createElement("div")
-    set2.id = "soln"
-    var div2=document.createElement("div")
-    var p =document.createElement("h1")
-    var text =document.createTextNode("Solution")
-    indiv?.appendChild(set2)
-    p.appendChild(text)
-    p.style.marginLeft="280px"
-    p.style.marginTop="20px"
-    div2.appendChild(p)
-    document.getElementById("soln")?.appendChild(div2)
-    var div3=document.createElement("div")
-    div3.style.marginTop="30px"
-    div3.style.display="flex"
-    for(let j=0;j<1;j++)
-    {
-      for(let k=0;k<1;k++)
-      {
-        var p =document.createElement("h3")
-        var text =document.createTextNode("x" + "=" + this.solution)
-        p.appendChild(text)
-        p.style.marginLeft="100px"
-        p.style.marginTop="20px"
-        div3.appendChild(p)
-        div2.appendChild(div3)
-        set2?.appendChild(div2)
-        indiv?.appendChild(set2)
+  
       }
-    }
-    var button=document.createElement("button")
-    var text4=document.createTextNode("plot graphically")
-    button.appendChild(text4)
-    var router3=this.router
-    var sol=this.currentSolType
-
-    var exp=""
-    var fn=this.funcInput
-    var exp1=this.initalvalue1
-    var exp2=this.initalvalue2
-    if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
-    {
-      exp=this.funcInput
-    }
-    else if(this.currentSolType=="Fixed Point")
-    {
-      exp=this.funcInput+"+"+"x"
-      exp=math.simplify(exp).toString()
-      console.log(exp)
-    }
-    else
-    {
-      console.log("lol")
-      console.log(this.deravtitve2)
-      exp=derivative(this.funcInput,"x").toString()
-    }
-    button.addEventListener("click",function():any{
-      router3.navigate(["/plotter"])
-      console.log(sol)
-      console.log(exp)
-      PlotterComponent.expression1=exp
-      PlotterComponent.method=sol
-      if(sol=="Bisection Method")
+      else if(this.currentSolType=="Fixed Point")
       {
-        console.log("all")
-        PlotterComponent.xmax=Number(exp1)
-        PlotterComponent.xmin=Number(exp2)
+          var fixedpoint = new FixedPoint(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+          var start = new Date().getTime()
+          this.solution=fixedpoint.applyFixedPoint().toString()
+          var end = new Date().getTime()
+          var delta = end-start
+          this.runTime=delta
       }
-    })
-    button.style.marginLeft="400px"
-    button.style.width="110px"
-    button.style.height="70px"
-    button.style.backgroundColor="black"
-    button.style.color="white"
-    button.style.borderRadius="15px"
-    div3.appendChild(button)
-    div2.appendChild(div3)
-    set2.appendChild(div2)
-    indiv?.appendChild(set2)
+      else if(this.currentSolType=="Newton Raphson Method")
+      {
+       
+         var newtonRaphson = new NewtonRaphson(Number(this.initalvalue1),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+         var start = new Date().getTime()
+         this.solution=newtonRaphson.applyNewtonRaphson().toString()
+         var end = new Date().getTime()
+         var delta = end-start
+         this.runTime=delta
+      }
+      else
+      {
+          var secant = new SecantMathod (Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+          var start = new Date().getTime()
+          this.solution= secant.applySecantMethod().toString()
+          var end = new Date().getTime()
+          var delta = end-start
+          this.runTime=delta
+      }
+      var indiv=document.getElementById("5000")
+      var del2 =document.getElementById("soln")
+      del2?.parentNode?.removeChild(del2)
+      var set2 = document.createElement("div")
+      set2.id = "soln"
+      var div2=document.createElement("div")
+      var p =document.createElement("h1")
+      var text =document.createTextNode("Solution")
+      indiv?.appendChild(set2)
+      p.appendChild(text)
+      p.style.marginLeft="280px"
+      p.style.marginTop="20px"
+      div2.appendChild(p)
+      document.getElementById("soln")?.appendChild(div2)
+      var div3=document.createElement("div")
+      div3.style.marginTop="30px"
+      div3.style.display="flex"
+      for(let j=0;j<1;j++)
+      {
+        for(let k=0;k<1;k++)
+        {
+          var p =document.createElement("h3")
+          var text =document.createTextNode("x" + "=" + this.solution)
+          p.appendChild(text)
+          p.style.marginLeft="100px"
+          p.style.marginTop="20px"
+          div3.appendChild(p)
+          div2.appendChild(div3)
+          set2?.appendChild(div2)
+          indiv?.appendChild(set2)
+        }
+      }
+      var button=document.createElement("button")
+      var text4=document.createTextNode("plot graphically")
+      button.appendChild(text4)
+      var router3=this.router
+      var sol=this.currentSolType
+  
+      var exp=""
+      var fn=this.funcInput
+      var exp1=this.initalvalue1
+      var exp2=this.initalvalue2
+      if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method" )
+      {
+        exp=this.funcInput
+      }
+      else if(this.currentSolType=="Fixed Point")
+      {
+        exp=this.funcInput+"+"+"x"
+        exp=math.simplify(exp).toString()
+        console.log(exp)
+      }
+      else
+      {
+        console.log("lol")
+        console.log(this.deravtitve2)
+        exp=derivative(this.funcInput,"x").toString()
+      }
+      button.addEventListener("click",function():any{
+        router3.navigate(["/plotter"])
+        console.log(sol)
+        console.log(exp)
+        PlotterComponent.expression1=exp
+        PlotterComponent.method=sol
+        if(sol=="Bisection Method")
+        {
+          console.log("all")
+          PlotterComponent.xmax=Number(exp1)
+          PlotterComponent.xmin=Number(exp2)
+        }
+      })
+      button.style.marginLeft="400px"
+      button.style.width="110px"
+      button.style.height="70px"
+      button.style.backgroundColor="black"
+      button.style.color="white"
+      button.style.borderRadius="15px"
+      div3.appendChild(button)
+      div2.appendChild(div3)
+      set2.appendChild(div2)
+      indiv?.appendChild(set2)
+    }
+    
   }
     read()
     {
-      var text=<HTMLInputElement>document.getElementById("intial1")
-      this.initalvalue1=text.value
-      if(this.flag==1)
-      {
-        var text2=<HTMLInputElement>document.getElementById("intial2")
-        this.initalvalue2=text2.value
-        if(this.initalvalue2<this.initalvalue1)
+      if(this.inputVerify){
+        var text=<HTMLInputElement>document.getElementById("intial1")
+        this.initalvalue1=text.value
+        if(this.flag==1)
         {
-          var temp = this.initalvalue1
-          this.initalvalue1=this.initalvalue2
-          this.initalvalue2=temp
+          var text2=<HTMLInputElement>document.getElementById("intial2")
+          this.initalvalue2=text2.value
+          if(this.initalvalue2<this.initalvalue1)
+          {
+            var temp = this.initalvalue1
+            this.initalvalue1=this.initalvalue2
+            this.initalvalue2=temp
+          }
         }
+        var text3=<HTMLInputElement>document.getElementById("precision")
+        if(text3.value!="")
+        {
+          this.precision=text3.value
+        }
+  
+        var text4=<HTMLInputElement>document.getElementById("iterations")
+        if(text4.value!="")
+        {
+          this.iterations=text4.value
+        }
+        console.log(this.initalvalue1)
+        console.log(this.initalvalue2)
+        console.log(this.precision)
+        console.log(this.iterations)
       }
-      var text3=<HTMLInputElement>document.getElementById("precision")
-      if(text3.value!="")
-      {
-        this.precision=text3.value
-      }
-
-      var text4=<HTMLInputElement>document.getElementById("iterations")
-      if(text4.value!="")
-      {
-        this.iterations=text4.value
-      }
-      console.log(this.initalvalue1)
-      console.log(this.initalvalue2)
-      console.log(this.precision)
-      console.log(this.iterations)
+      
     }
     flag:number=1
     change()
