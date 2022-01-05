@@ -1,18 +1,21 @@
 import * as math from "mathjs"
-
+import { derivative } from "mathjs";
 export class FixedPoint{
     private xi:number;
     private tolerance:number;
     private precision:number;
     private expression:string;
     private maxIterations:number;
-  
+    private GX:string;
+    private a:number;
     constructor(xi:number,tolerance:number,precision:number,expression:string,maxIterations:number){
       this.xi = xi
       this.tolerance = tolerance
       this.precision = precision
       this.expression = expression
       this.maxIterations = maxIterations
+      this.a=1;
+      this.GX="";
     }
     public getXi():number{
       return this.xi
@@ -27,10 +30,20 @@ export class FixedPoint{
       return this.expression
     }
     public getGX():string{
-        return this.getExpression()+"+x";
+        return this.GX;
     }
     public getMaxIterations():number{
       return this.maxIterations
+    }
+    public getA():number{
+      return this.a;
+    }
+    public setA(x:number):void{
+      this.a=x;
+    }
+    
+    private setGX():void {
+      this.GX=this.getMultiplierForFx() +"*("+this.getExpression()+")+x";
     }
     public setXi(x:number):void{
       this.xi = x
@@ -46,6 +59,25 @@ export class FixedPoint{
     }
     public setMaxIterations(maxIterations:number):void{
       this.maxIterations = maxIterations
+    }
+    /*
+    idea:
+    af(x)+x=g(x)  sufficient condition g`(x)<=abs(1)
+    goal to make "a" choosen to make convergence as fast as possible
+    so g`(x)=0
+    g`(x)=af`(x)+1  ---> af`(x)=-1
+    logic: get f`x then look for a which satisify equation
+    */
+    public getMultiplierForFx():number{
+      var derivativeNode:math.MathNode;
+      derivativeNode=derivative(this.getExpression(),'x'); //f`
+      var dfx=derivativeNode.evaluate({x:this.xi}).toPrecision(this.getPrecision());
+      if(math.abs(dfx-1)< 0)
+        this.a=1;
+      else
+        this.a=this.precise(-1/dfx);
+      console.log("a= "+this.a);
+      return this.a;
     }
     public substitute(x:number):number{
         var substitution = this.getExpression()
@@ -65,6 +97,7 @@ export class FixedPoint{
         var maxIterations = this.getMaxIterations()
         var xi1:number=0;
         xi1=xi;
+        this.setGX();
         while (iteration_counter==0 ||
             ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
               console.log("xi "+xi);
