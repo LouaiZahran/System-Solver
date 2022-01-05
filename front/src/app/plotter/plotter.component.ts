@@ -55,8 +55,6 @@ export class PlotterComponent implements OnInit {
     axes.doNegativeX = true;
     this.showAxes(ctx,axes);
     this.setGraph(ctx,axes,"rgb(255,0,0)",1,1);
-    console.log("hi")
-
     if(PlotterComponent.method=="Fixed Point"){
       this.setFunction2("x");
       this.setGraph(ctx,axes,"rgb(0,0,255)",1,2);
