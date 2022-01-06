@@ -102,6 +102,8 @@ export class bisection{
       this.steps.push(xu);
       this.steps.push(fr);
       this.steps.push(math.abs(xu -xl));
+      if(fr==0)
+        break;
       iteration_counter = iteration_counter + 1;
     }
     return xr;
