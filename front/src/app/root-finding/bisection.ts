@@ -1,7 +1,8 @@
 import * as math from "mathjs"
 import {
   create,
-  all
+  all,
+  bignumber
 } from 'mathjs';
 
 export class bisection{
@@ -61,6 +62,29 @@ export class bisection{
   public setMaxIterations(maxIterations:number):void{
     this.maxIterations = maxIterations
   }
+  generateRandomIntegerInRange(min:number, max:number):number {
+    return Number((Math.random() * (max - min + 1) + min).toPrecision(this.getPrecision()));
+  }
+    public generateBrackets(positiveFound:boolean)
+    {
+      var counter=0;
+      var maxCounter=100;
+      var x1=this.generateRandomIntegerInRange(-100,100);
+      if(positiveFound){
+        while(this.substitute(x1)>0 && counter<maxCounter){
+          x1=this.generateRandomIntegerInRange(-100,100);
+          counter++;
+        }
+      }
+      else{
+        while(this.substitute(x1)<0 && counter<maxCounter){
+          x1=this.generateRandomIntegerInRange(-100,100);
+          counter++;
+        }
+      }
+      return x1
+    }
+    
   public substitute(x:number):number{
     var substitution = this.getExpression()
     const config = {
@@ -69,7 +93,7 @@ export class bisection{
    }
    const math = create(all, config)
 
-    return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
+    return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
   }
   public precise(x:number) {
     return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));

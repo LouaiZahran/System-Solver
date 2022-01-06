@@ -1,7 +1,8 @@
 import * as math from "mathjs"
 import {
   create,
-  all
+  all,
+  bignumber
 } from 'mathjs';
 import { derivative } from "mathjs";
 
@@ -61,7 +62,7 @@ export class NewtonRaphson{
           precision: this.getPrecision()
        }
        const math = create(all, config)
-        return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
+        return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
     }
     public precise(x:number) {
       return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));

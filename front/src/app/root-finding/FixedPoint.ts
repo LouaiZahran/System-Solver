@@ -1,7 +1,8 @@
 import * as math from "mathjs"
 import {
   create,
-  all
+  all,
+  bignumber
 } from 'mathjs';
 import { derivative } from "mathjs";
 export class FixedPoint{
@@ -89,13 +90,14 @@ export class FixedPoint{
       return this.a;
     }
     public substitute(x:number):number{
-        var substitution = this.getExpression()
-        const config = {
-          number: 'BigNumber',
-          precision: this.getPrecision()
-       }
-       const math = create(all, config)
-        return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
+      var substitution = this.getExpression()
+      const config = {
+        number: 'BigNumber',
+        precision: this.getPrecision()
+     }
+     const math = create(all, config)
+  
+      return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
     }
     public substituteGX(x:number):number{
         var substitution = this.getGX();
@@ -104,7 +106,7 @@ export class FixedPoint{
           precision: this.getPrecision()
        }
        const math = create(all, config)
-        return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
+        return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
     }
     public precise(x:number) {
       return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));

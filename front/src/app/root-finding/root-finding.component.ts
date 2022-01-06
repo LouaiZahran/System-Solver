@@ -399,9 +399,26 @@ export class RootFindingComponent implements OnInit {
   read()
   {
     if(this.inputVerify){
+      var text3=<HTMLInputElement>document.getElementById("precision")
+      if(text3.value!="")
+      {
+        this.precision=text3.value
+      }
+      var text4=<HTMLInputElement>document.getElementById("iterations")
+      if(text4.value!="")
+      {
+        this.iterations=text4.value
+      }
       var text=<HTMLInputElement>document.getElementById("intial1")
       if(text.value!="")
         this.initalvalue1=text.value
+      else{
+        if(this.currentSolType=="False Position" || this.currentSolType=="Bisection Method"){
+          this.initalvalue1="0";
+          var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+          this.initalvalue2=bisect.generateBrackets(bisect.substitute(Number(this.initalvalue1))>0);
+        }
+      }
       if(this.flag==1)
       {
         var text2=<HTMLInputElement>document.getElementById("intial2")
@@ -414,17 +431,7 @@ export class RootFindingComponent implements OnInit {
           this.initalvalue2=temp
         }
       }
-      var text3=<HTMLInputElement>document.getElementById("precision")
-      if(text3.value!="")
-      {
-        this.precision=text3.value
-      }
-
-      var text4=<HTMLInputElement>document.getElementById("iterations")
-      if(text4.value!="")
-      {
-        this.iterations=text4.value
-      }
+      
       console.log(this.initalvalue1)
       console.log(this.initalvalue2)
       console.log(this.precision)
