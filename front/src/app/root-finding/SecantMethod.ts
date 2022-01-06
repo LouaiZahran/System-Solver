@@ -1,4 +1,8 @@
 import * as math from "mathjs"
+import {
+  create,
+  all
+} from 'mathjs';
 
 export class SecantMathod{
   private xCurr:number;
@@ -58,7 +62,12 @@ export class SecantMathod{
   }
   public substitute(x:number):number{
     var substitution = this.getExpression()
-    return math.simplify(math.parse(substitution).toString()).evaluate({x:x}).toPrecision(this.getPrecision())
+    const config = {
+      number: 'BigNumber',
+      precision: this.getPrecision()
+   }
+   const math = create(all, config)
+    return math.simplify(math.parse(substitution).toString()).evaluate({x:x});
   }
   public precise(x:number) {
     return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
