@@ -1,4 +1,5 @@
 import * as math from "mathjs"
+import { re } from "mathjs";
 
 export class bisection{
   private xLower:number;
@@ -7,6 +8,7 @@ export class bisection{
   private precision:number;
   private expression:string;
   private maxIterations:number;
+  private steps:Array<number>;
                                                                                         
   constructor(xLower:number,xUpper:number,tolerance:number,precision:number,expression:string,maxIterations:number){
     this.xLower = xLower
@@ -15,6 +17,10 @@ export class bisection{
     this.precision = precision
     this.expression = expression
     this.maxIterations = maxIterations
+    this.steps=new Array<number>();
+  }
+  public getSteps():Array<number>{
+    return this.steps;
   }
   public getXLower():number{
     return this.xLower
@@ -68,8 +74,10 @@ export class bisection{
     var xr:number=0;
     var fr:number;
     var fl:number;
+    
     if(math.abs(xu -xl) < eps) 
       return xu;
+    
     while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
       xr = this.precise(this.precise(xl + xu)/2);
       fr = this.substitute(xr);
@@ -80,6 +88,11 @@ export class bisection{
       else{
         xu = xr;
       }
+      this.steps.push(iteration_counter+1);
+      this.steps.push(xl);
+      this.steps.push(xu);
+      this.steps.push(fr);
+      this.steps.push(math.abs(xu -xl));
       iteration_counter = iteration_counter + 1;
     }
     return xr;

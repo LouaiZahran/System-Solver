@@ -8,6 +8,7 @@ export class FixedPoint{
     private maxIterations:number;
     private GX:string;
     private a:number;
+    private steps:Array<number>;
     constructor(xi:number,tolerance:number,precision:number,expression:string,maxIterations:number){
       this.xi = xi
       this.tolerance = tolerance
@@ -16,6 +17,10 @@ export class FixedPoint{
       this.maxIterations = maxIterations
       this.a=1;
       this.GX="";
+      this.steps=new Array<number>();
+    }
+    public getSteps():Array<number>{
+      return this.steps;
     }
     public getXi():number{
       return this.xi
@@ -98,12 +103,16 @@ export class FixedPoint{
         var xi1:number=0;
         xi1=xi;
         this.setGX();
+        
         while (iteration_counter==0 ||
             ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
-              console.log("xi "+xi);
-            console.log("eps"+eps);
                 xi=xi1;
                 xi1=this.substituteGX(xi);
+                
+                this.steps.push(iteration_counter+1);
+                this.steps.push(xi);
+                this.steps.push(this.substitute(xi));
+                this.steps.push(math.abs(xi -xi1));
                 iteration_counter = iteration_counter + 1;
         }
         return xi1;

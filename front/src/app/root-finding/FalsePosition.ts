@@ -7,7 +7,7 @@ export class FalsePosition{
     private precision:number;
     private expression:string;
     private maxIterations:number;
-  
+    private steps:Array<number>;
     constructor(xLower:number,xUpper:number,tolerance:number,precision:number,expression:string,maxIterations:number){
       this.xLower = xLower
       this.xUpper = xUpper
@@ -15,6 +15,10 @@ export class FalsePosition{
       this.precision = precision
       this.expression = expression
       this.maxIterations = maxIterations
+      this.steps=new Array<number>();
+    }
+    public getSteps():Array<number>{
+      return this.steps;
     }
     public getXLower():number{
       return this.xLower
@@ -69,6 +73,7 @@ export class FalsePosition{
         var fr:number;
         var fl:number;
         var fu:number;
+        
         if(math.abs(xu -xl) < eps) 
           return xu;
         while ((math.abs(xu -xl) > eps) && (iteration_counter < maxIterations)){
@@ -91,6 +96,14 @@ export class FalsePosition{
           else{
             xu = xr;
           }
+          
+          this.steps.push(iteration_counter+1);
+          this.steps.push(xl);
+          this.steps.push(xu);
+          this.steps.push(fr);
+          this.steps.push(math.abs(xu -xl));
+          if(fr==0)
+            break;
           iteration_counter = iteration_counter + 1;
         }
     

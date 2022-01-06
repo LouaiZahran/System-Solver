@@ -7,13 +7,18 @@ export class NewtonRaphson{
     private precision:number;
     private expression:string;
     private maxIterations:number;
-  
+    private steps:Array<number>;
+
     constructor(xi:number,tolerance:number,precision:number,expression:string,maxIterations:number){
       this.xi = xi
       this.tolerance = tolerance
       this.precision = precision
       this.expression = expression
       this.maxIterations = maxIterations
+      this.steps=new Array<number>();
+    }
+    public getSteps():Array<number>{
+      return this.steps;
     }
     public getXi():number{
       return this.xi
@@ -64,12 +69,18 @@ export class NewtonRaphson{
         var derivativeNode:math.MathNode;
         derivativeNode=derivative(this.getExpression(),'x');
         xi1=xi;
+        
         while (iteration_counter==0 ||
           ((math.abs(xi -xi1) > eps) && (iteration_counter < maxIterations))){
             xi=xi1;
             fxi = this.substitute(xi);
             dfxi=derivativeNode.evaluate({x:xi}).toPrecision(this.getPrecision());
             xi1=this.precise(xi-this.precise(fxi/dfxi));
+            
+            this.steps.push(iteration_counter+1);
+            this.steps.push(xi);
+            this.steps.push(fxi);
+            this.steps.push(math.abs(xi -xi1));
             iteration_counter = iteration_counter + 1;
         }
     

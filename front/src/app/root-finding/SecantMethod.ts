@@ -1,20 +1,24 @@
 import * as math from "mathjs"
 
 export class SecantMathod{
-    private xCurr:number;
+  private xCurr:number;
   private xPrev:number;
   private tolerance:number;
   private precision:number;
   private expression:string;
   private maxIterations:number;
-
-  constructor(xCurr:number,xPrev:number,tolerance:number,precision:number,expression:string,maxIterations:number){
+  private steps:Array<number>;
+  constructor(xPrev:number,xCurr:number,tolerance:number,precision:number,expression:string,maxIterations:number){
     this.xCurr = xCurr
     this.xPrev = xPrev
     this.tolerance = tolerance
     this.precision = precision
     this.expression = expression
     this.maxIterations = maxIterations
+    this.steps=new Array<number>();
+  }
+  public getSteps():Array<number>{
+    return this.steps;
   }
   public getXCurr():number{
     return this.xCurr
@@ -69,6 +73,7 @@ export class SecantMathod{
         var fcurr:number;
         var fprev:number;
         
+        
         while ((math.abs(xCurr -xPrev) > eps) && (iteration_counter < maxIterations)){
             
             fprev = this.substitute(xPrev);
@@ -82,8 +87,15 @@ export class SecantMathod{
                         )
                     )
                 );
+        
+            this.steps.push(iteration_counter+1);
+            this.steps.push(xTemp);
+            this.steps.push(xPrev);
+            this.steps.push(xCurr);
+            this.steps.push(this.substitute(xTemp));
             xPrev=xCurr;
             xCurr=xTemp;
+            this.steps.push(math.abs(xCurr -xPrev));
             iteration_counter = iteration_counter + 1;
         }
     
