@@ -179,10 +179,14 @@ export class RootFindingComponent implements OnInit {
     if(!this.inputVerify)
         return;
 
-    steps:Array<number>();
     if(this.currentSolType=="Bisection Method" )
     {
       var bisect:any = new bisection(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+      if(bisect.substitute(this.initalvalue1)*bisect.substitute(this.initalvalue2)>0)
+      {
+        alert("No brackets in this interval");
+        return;
+      }
       var start = new Date().getTime()
       this.solution=bisect.applyBisection().toString()
       var end = new Date().getTime()
@@ -190,8 +194,13 @@ export class RootFindingComponent implements OnInit {
       this.runTime=delta
     }
     else if(this.currentSolType=="False Position")
-    {
+    { 
       var falsePosition:any = new FalsePosition(Number(this.initalvalue1),Number(this.initalvalue2),Number(this.precision),Number(this.significant_figure),this.funcInput,Number(this.iterations))
+      if(falsePosition.substitute(this.initalvalue1)*falsePosition.substitute(this.initalvalue2)>0)
+      {
+        alert("No brackets in this interval");
+        return;
+      }
       var start = new Date().getTime()
       this.solution= falsePosition.applyFalsePosition().toString()
       var end = new Date().getTime()
