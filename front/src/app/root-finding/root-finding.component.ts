@@ -284,7 +284,7 @@ export class RootFindingComponent implements OnInit {
       }
       else if(this.currentSolType=="Fixed Point")
       {
-        exp=this.funcInput+"+x";
+        exp=fixedpoint.getGX();
         exp=math.simplify(exp).toString()
         console.log(exp)
       }

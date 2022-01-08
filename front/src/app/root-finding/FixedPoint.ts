@@ -78,16 +78,17 @@ export class FixedPoint{
     g`(x)=af`(x)+1  ---> af`(x)=-1
     logic: get f`x then look for a which satisify equation
     */
-    public getMultiplierForFx():number{
+    public getMultiplierForFx():string{
       var derivativeNode:math.MathNode;
       derivativeNode=derivative(this.getExpression(),'x'); //f`
       var dfx=derivativeNode.evaluate({x:this.xi}).toPrecision(this.getPrecision());
-      if(math.abs(dfx-1)< 0)
+      if(dfx< 1 && dfx>0)
+        this.a=-1;
+      else if(dfx>-1 && dfx<0)
         this.a=1;
       else
         this.a=this.precise(-1/dfx);
-      console.log("a= "+this.a);
-      return this.a;
+      return this.a.toPrecision(this.getPrecision()>14?14:this.getPrecision());
     }
     public substitute(x:number):number{
       var substitution = this.getExpression()
@@ -102,10 +103,10 @@ export class FixedPoint{
     public substituteGX(x:number):number{
         var substitution = this.getGX();
         const config = {
-          number: 'BigNumber',
-          precision: this.getPrecision()
-       }
-       const math = create(all, config)
+            number: 'BigNumber',
+            precision: this.getPrecision()
+        }
+        const math = create(all, config)
         return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
     }
     public precise(x:number) {
