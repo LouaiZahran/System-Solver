@@ -88,7 +88,7 @@ export class FixedPoint{
         this.a=1;
       else
         this.a=this.precise(-1/dfx);
-      return this.a.toPrecision(this.getPrecision()>14?14:this.getPrecision());
+      return this.a.toString();
     }
     public substitute(x:number):number{
       var substitution = this.getExpression()
@@ -107,7 +107,7 @@ export class FixedPoint{
             precision: this.getPrecision()
         }
         const math = create(all, config)
-        return math.simplify(math.parse(substitution).toString()).evaluate({x:bignumber(x)});
+        return  math.parse(substitution).evaluate({x:bignumber(x)});
     }
     public precise(x:number) {
       return Number(Number.parseFloat(x.toString()).toPrecision(this.getPrecision()));
